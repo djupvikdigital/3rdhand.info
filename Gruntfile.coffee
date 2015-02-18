@@ -5,7 +5,7 @@ module.exports = (grunt) ->
 		module:
 			loaders: [
 				test: /\.coffee$/
-				loader: 'coffee-loader'
+				loader: 'coffee-jsx-loader'
 			]
 		entry: './src/scripts/index.coffee'
 		output:
@@ -32,6 +32,9 @@ module.exports = (grunt) ->
 				publicPath: '/' + webpackConfig.output.publicPath
 			start:
 				keepAlive: true
+				webpack:
+					debug: true
+					devtool: 'source-map'
 
 	grunt.loadNpmTasks 'grunt-contrib-clean'
 	grunt.loadNpmTasks 'grunt-svgmin'
