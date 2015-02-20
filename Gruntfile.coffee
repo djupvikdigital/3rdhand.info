@@ -4,7 +4,7 @@ module.exports = (grunt) ->
 	webpackConfig = 
 		module:
 			loaders: [
-				test: /\.coffee$/
+				test: /\.(coffee|cjsx)$/
 				loader: 'coffee-jsx-loader'
 			]
 		entry: './src/scripts/index.coffee'

@@ -20,6 +20,7 @@
     "coffee-loader": "^0.7.2",
     "coffee-react": "^2.1.2",
     "coffee-script": "^1.9.0",
+    "couchapp": "^0.11.0",
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-svgmin": "^2.0.0",
