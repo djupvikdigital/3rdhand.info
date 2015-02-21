@@ -1,5 +1,5 @@
 Reflux = require 'reflux'
 
 module.exports = {
-	fetch: Reflux.createAction(async: true)
+	fetch: Reflux.createAction(asyncResult: true)
 }

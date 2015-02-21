@@ -6,10 +6,11 @@ articleStore = require '../stores/article-store.coffee'
 module.exports = React.createClass
 	mixins: [ Reflux.listenTo(articleStore, 'onUpdate') ]
 	onUpdate: (articles) ->
+		console.log articles
 		@setState articles[0]
 	getInitialState: ->
-		title: 'Lorem Ipsum'
-		content: 'Lorem ipsum dolor sit amet.'
+		articleActions.fetch()
+		{}
 	render: ->
 		<article>
 			<h1>{ this.state.title }</h1>
