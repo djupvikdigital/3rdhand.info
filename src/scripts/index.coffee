@@ -1,7 +1,7 @@
 React = require 'react'
 Router = require 'react-router'
 
-Article = require './views/article.cjsx'
+ArticleList = require './views/article-list.cjsx'
 
 DefaultRoute = Router.DefaultRoute
 Route = Router.Route
@@ -18,7 +18,7 @@ App = React.createClass
 		</div>
 
 routes = <Route name="app" path="/" handler={ App }>
-	<Route name="blog" path="/blog" handler={ Article }/>
+	<Route name="blog" path="/blog" handler={ ArticleList }/>
 </Route>
 
 Router.run routes, Router.HistoryLocation, (Handler) ->
