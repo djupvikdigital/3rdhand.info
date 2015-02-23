@@ -18,6 +18,7 @@ App = React.createClass
 		</div>
 
 routes = <Route name="app" path="/" handler={ App }>
+	<Route path=":year/:month/:day/:slug" handler={ ArticleList }/>
 	<DefaultRoute handler={ ArticleList }/>
 </Route>
 

@@ -1,3 +1,4 @@
+moment = require 'moment'
 Reflux = require 'reflux'
 request = require 'superagent'
 actions = require '../actions/article-actions.coffee'
@@ -9,8 +10,13 @@ module.exports = Reflux.createStore
 	update: ->
 		request 'http://localhost:8081/blog', (res) =>
 			if res.ok
-				@articles = res.body.rows.map (row) ->
-					row.value
+				@articles = (for row in res.body.rows
+					do (row) ->
+						article = row.value
+						created = moment(article.created).format('YYYY/MM/DD')
+						article.url = '/' + created + '/' + article.slug
+						article
+				)
 				actions.fetch.completed res.body
 				@trigger(@articles)
 			else
