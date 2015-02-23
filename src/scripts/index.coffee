@@ -12,13 +12,13 @@ App = React.createClass
 	render: ->
 		<div>
 			<ul>
-				<li><Link to="blog">Blog</Link></li>
+				<li><Link to="app">Home</Link></li>
 			</ul>
 			<RouteHandler/>
 		</div>
 
 routes = <Route name="app" path="/" handler={ App }>
-	<Route name="blog" path="/blog" handler={ ArticleList }/>
+	<DefaultRoute handler={ ArticleList }/>
 </Route>
 
 Router.run routes, Router.HistoryLocation, (Handler) ->
