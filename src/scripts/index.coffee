@@ -14,7 +14,7 @@ App = React.createClass
 			<ul>
 				<li><Link to="app">Home</Link></li>
 			</ul>
-			<RouteHandler/>
+			<RouteHandler {... @props }/>
 		</div>
 
 routes = <Route name="app" path="/" handler={ App }>
@@ -22,5 +22,5 @@ routes = <Route name="app" path="/" handler={ App }>
 	<DefaultRoute handler={ ArticleList }/>
 </Route>
 
-Router.run routes, Router.HistoryLocation, (Handler) ->
-	React.render(<Handler/>, document.body)
+Router.run routes, Router.HistoryLocation, (Handler, state) ->
+	React.render(<Handler params={ state.params }/>, document.body)
