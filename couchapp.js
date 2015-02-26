@@ -1,3 +1,5 @@
+var couchapp = require('couchapp');
+
 module.exports = {
 	_id: '_design/app',
 	views: {

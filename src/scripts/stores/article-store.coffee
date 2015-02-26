@@ -3,7 +3,7 @@ Reflux = require 'reflux'
 request = require 'superagent'
 actions = require '../actions/article-actions.coffee'
 
-ddoc = 'http://localhost:5984/thirdhandinfo/_design/app/'
+server = 'http://localhost:8081/'
 
 module.exports = Reflux.createStore
 	init: ->
@@ -12,9 +12,8 @@ module.exports = Reflux.createStore
 		@listenTo actions.fetchOne, @fetchOne
 	onResponse: (res) ->
 		if res.ok
-			@articles = (for row in res.body.rows
-				do (row) ->
-					article = row.value
+			@articles = (for article in res.body
+				do (article) ->
 					created = moment(article.created).format('YYYY/MM/DD')
 					article.url = '/' + created + '/' + article.slug
 					article
@@ -28,11 +27,11 @@ module.exports = Reflux.createStore
 		date = new Date(params.year, params.month - 1, params.day)
 		key = [ date.toDateString(), params.slug ]
 		request
-			.get(ddoc + '_view/articlesByDateAndSlug?key=' + JSON.stringify(key))
+			.get(server + 'articlesByDateAndSlug?key=' + JSON.stringify(key))
 			.accept('application/json')
 			.end(@onResponse.bind(this))
 	update: ->
 		request
-			.get(ddoc + '_view/articlesByMostRecentlyUpdated?descending=true')
+			.get(server + 'articlesByMostRecentlyUpdated?descending=true')
 			.accept('application/json')
 			.end(@onResponse.bind(this))
