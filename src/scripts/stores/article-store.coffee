@@ -8,8 +8,8 @@ server = 'http://localhost:8081/'
 module.exports = Reflux.createStore
 	init: ->
 		@articles = []
+		@lastFetched = null
 		@listenTo actions.fetch, @update
-		@listenTo actions.fetchOne, @fetchOne
 	onResponse: (res) ->
 		if res.ok
 			@articles = (for article in res.body
@@ -18,7 +18,8 @@ module.exports = Reflux.createStore
 					article.url = '/' + created + '/' + article.slug
 					article
 			)
-			actions.fetch.completed res.body
+			actions.fetch.completed @articles
+			@lastFetched = new Date()
 			@trigger(@articles)
 		else
 			actions.fetch.failed res.error
@@ -30,8 +31,13 @@ module.exports = Reflux.createStore
 			.get(server + 'articlesByDateAndSlug?key=' + JSON.stringify(key))
 			.accept('application/json')
 			.end(@onResponse.bind(this))
-	update: ->
+	fetchAll: ->
 		request
 			.get(server + 'articlesByMostRecentlyUpdated?descending=true')
 			.accept('application/json')
 			.end(@onResponse.bind(this))
+	update: (params) ->
+		if params.slug
+			@fetchOne params
+		else
+			@fetchAll()

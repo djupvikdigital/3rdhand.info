@@ -10,15 +10,12 @@ module.exports = React.createClass
 		Reflux.listenTo(articleStore, 'onUpdate')
 	]
 	fetch: (params) ->
-		if params.slug
-			articleActions.fetchOne(params)
-		else
-			articleActions.fetch()
+		articleActions.fetch(params)
 	onUpdate: (articles) ->
 		@setState articles: articles
 	getInitialState: ->
-		@fetch @props.params
-		{ articles: [] }
+		@fetch @props.params unless articleStore.lastFetched
+		{ articles: articleStore.articles }
 	componentWillReceiveProps: (nextProps) ->
 		@fetch nextProps.params
 	render: ->
