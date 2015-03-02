@@ -7,8 +7,12 @@ html, body {
 	height: 100%;
 }
 
+header[role=banner],
 h1 {
+	margin: 0.67em 0;
 	font-family: 'Rokkitt', serif;
+	font-size: 2em;
+	font-weight: bold;
 	text-transform: uppercase;
 }
 
