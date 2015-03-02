@@ -3,6 +3,7 @@ require('node-cjsx').transform()
 express = require 'express'
 React = require 'react'
 Router = require 'react-router'
+DocumentTitle = require 'react-document-title'
 
 db = require './db.coffee'
 routes = require './src/scripts/views/routes.cjsx'
@@ -46,7 +47,8 @@ server.get '*', (req, res) ->
 	router.run (Handler, state) =>
 		articleActions.fetch.triggerPromise(state.params).then((articles) ->
 			html = React.renderToString React.createElement Handler, params: state.params
-			res.render 'index', app: html
+			title = DocumentTitle.rewind()
+			res.render 'index', title: title, app: html
 		).catch((err) ->
 			res.send err
 		)

@@ -1,5 +1,7 @@
 React = require 'react'
 Reflux = require 'reflux'
+DocumentTitle = require 'react-document-title'
+
 articleActions = require '../actions/article-actions.coffee'
 articleStore = require '../stores/article-store.coffee'
 ArticleItem = require './article.cjsx'
@@ -19,7 +21,11 @@ module.exports = React.createClass
 	componentWillReceiveProps: (nextProps) ->
 		@fetch nextProps.params
 	render: ->
-		articles = (<ArticleItem key={ article._id } data={ article }/> for article in @state.articles)
-		<div>
-			{ articles }
-		</div>
+		articles = @state.articles
+		title = if articles.length == 1 then articles[0].title else @props.title
+		list = (<ArticleItem key={ article._id } data={ article }/> for article in articles)
+		<DocumentTitle title={ title }>
+			<div>
+				{ list }
+			</div>
+		</DocumentTitle>

@@ -11,4 +11,3 @@ module.exports = React.createClass
 			<h1><Link to={ @props.data.url }>{ @props.data.title }</Link></h1>
 			{ @props.data.content }
 		</article>
-
