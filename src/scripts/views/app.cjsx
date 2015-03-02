@@ -10,7 +10,7 @@ module.exports = React.createClass
 		title = 'Third Hand Information'
 		<DocumentTitle title={ title }>
 			<div className="wrapper">
-				<header role="banner"><img className="logo" src="/dist/svg/logo.svg" alt=""/> Third Hand Information</header>
+				<header role="banner"><img className="logo" src="/dist/svg/logo.svg" alt=""/> { title }</header>
 				<ul>
 					<li><Link to="app">Home</Link></li>
 				</ul>

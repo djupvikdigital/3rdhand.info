@@ -23,7 +23,7 @@ module.exports = React.createClass
 	render: ->
 		articles = @state.articles
 		isSingle = articles.length == 1
-		title = if isSingle then articles[0].title else @props.title
+		title = (if isSingle then articles[0].title + ' - ' else '') + @props.title
 		unless isSingle
 			list = (<article key={ article._id }><ArticleItem data={ article }/></article> for article in articles)
 		else
