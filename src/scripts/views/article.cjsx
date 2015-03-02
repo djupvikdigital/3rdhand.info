@@ -6,8 +6,13 @@ Link = Router.Link
 
 module.exports = React.createClass
 	displayName: 'ArticleItem'
+	mixins: [ Router.State ]
 	render: ->
-		<article>
-			<h1><Link to={ @props.data.url }>{ @props.data.title }</Link></h1>
+		if @props.data.url != @getPath()
+			h1 = <Link to={ @props.data.url }>{ @props.data.title }</Link>
+		else
+			h1 = @props.data.title
+		<div>
+			<h1>{ h1 }</h1>
 			{ @props.data.content }
-		</article>
+		</div>
