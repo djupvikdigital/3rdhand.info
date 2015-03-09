@@ -5,6 +5,7 @@ DocumentTitle = require 'react-document-title'
 articleActions = require '../actions/article-actions.coffee'
 articleStore = require '../stores/article-store.coffee'
 ArticleItem = require './article.cjsx'
+ArticleEditor = require './article-editor.cjsx'
 
 module.exports = React.createClass
 	displayName: 'ArticleList'
@@ -27,7 +28,10 @@ module.exports = React.createClass
 		unless isSingle
 			list = (<article key={ article._id }><ArticleItem data={ article }/></article> for article in articles)
 		else
-			list = <ArticleItem data={ articles[0] }/>
+			if @props.params.view == 'edit'
+				list = <ArticleEditor data={ articles[0] }/>
+			else
+				list = <ArticleItem data={ articles[0] }/>
 		<DocumentTitle title={ title }>
 			<div>
 				{ list }

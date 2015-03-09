@@ -9,5 +9,6 @@ Route = Router.Route
 
 module.exports = <Route name="app" path="/" handler={ App }>
 	<Route path=":year/:month/:day/:slug" handler={ ArticleList }/>
+	<Route path=":year/:month/:day/:slug/:view" handler={ ArticleList }/>
 	<DefaultRoute handler={ ArticleList }/>
 </Route>

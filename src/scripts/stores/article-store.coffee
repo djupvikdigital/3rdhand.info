@@ -10,6 +10,7 @@ module.exports = Reflux.createStore
 		@articles = []
 		@lastFetched = null
 		@listenTo actions.fetch, @update
+		@listenTo actions.save, @save
 	onResponse: (res) ->
 		if res.ok
 			@articles = (for article in res.body
@@ -26,9 +27,13 @@ module.exports = Reflux.createStore
 	fetchOne: (params) ->
 		# TODO: validate params as numbers
 		date = new Date(params.year, params.month - 1, params.day)
-		key = [ date.toDateString(), params.slug ]
+		query = {
+			key: JSON.stringify [ date.toDateString(), params.slug ]
+		}
+		query.view = params.view if params.view
 		request
-			.get(server + 'articlesByDateAndSlug?key=' + JSON.stringify(key))
+			.get(server + 'articlesByDateAndSlug')
+			.query(query)
 			.accept('application/json')
 			.end(@onResponse.bind(this))
 	fetchAll: ->
@@ -41,3 +46,9 @@ module.exports = Reflux.createStore
 			@fetchOne params
 		else
 			@fetchAll()
+	save: (article) ->
+		request.post(server).send(article).end (res) ->
+			if res.ok
+				actions.save.completed res.body
+			else
+				actions.save.failed res.error

@@ -25,6 +25,10 @@ p {
 	margin: 0 0 .5em;
 }
 
+label {
+	display: block;
+}
+
 .wrapper {
 	background: url(/dist/svg/loader-plain.svg) no-repeat;
 	background-position: left 5%;

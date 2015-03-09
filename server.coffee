@@ -1,17 +1,20 @@
 require('node-cjsx').transform()
 
 express = require 'express'
+bodyParser = require 'body-parser'
 React = require 'react'
 Router = require 'react-router'
 DocumentTitle = require 'react-document-title'
 
 db = require './db.coffee'
+localize = require './src/scripts/localize.coffee'
 routes = require './src/scripts/views/routes.cjsx'
 articleActions = require './src/scripts/actions/article-actions.coffee'
 articleStore = require './src/scripts/stores/article-store.coffee'
 
 server = express()
 server.use(express.static(__dirname))
+server.use(bodyParser.json())
 server.set('view engine', 'jade')
 
 server.use (req, res, next) ->
@@ -20,20 +23,18 @@ server.use (req, res, next) ->
 	next()
 
 server.get '/:view', (req, res) ->
-	qs = {}
+	query = {}
 	for key, val of req.query
-		qs[key] = JSON.parse(val)
-	db.view 'app', req.params.view, qs, (err, body) ->
+		query[key] = val
+	query.key = JSON.parse(query.key) if typeof query.key == 'string'
+	db.view 'app', req.params.view, query, (err, body) ->
 		if err
 			return res.send err
 		lang = req.acceptsLanguages 'nb', 'en'
-		docs = []
-		for row in body.rows
-			do ->
-				doc = {}
-				for key, val of row.value
-					doc[key] = if val.hasOwnProperty(lang) then val[lang] else val
-				docs[docs.length] = doc
+		if query.view == 'edit'
+			docs = (row.value for row in body.rows)
+		else
+			docs = (localize(row.value) for row in body.rows)
 		res.send docs
 
 server.get '*', (req, res) ->
@@ -52,6 +53,10 @@ server.get '*', (req, res) ->
 		).catch((err) ->
 			res.send err
 		)
+
+server.post '/', (req, res) ->
+	db.insert req.body, req.body._id, (err, body) ->
+		res.send if err then err else body
 
 server.listen 8081, ->
 	console.log 'Express web server listening on port 8081...'
