@@ -6,6 +6,7 @@ RouteHandler = Router.RouteHandler
 Link = Router.Link
 
 module.exports = React.createClass
+	displayName: 'App'
 	render: ->
 		title = 'Third Hand Information'
 		<DocumentTitle title={ title }>
