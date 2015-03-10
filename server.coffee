@@ -7,7 +7,7 @@ Router = require 'react-router'
 DocumentTitle = require 'react-document-title'
 
 db = require './db.coffee'
-localize = require './src/scripts/localize.coffee'
+utils = require './src/scripts/utils.coffee'
 routes = require './src/scripts/views/routes.cjsx'
 articleActions = require './src/scripts/actions/article-actions.coffee'
 articleStore = require './src/scripts/stores/article-store.coffee'
@@ -34,7 +34,7 @@ server.get '/:view', (req, res) ->
 		if query.view == 'edit'
 			docs = (row.value for row in body.rows)
 		else
-			docs = (localize(row.value) for row in body.rows)
+			docs = (utils.localize(lang, row.value) for row in body.rows)
 		res.send docs
 
 server.get '*', (req, res) ->

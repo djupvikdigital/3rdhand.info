@@ -1,6 +1,6 @@
 React = require 'react'
 
-localize = require '../localize.coffee'
+utils = require '../utils.coffee'
 articleActions = require '../actions/article-actions.coffee'
 
 module.exports = React.createClass
@@ -32,7 +32,7 @@ module.exports = React.createClass
 			article[key] = val unless key == 'lang'
 		articleActions.save article
 	render: ->
-		data = localize @state.lang, @state
+		data = utils.localize @state.lang, @state
 		<form onSubmit={ @handleSubmit }>
 			<label><input type="radio" name="lang" value="nb" checked={ data.lang == 'nb' } onChange={ @handleChange }/> Norwegian</label>
 			<label><input type="radio" name="lang" value="en" checked={ data.lang == 'en' } onChange={ @handleChange }/> English</label>

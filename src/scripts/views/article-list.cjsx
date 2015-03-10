@@ -2,6 +2,7 @@ React = require 'react'
 Reflux = require 'reflux'
 DocumentTitle = require 'react-document-title'
 
+utils = require '../utils.coffee'
 articleActions = require '../actions/article-actions.coffee'
 articleStore = require '../stores/article-store.coffee'
 ArticleItem = require './article.cjsx'
@@ -24,7 +25,7 @@ module.exports = React.createClass
 	render: ->
 		articles = @state.articles
 		isSingle = articles.length == 1
-		title = (if isSingle then articles[0].title + ' - ' else '') + @props.title
+		title = (if isSingle then utils.localize('en', articles[0].title) + ' - ' else '') + @props.title
 		unless isSingle
 			list = (<article key={ article._id }><ArticleItem data={ article }/></article> for article in articles)
 		else
