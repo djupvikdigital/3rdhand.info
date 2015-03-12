@@ -1,4 +1,5 @@
 React = require 'react'
+Immutable = require 'immutable'
 
 utils = require '../utils.coffee'
 articleActions = require '../actions/article-actions.coffee'
@@ -6,33 +7,27 @@ articleActions = require '../actions/article-actions.coffee'
 module.exports = React.createClass
 	displayName: 'ArticleEditor'
 	setLanguage: (lang) ->
-		@setState lang: lang
+		@replaceState lang: lang
 	getInitialState: ->
-		state = {
-			lang: 'nb'
-		}
-		for key, val of @props.data
-			state[key] = val
+		state = Immutable.Map lang: 'nb'
+		state = state.merge @props.data
 		state
 	handleChange: (e) ->
-		lang = @state.lang
-		key = e.target.name
-		val = e.target.value
-		state = {}
-		if @state[key].hasOwnProperty(lang)
-			state[key] = JSON.parse JSON.stringify @state[key]
-			state[key][lang] = val
+		lang = @state.get 'lang'
+		k = e.target.name
+		v = e.target.value
+		if @state.hasIn [k, lang]
+			state = @state.setIn [k, lang], v
 		else
-			state[key] = val
-		@setState state
+			state = @state.set k, v
+		@replaceState state
 	handleSubmit: (e) ->
 		e.preventDefault()
-		article = {}
-		for key, val of @state
-			article[key] = val unless key == 'lang'
-		articleActions.save article
+		article = @state.filterNot utils.keyIn 'lang'
+		articleActions.save article.toJS()
 	render: ->
-		data = utils.localize @state.lang, @state
+		state = @state.toJS()
+		data = utils.localize state.lang, state
 		<form onSubmit={ @handleSubmit }>
 			<label><input type="radio" name="lang" value="nb" checked={ data.lang == 'nb' } onChange={ @handleChange }/> Norwegian</label>
 			<label><input type="radio" name="lang" value="en" checked={ data.lang == 'en' } onChange={ @handleChange }/> English</label>
