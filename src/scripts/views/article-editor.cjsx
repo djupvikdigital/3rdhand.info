@@ -7,31 +7,50 @@ articleActions = require '../actions/article-actions.coffee'
 module.exports = React.createClass
 	displayName: 'ArticleEditor'
 	setLanguage: (lang) ->
-		@replaceState lang: lang
+		@replaceState @state.set('lang', lang)
 	getInitialState: ->
-		state = Immutable.Map lang: 'nb'
-		state = state.merge @props.data
-		state
+		data = Immutable.fromJS @props.data
+		if @props.view != 'edit'
+			data = utils.stripDbFields data
+		if @props.view == 'new'
+			data = data.map utils.recursiveEmptyMapper
+		Immutable.Map
+			lang: 'nb'
+			data: data
+	getTextProps: (name, data) ->
+		props =
+			name: name
+			value: data[name]
+			onChange: @handleChange
+		if @props.view == 'new'
+			props.placeholder = utils.localize @state.get('lang'), @props.data[name]
+		props
 	handleChange: (e) ->
 		lang = @state.get 'lang'
+		data = @state.get 'data'
 		k = e.target.name
 		v = e.target.value
-		if @state.hasIn [k, lang]
-			state = @state.setIn [k, lang], v
+		if data.hasIn [k, lang]
+			data = data.setIn [k, lang], v
 		else
-			state = @state.set k, v
-		@replaceState state
+			data = data.set k, v
+		@replaceState @state.set 'data', data
+	handleLanguageChange: (e) ->
+		@setLanguage e.target.value
 	handleSubmit: (e) ->
 		e.preventDefault()
 		article = @state.filterNot utils.keyIn 'lang'
 		articleActions.save article.toJS()
 	render: ->
 		state = @state.toJS()
-		data = utils.localize state.lang, state
+		data = utils.localize state.lang, state.data
+		props =
+			title: @getTextProps('title', data)
+			content: @getTextProps('content', data)
 		<form onSubmit={ @handleSubmit }>
-			<label><input type="radio" name="lang" value="nb" checked={ data.lang == 'nb' } onChange={ @handleChange }/> Norwegian</label>
-			<label><input type="radio" name="lang" value="en" checked={ data.lang == 'en' } onChange={ @handleChange }/> English</label>
-			<label>Title: <input name="title" value={ data.title } onChange={ @handleChange }/></label>
-			<label>Content: <textarea name="content" value={ data.content } onChange={ @handleChange }/></label>
+			<label><input type="radio" name="lang" value="nb" checked={ state.lang == 'nb' } onChange={ @handleLanguageChange }/> Norwegian</label>
+			<label><input type="radio" name="lang" value="en" checked={ state.lang == 'en' } onChange={ @handleLanguageChange }/> English</label>
+			<label>Title: <input {...props.title}/></label>
+			<label>Content: <textarea {...props.content}/></label>
 			<input type="submit" value="Save"/>
 		</form>

@@ -22,6 +22,18 @@ describe 'localize', ->
 		test = 'felt'
 		expect(utils.localize('nb', input)).toBe 'felt'
 
+describe 'recursiveEmptyMapper', ->
+	it 'removes all values recursively when used as a mapper function', ->
+		input = Immutable.fromJS
+			field: 'field'
+			parent:
+				child: 'child'
+		test =
+			field: undefined
+			parent:
+				child: undefined
+		expect(input.map(utils.recursiveEmptyMapper).toJS()).toEqual test
+
 describe 'stripDbFields', ->
 	it 'removes fields _id and _rev from an object', ->
 		input =

@@ -1,5 +1,9 @@
 Immutable = require 'immutable'
 
+recursiveEmptyMapper = (v) ->
+	if Immutable.Map.isMap v
+		v.map recursiveEmptyMapper
+
 keyIn = ->
 	keySet = Immutable.Set(arguments)
 	return (v, k) ->
@@ -19,6 +23,7 @@ localize = (lang, input) ->
 module.exports =
 	keyIn: keyIn
 	localize: localize
+	recursiveEmptyMapper: recursiveEmptyMapper
 	stripDbFields: (obj) ->
 		gotMap = Immutable.Map.isMap(obj)
 		map = if gotMap then obj else Immutable.Map(obj)

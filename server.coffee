@@ -31,7 +31,7 @@ server.get '/:view', (req, res) ->
 		if err
 			return res.send err
 		lang = req.acceptsLanguages 'nb', 'en'
-		if query.view == 'edit'
+		if query.view
 			docs = (row.value for row in body.rows)
 		else
 			docs = (utils.localize(lang, row.value) for row in body.rows)
