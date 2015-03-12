@@ -1,5 +1,8 @@
-jest.dontMock 'immutable'
-jest.dontMock '../src/scripts/utils.coffee'
+jest
+	.dontMock 'immutable'
+	.dontMock '../src/scripts/utils.coffee'
+
+Immutable = require 'immutable'
 utils = require '../src/scripts/utils.coffee'
 
 describe 'localize', ->
@@ -28,3 +31,9 @@ describe 'stripDbFields', ->
 		test =
 			field: 'field'
 		expect(utils.stripDbFields(input)).toEqual test
+
+	it 'returns an Immutable.Map if provided an Immutable.Map', ->
+		input = Immutable.Map
+			field: 'field'
+		output = utils.stripDbFields input
+		expect(Immutable.Map.isMap(output)).toBe true

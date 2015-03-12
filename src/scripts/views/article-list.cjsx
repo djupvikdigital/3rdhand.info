@@ -29,8 +29,8 @@ module.exports = React.createClass
 		unless isSingle
 			list = (<article key={ article._id }><ArticleItem data={ article }/></article> for article in articles)
 		else
-			if @props.params.view == 'edit'
-				list = <ArticleEditor data={ articles[0] }/>
+			if @props.params.view
+				list = <ArticleEditor data={ articles[0] } view={ @props.params.view }/>
 			else
 				list = <ArticleItem data={ articles[0] }/>
 		<DocumentTitle title={ title }>
