@@ -24,15 +24,17 @@ module.exports = React.createClass
 		@fetch nextProps.params
 	render: ->
 		articles = @state.articles
+		lang = articleStore.lang
 		isSingle = articles.length == 1
-		title = (if isSingle then utils.localize('en', articles[0].title) + ' - ' else '') + @props.title
+		title = (if isSingle then utils.localize(lang, articles[0].title) + ' - ' else '') + @props.title
 		unless isSingle
 			list = (<article key={ article._id }><ArticleItem data={ article }/></article> for article in articles)
 		else
+			data = doc: articles[0], lang: lang
 			if @props.params.view
-				list = <ArticleEditor data={ articles[0] } view={ @props.params.view }/>
+				list = <ArticleEditor data={ data } view={ @props.params.view }/>
 			else
-				list = <ArticleItem data={ articles[0] }/>
+				list = <ArticleItem data={ data }/>
 		<DocumentTitle title={ title }>
 			<div>
 				{ list }

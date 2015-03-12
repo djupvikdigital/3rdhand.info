@@ -8,12 +8,14 @@ server = 'http://localhost:8081/'
 module.exports = Reflux.createStore
 	init: ->
 		@articles = []
+		@lang = 'en'
 		@lastFetched = null
 		@listenTo actions.fetch, @update
 		@listenTo actions.save, @save
 	onResponse: (res) ->
 		if res.ok
-			@articles = (for article in res.body
+			@lang = res.body.lang
+			@articles = (for article in res.body.docs
 				do (article) ->
 					created = moment(article.created).format('YYYY/MM/DD')
 					article.url = '/' + created + '/' + article.slug

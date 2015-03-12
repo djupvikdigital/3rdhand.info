@@ -9,13 +9,13 @@ module.exports = React.createClass
 	setLanguage: (lang) ->
 		@replaceState @state.set('lang', lang)
 	getInitialState: ->
-		data = Immutable.fromJS @props.data
+		data = Immutable.fromJS @props.data.doc
 		if @props.view != 'edit'
 			data = utils.stripDbFields data
 		if @props.view == 'new'
 			data = data.map utils.recursiveEmptyMapper
 		Immutable.Map
-			lang: 'nb'
+			lang: @props.data.lang
 			data: data
 	getTextProps: (name, data) ->
 		props =
@@ -23,7 +23,7 @@ module.exports = React.createClass
 			value: data[name]
 			onChange: @handleChange
 		if @props.view == 'new'
-			props.placeholder = utils.localize @state.get('lang'), @props.data[name]
+			props.placeholder = utils.localize @state.get('lang'), @props.data.doc[name]
 		props
 	handleChange: (e) ->
 		lang = @state.get 'lang'
