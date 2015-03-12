@@ -17,6 +17,7 @@ localize = (lang, input) ->
 	output
 
 module.exports =
+	keyIn: keyIn
 	localize: localize
 	stripDbFields: (obj) ->
 		gotMap = Immutable.Map.isMap(obj)
