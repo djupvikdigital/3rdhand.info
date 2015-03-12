@@ -1,3 +1,5 @@
+Immutable = require 'immutable'
+
 localize = (lang, input) ->
 	if typeof input != 'object'
 		output = input
@@ -11,3 +13,7 @@ localize = (lang, input) ->
 
 module.exports =
 	localize: localize
+	stripDbFields: (obj) ->
+		map = Immutable.Map(obj).filterNot (val, key) ->
+			key == '_id' || key == '_rev'
+		map.toObject()
