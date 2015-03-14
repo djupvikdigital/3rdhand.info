@@ -1,4 +1,3 @@
-moment = require 'moment'
 Reflux = require 'reflux'
 Promise = 'bluebird'
 request = require 'superagent-bluebird-promise'
@@ -29,14 +28,10 @@ module.exports = Reflux.createStore
 					schema = YAML.safeLoad(res.text)
 					@articleDefault = defaults(schema)
 	set: (articles) ->
-		if Object.prototype.toString.call(articles) != '[object Array]'
-			articles = Array.prototype.slice.call(arguments)
-		@articles = (for article in articles
-			do (article) ->
-				created = moment(article.created).format('YYYY/MM/DD')
-				article.url = '/' + created + '/' + article.slug
-				article
-		)
+		if Object.prototype.toString.call(articles) == '[object Array]'
+			@articles = articles
+		else
+			@articles = Array.prototype.slice.call(arguments)
 		actions.fetch.completed @articles
 		@lastFetched = new Date()
 		@trigger(@articles)

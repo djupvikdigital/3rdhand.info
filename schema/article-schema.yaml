@@ -17,6 +17,9 @@ properties:
     _rev:
         description: CouchDB revision
         type: string
+    slug:
+        description: Slug for constructing URL
+        type: string
     title:
         type: object
         properties: *langs
