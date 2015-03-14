@@ -73,6 +73,7 @@ module.exports = Reflux.createStore
 		else
 			@fetchAll()
 	save: (article) ->
+		article.created = (new Date()).toISOString() unless article.created
 		request.post(server).send(article).end (res) ->
 			if res.ok
 				actions.save.completed res.body
