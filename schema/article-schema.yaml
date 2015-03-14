@@ -1,0 +1,25 @@
+$schema: http://json-schema.org/draft-04/schema#
+
+langs: &langs
+    nb:
+        type: string
+        default: ''
+    en:
+        type: string
+        default: ''
+
+title: Article
+type: object
+properties:
+    _id:
+        description: CouchDB id
+        type: string
+    _rev:
+        description: CouchDB revision
+        type: string
+    title:
+        type: object
+        properties: *langs
+    content:
+        type: object
+        properties: *langs

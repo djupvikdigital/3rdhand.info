@@ -1,6 +1,9 @@
 moment = require 'moment'
 Reflux = require 'reflux'
-request = require 'superagent'
+Promise = 'bluebird'
+request = require 'superagent-bluebird-promise'
+YAML = require 'js-yaml'
+defaults = require 'json-schema-defaults'
 actions = require '../actions/article-actions.coffee'
 
 server = 'http://localhost:8081/'
@@ -12,18 +15,40 @@ module.exports = Reflux.createStore
 		@lastFetched = null
 		@listenTo actions.fetch, @update
 		@listenTo actions.save, @save
+	create: ->
+		if @articleDefault
+			return Promise.resolve @articleDefault
+		req = request
+			.get(server + 'schema/article-schema.yaml')
+		if typeof req.buffer == 'function'
+			req.buffer()
+		req
+			.promise()
+			.then (res) ->
+				if res.ok
+					schema = YAML.safeLoad(res.text)
+					@articleDefault = defaults(schema)
+	set: (articles) ->
+		if Object.prototype.toString.call(articles) != '[object Array]'
+			articles = Array.prototype.slice.call(arguments)
+		@articles = (for article in articles
+			do (article) ->
+				created = moment(article.created).format('YYYY/MM/DD')
+				article.url = '/' + created + '/' + article.slug
+				article
+		)
+		actions.fetch.completed @articles
+		@lastFetched = new Date()
+		@trigger(@articles)
+		@articles
 	onResponse: (res) ->
 		if res.ok
 			@lang = res.body.lang
-			@articles = (for article in res.body.docs
-				do (article) ->
-					created = moment(article.created).format('YYYY/MM/DD')
-					article.url = '/' + created + '/' + article.slug
-					article
-			)
-			actions.fetch.completed @articles
-			@lastFetched = new Date()
-			@trigger(@articles)
+			articles = res.body.docs
+			if !articles.length
+				@create().then(@set)
+			else
+				@set(articles)
 		else
 			actions.fetch.failed res.error
 	fetchOne: (params) ->
@@ -37,12 +62,16 @@ module.exports = Reflux.createStore
 			.get(server + 'articlesByDateAndSlug')
 			.query(query)
 			.accept('application/json')
-			.end(@onResponse.bind(this))
+			.promise()
+			.bind(this)
+			.then(@onResponse)
 	fetchAll: ->
 		request
 			.get(server + 'articlesByMostRecentlyUpdated?descending=true')
 			.accept('application/json')
-			.end(@onResponse.bind(this))
+			.promise()
+			.bind(this)
+			.then(@onResponse)
 	update: (params) ->
 		if params.slug
 			@fetchOne params
