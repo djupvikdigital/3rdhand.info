@@ -37,6 +37,7 @@
     "jade": "^1.9.2",
     "js-yaml": "^3.2.7",
     "json-schema-defaults": "^0.1.0",
+    "marked": "^0.3.3",
     "moment": "^2.9.0",
     "nano": "^6.0.2",
     "node-cjsx": "^0.1.3",

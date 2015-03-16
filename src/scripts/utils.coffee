@@ -1,4 +1,8 @@
 Immutable = require 'immutable'
+marked = require 'marked'
+
+marked.setOptions
+	sanitize: true
 
 recursiveEmptyMapper = (v) ->
 	if Immutable.Map.isMap v
@@ -22,7 +26,35 @@ localize = (lang, input) ->
 			output[key] = localize(lang, val)
 	output
 
+getFieldValueFromFormats = (input) ->
+	if typeof input != 'object'
+		output = input
+	else if input.hasOwnProperty('md') && input.md
+		output = input.md
+	else if input.hasOwnProperty('txt')
+		output = input.txt
+	else
+		output = {}
+		for own k, v of input
+			output[k] = getFieldValueFromFormats(v)
+	output
+
+format = (input) ->
+	if typeof input != 'object'
+		output = input
+	else if input.hasOwnProperty('md') && input.md
+		output = marked input.md
+	else if input.hasOwnProperty('txt')
+		output = input.txt
+	else
+		output = {}
+		for own k, v of input
+			output[k] = format(v)
+	output
+
 module.exports =
+	getFieldValueFromFormats: getFieldValueFromFormats
+	format: format
 	keyIn: keyIn
 	localize: localize
 	recursiveEmptyMapper: recursiveEmptyMapper

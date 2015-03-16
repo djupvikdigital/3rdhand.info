@@ -25,15 +25,19 @@ module.exports = React.createClass
 			value: data[name]
 			onChange: @handleChange
 		if @props.params.view == 'new'
-			props.placeholder = utils.localize @state.get('lang'), @props.data.doc[name]
+			props.placeholder = utils.getFieldValueFromFormats utils.localize @state.get('lang'), @props.data.doc[name]
 		props
 	handleChange: (e) ->
+		# this will do for now
+		fieldFormats =
+			title: 'txt'
+			content: 'md'
 		lang = @state.get 'lang'
 		data = @state.get 'data'
 		k = e.target.name
 		v = e.target.value
-		if data.hasIn [k, lang]
-			data = data.setIn [k, lang], v
+		if data.hasIn [k, lang, fieldFormats[k]]
+			data = data.setIn [k, lang, fieldFormats[k]], v
 		else
 			data = data.set k, v
 		@replaceState @state.set 'data', data
@@ -44,7 +48,7 @@ module.exports = React.createClass
 		articleActions.save @state.get('data').toJS()
 	render: ->
 		state = @state.toJS()
-		data = utils.localize state.lang, state.data
+		data = utils.getFieldValueFromFormats utils.localize state.lang, state.data
 		props =
 			slug: @getTextProps('slug', data)
 			title: @getTextProps('title', data)

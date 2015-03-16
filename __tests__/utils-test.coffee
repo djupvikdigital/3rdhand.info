@@ -1,9 +1,28 @@
 jest
 	.dontMock 'immutable'
+	.dontMock 'marked'
 	.dontMock '../src/scripts/utils.coffee'
 
 Immutable = require 'immutable'
 utils = require '../src/scripts/utils.coffee'
+
+describe 'format', ->
+	it 'returns an object with field values formatted from a format subfield', ->
+		input =
+			field:
+				md: 'Markdown *em*.'
+		test =
+			field: '<p>Markdown <em>em</em>.</p>\n'
+		expect(utils.format(input)).toEqual test
+
+describe 'getFieldValueFromFormats', ->
+	it 'returns an object with field values from a format subfield', ->
+		input =
+			field:
+				md: 'Markdown *em*.'
+		test =
+			field: 'Markdown *em*.'
+		expect(utils.getFieldValueFromFormats(input)).toEqual test
 
 describe 'localize', ->
 	it 'returns an object with field values set to language subfields', ->
@@ -29,9 +48,9 @@ describe 'recursiveEmptyMapper', ->
 			parent:
 				child: 'child'
 		test =
-			field: undefined
+			field: ''
 			parent:
-				child: undefined
+				child: ''
 		expect(input.map(utils.recursiveEmptyMapper).toJS()).toEqual test
 
 describe 'stripDbFields', ->
