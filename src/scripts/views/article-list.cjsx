@@ -28,11 +28,12 @@ module.exports = React.createClass
 		isSingle = articles.length == 1
 		title = (if isSingle then utils.localize(lang, articles[0].title) + ' - ' else '') + @props.title
 		unless isSingle
-			list = (<article key={ article._id }><ArticleItem data={ article }/></article> for article in articles)
+			datalist = ({ doc: article, lang: lang } for article in articles)
+			list = (<article key={ data.doc._id }><ArticleItem data={ data }/></article> for data in datalist)
 		else
 			data = doc: articles[0], lang: lang
 			if @props.params.view
-				list = <ArticleEditor data={ data } view={ @props.params.view }/>
+				list = <ArticleEditor data={ data } params={ @props.params }/>
 			else
 				list = <ArticleItem data={ data }/>
 		<DocumentTitle title={ title }>

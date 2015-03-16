@@ -1,3 +1,9 @@
-nano = require('nano')('http://localhost:5984')
+nano = require('nano')
 
-module.exports = nano.use('thirdhandinfo')
+url = 'http://localhost:5984'
+
+module.exports = (cookie) ->
+	config =
+		url: url
+	config.cookie = cookie if cookie
+	nano(config).use('thirdhandinfo')

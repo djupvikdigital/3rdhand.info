@@ -3,6 +3,8 @@ Immutable = require 'immutable'
 recursiveEmptyMapper = (v) ->
 	if Immutable.Map.isMap v
 		v.map recursiveEmptyMapper
+	else
+		''
 
 keyIn = ->
 	keySet = Immutable.Set(arguments)

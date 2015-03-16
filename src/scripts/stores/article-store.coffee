@@ -3,9 +3,13 @@ Promise = 'bluebird'
 request = require 'superagent-bluebird-promise'
 YAML = require 'js-yaml'
 defaults = require 'json-schema-defaults'
-actions = require '../actions/article-actions.coffee'
 
-server = 'http://localhost:8081/'
+actions = require '../actions/article-actions.coffee'
+loginStore = require './login-store.coffee'
+
+protocol = 'http://'
+host = 'localhost:8081'
+server = protocol + host + '/'
 
 module.exports = Reflux.createStore
 	init: ->
@@ -76,7 +80,10 @@ module.exports = Reflux.createStore
 		now = (new Date()).toISOString()
 		article.created = now unless article.created
 		article.updated = now
-		request.post(server).send(article).end (res) ->
+		data = doc: article
+		if loginStore.isLoggedIn()
+			data.auth = loginStore.getLogin()
+		request.post(server).send(data).end (res) ->
 			if res.ok
 				actions.save.completed res.body
 			else
