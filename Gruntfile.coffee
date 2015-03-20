@@ -15,6 +15,9 @@ module.exports = (grunt) ->
 
 	grunt.initConfig
 		clean: ['dist']
+		sass:
+			dist:
+				files: 'dist/styles/main.css': 'src/styles/main.scss'
 		svgmin:
 			dist:
 				files: [
@@ -37,6 +40,7 @@ module.exports = (grunt) ->
 					devtool: 'source-map'
 
 	grunt.loadNpmTasks 'grunt-contrib-clean'
+	grunt.loadNpmTasks 'grunt-contrib-sass'
 	grunt.loadNpmTasks 'grunt-svgmin'
 	grunt.loadNpmTasks 'grunt-webpack'
 
