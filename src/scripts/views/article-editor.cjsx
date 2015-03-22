@@ -54,10 +54,12 @@ module.exports = React.createClass
 			title: @getTextProps('title', data)
 			content: @getTextProps('content', data)
 		<form onSubmit={ @handleSubmit }>
-			<label><input type="radio" name="lang" value="nb" checked={ state.lang == 'nb' } onChange={ @handleLanguageChange }/> Norwegian</label>
-			<label><input type="radio" name="lang" value="en" checked={ state.lang == 'en' } onChange={ @handleLanguageChange }/> English</label>
-			<label>Slug: <input {...props.slug}/></label>
-			<label>Title: <input {...props.title}/></label>
-			<label>Content: <textarea {...props.content}/></label>
-			<input type="submit" value="Save"/>
+			<label className="form-group--unlabeled"><input type="radio" name="lang" value="nb" checked={ state.lang == 'nb' } onChange={ @handleLanguageChange }/> Norwegian</label>
+			<label className="form-group--unlabeled"><input type="radio" name="lang" value="en" checked={ state.lang == 'en' } onChange={ @handleLanguageChange }/> English</label>
+			<label className="form-group">Slug: <input {...props.slug}/></label>
+			<label className="form-group">Title: <input {...props.title}/></label>
+			<label className="form-group">Content: <textarea {...props.content}/></label>
+			<div className="form-group--unlabeled">
+				<input type="submit" value="Save"/>
+			</div>
 		</form>

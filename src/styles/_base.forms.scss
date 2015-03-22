@@ -1,3 +1,14 @@
 label {
 	display: block;
 }
+
+label > input:not([type]),
+label > input[type=text],
+label > textarea {
+	box-sizing: border-box;
+	margin-bottom: $inuit-base-spacing-unit--small;
+}
+
+label > textarea {
+	vertical-align: top;
+}

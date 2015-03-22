@@ -1,0 +1,15 @@
+.form-group {
+	display: block;
+	text-align: right;
+}
+
+.form-group--unlabeled {
+	padding-left: 25%;
+}
+
+.form-group > input:not([type]),
+.form-group > input[type=text],
+.form-group > textarea {
+	width: 75%;
+	text-align: left;
+}
