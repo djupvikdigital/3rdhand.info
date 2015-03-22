@@ -26,7 +26,9 @@ module.exports = React.createClass
 		articles = @state.articles
 		lang = articleStore.lang
 		isSingle = articles.length == 1
-		title = (if isSingle then utils.localize(lang, articles[0].title) + ' - ' else '') + @props.title
+		title = @props.title
+		if isSingle
+			title = utils.getFieldValueFromFormats(utils.localize(lang, articles[0].title)) + ' - ' + title
 		unless isSingle
 			datalist = ({ doc: article, lang: lang } for article in articles)
 			list = (<article key={ data.doc._id }><ArticleItem data={ data }/></article> for data in datalist)
