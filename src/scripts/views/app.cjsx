@@ -14,15 +14,17 @@ module.exports = React.createClass
 		newUrl = '/' + moment().format('YYYY/MM/DD') + '/untitled/new'
 		if loginStore.isLoggedIn()
 			newArticleLink = <li key="new-article"><Link to={ newUrl }>New article</Link></li>
-		title = 'Third Hand Information'
+		title = '3rdhand.info'
 		<DocumentTitle title={ title }>
 			<div>
-				<header role="banner" className="alpha"><img className="logo" src="/dist/svg/logo.svg" alt=""/> { title }</header>
-				<ul>
-					<li><Link to="app">Home</Link></li>
-					<li><Link to="admin">Admin</Link></li>
-					{ newArticleLink }
-				</ul>
-				<RouteHandler title={ title } {... @props }/>
+				<header role="banner" className="site-header"><img className="site-header__logo" src="/dist/svg/logo.svg" alt=""/> { title }</header>
+				<div className="wrapper">
+					<ul>
+						<li><Link to="app">Home</Link></li>
+						<li><Link to="admin">Admin</Link></li>
+						{ newArticleLink }
+					</ul>
+					<RouteHandler title={ title } {... @props }/>
+				</div>
 			</div>
 		</DocumentTitle>
