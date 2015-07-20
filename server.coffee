@@ -29,7 +29,7 @@ main = (req, res) ->
 		articleActions.fetch.triggerPromise(state.params).then((articles) ->
 			html = React.renderToString React.createElement Handler, params: state.params
 			title = DocumentTitle.rewind()
-			res.render 'index', title: title, app: html
+			res.render 'index', title: title, app: html, doctype: 'strict'
 		).catch((err) ->
 			res.send err
 		)

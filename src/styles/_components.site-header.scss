@@ -2,7 +2,6 @@
 	text-align: center;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 10rem;
-	line-height: 7rem;
 	font-weight: 800;
 	font-style: italic;
 	letter-spacing: -0.08em;
@@ -11,4 +10,18 @@
 .site-header__logo {
 	width: 8rem;
 	vertical-align: top;
+}
+
+.site-header__title {
+	height: 100px;
+	background-color: hsl(130, 50%, 75%);
+}
+
+.site-header__title > svg {
+	vertical-align: top;
+}
+
+.site-header__title text,
+.site-header__title use {
+	fill: hsl(110, 50%, 60%);
 }

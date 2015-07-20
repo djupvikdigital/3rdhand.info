@@ -16,15 +16,12 @@ module.exports = React.createClass
 			newArticleLink = <li key="new-article"><Link to={ newUrl }>New article</Link></li>
 		title = '3rdhand.info'
 		<DocumentTitle title={ title }>
-			<div>
-				<header role="banner" className="site-header"><img className="site-header__logo" src="/dist/svg/logo.svg" alt=""/> { title }</header>
-				<div className="wrapper">
-					<ul>
-						<li><Link to="app">Home</Link></li>
-						<li><Link to="admin">Admin</Link></li>
-						{ newArticleLink }
-					</ul>
-					<RouteHandler title={ title } {... @props }/>
-				</div>
+			<div className="wrapper">
+				<ul>
+					<li><Link to="app">Home</Link></li>
+					<li><Link to="admin">Admin</Link></li>
+					{ newArticleLink }
+				</ul>
+				<RouteHandler title={ title } {... @props }/>
 			</div>
 		</DocumentTitle>
