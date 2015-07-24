@@ -22,13 +22,13 @@ module.exports = (grunt) ->
 			new ExtractTextPlugin('styles/main.css')
 		]
 		entry: {
-			'./src/scripts/index.coffee'
-			'./src/styles/main.scss'
+			'scripts/main.js': './src/scripts/index.coffee'
+			'styles/main.css': './src/styles/main.scss'
 		}
 		output:
 			path: path.join(__dirname, 'dist')
 			publicPath: 'dist/'
-			filename: '[name].js'
+			filename: '[name]'
 
 	grunt.initConfig
 		clean: ['dist']
