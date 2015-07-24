@@ -29,7 +29,6 @@ main = (req, res) ->
 			console.log err
 	
 	router.run (Handler, state) =>
-		console.log eval('Promise')
 		articleActions.fetch.triggerPromise(state.params).then((articles) ->
 			html = React.renderToString React.createElement Handler, params: state.params
 			title = DocumentTitle.rewind()
