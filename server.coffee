@@ -2,9 +2,12 @@ require('node-cjsx').transform()
 
 express = require 'express'
 bodyParser = require 'body-parser'
+Promise = require 'bluebird'
 React = require 'react'
 Router = require 'react-router'
 DocumentTitle = require 'react-document-title'
+
+global.Promise = Promise
 
 db = require './db.coffee'
 routes = require './src/scripts/views/routes.cjsx'
@@ -26,6 +29,7 @@ main = (req, res) ->
 			console.log err
 	
 	router.run (Handler, state) =>
+		console.log eval('Promise')
 		articleActions.fetch.triggerPromise(state.params).then((articles) ->
 			html = React.renderToString React.createElement Handler, params: state.params
 			title = DocumentTitle.rewind()
