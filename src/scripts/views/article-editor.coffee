@@ -2,6 +2,13 @@ React = require 'react'
 Elements = require 'react-coffee-elements'
 Immutable = require 'immutable'
 
+FormGroup = ((fn) ->
+	(options...) ->
+		if options[0]['_isReactElement'] or options[0].constructor isnt Object
+			options.unshift {}
+		fn.apply this, options
+)(React.createFactory require('./form-group.coffee'))
+
 utils = require '../utils.coffee'
 articleActions = require '../actions/article-actions.coffee'
 
@@ -52,14 +59,9 @@ module.exports = React.createClass
 	render: ->
 		state = @state.toJS()
 		data = utils.getFieldValueFromFormats utils.localize state.lang, state.data
-		props =
-			slug: @getTextProps('slug', data)
-			title: @getTextProps('title', data)
-			content: @getTextProps('content', data)
 		form(
 			{ onSubmit: @handleSubmit }
-			label(
-				{ className: "form-group--unlabeled" },
+			FormGroup(
 				input(
 					type: "radio"
 					name: "lang"
@@ -69,8 +71,7 @@ module.exports = React.createClass
 				)
 				' Norwegian'
 			)
-			label(
-				{ className: "form-group--unlabeled" }
+			FormGroup(
 				input(
 					type: "radio"
 					name: "lang"
@@ -80,23 +81,19 @@ module.exports = React.createClass
 				)
 				' English'
 			)
-			label(
-				{ className: "form-group" }
+			FormGroup(
 				'Slug: '
-				input(props.slug)
+				input(@getTextProps('slug', data))
 			)
-			label(
-				{ className: "form-group" }
+			FormGroup(
 				'Title: '
-				input(props.title)
+				input(@getTextProps('title', data))
 			)
-			label(
-				{ className: "form-group" }
+			FormGroup(
 				'Content: '
-				textarea(props.content)
+				textarea(@getTextProps('content', data))
 			)
-			div(
-				{ className: "form-group--unlabeled" }
+			FormGroup(
 				input(type: "submit", value: "Save")
 			)
 		)
