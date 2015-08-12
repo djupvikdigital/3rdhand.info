@@ -1,12 +1,15 @@
 React = require 'react'
+Elements = require 'react-coffee-elements'
 Reflux = require 'reflux'
-DocumentTitle = require 'react-document-title'
+DocumentTitle = React.createFactory require 'react-document-title'
 
 utils = require '../utils.coffee'
 articleActions = require '../actions/article-actions.coffee'
 articleStore = require '../stores/article-store.coffee'
-ArticleItem = require './article.cjsx'
-ArticleEditor = require './article-editor.cjsx'
+ArticleItem = React.createFactory require './article.coffee'
+ArticleEditor = React.createFactory require './article-editor.coffee'
+
+{ article, div } = Elements
 
 module.exports = React.createClass
 	displayName: 'ArticleList'
@@ -31,15 +34,16 @@ module.exports = React.createClass
 			title = utils.getFieldValueFromFormats(utils.localize(lang, articles[0].title)) + ' - ' + title
 		unless isSingle
 			datalist = ({ doc: article, lang: lang } for article in articles)
-			list = (<article key={ data.doc._id }><ArticleItem data={ data }/></article> for data in datalist)
+			list = (article({ key: data.doc._id }, ArticleItem(data: data)) for data in datalist)
 		else
 			data = doc: articles[0], lang: lang
 			if @props.params.view
-				list = <ArticleEditor data={ data } params={ @props.params }/>
+				list = ArticleEditor data: data, params: @props.params
 			else
-				list = <ArticleItem data={ data }/>
-		<DocumentTitle title={ title }>
-			<div>
-				{ list }
-			</div>
-		</DocumentTitle>
+				list = ArticleItem data: data
+		DocumentTitle(
+			{ title: title }
+			div(
+				list
+			)
+		)

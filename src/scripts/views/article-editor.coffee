@@ -1,8 +1,11 @@
 React = require 'react'
+Elements = require 'react-coffee-elements'
 Immutable = require 'immutable'
 
 utils = require '../utils.coffee'
 articleActions = require '../actions/article-actions.coffee'
+
+{ form, label, input, textarea, div } = Elements
 
 module.exports = React.createClass
 	displayName: 'ArticleEditor'
@@ -53,13 +56,47 @@ module.exports = React.createClass
 			slug: @getTextProps('slug', data)
 			title: @getTextProps('title', data)
 			content: @getTextProps('content', data)
-		<form onSubmit={ @handleSubmit }>
-			<label className="form-group--unlabeled"><input type="radio" name="lang" value="nb" checked={ state.lang == 'nb' } onChange={ @handleLanguageChange }/> Norwegian</label>
-			<label className="form-group--unlabeled"><input type="radio" name="lang" value="en" checked={ state.lang == 'en' } onChange={ @handleLanguageChange }/> English</label>
-			<label className="form-group">Slug: <input {...props.slug}/></label>
-			<label className="form-group">Title: <input {...props.title}/></label>
-			<label className="form-group">Content: <textarea {...props.content}/></label>
-			<div className="form-group--unlabeled">
-				<input type="submit" value="Save"/>
-			</div>
-		</form>
+		form(
+			{ onSubmit: @handleSubmit }
+			label(
+				{ className: "form-group--unlabeled" },
+				input(
+					type: "radio"
+					name: "lang"
+					value: "nb"
+					checked: (state.lang == 'nb')
+					onChange: @handleLanguageChange
+				)
+				' Norwegian'
+			)
+			label(
+				{ className: "form-group--unlabeled" }
+				input(
+					type: "radio"
+					name: "lang"
+					value: "en"
+					checked: (state.lang == 'en')
+					onChange: @handleLanguageChange
+				)
+				' English'
+			)
+			label(
+				{ className: "form-group" }
+				'Slug: '
+				input(props.slug)
+			)
+			label(
+				{ className: "form-group" }
+				'Title: '
+				input(props.title)
+			)
+			label(
+				{ className: "form-group" }
+				'Content: '
+				textarea(props.content)
+			)
+			div(
+				{ className: "form-group--unlabeled" }
+				input(type: "submit", value: "Save")
+			)
+		)

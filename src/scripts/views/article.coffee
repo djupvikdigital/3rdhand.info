@@ -1,11 +1,13 @@
 moment = require 'moment'
 React = require 'react'
+Elements = require 'react-coffee-elements'
 Reflux = require 'reflux'
 Router = require 'react-router'
 
 utils = require '../utils.coffee'
 
-Link = Router.Link
+{ div, h1 } = Elements
+Link = React.createFactory Router.Link
 
 module.exports = React.createClass
 	displayName: 'ArticleItem'
@@ -15,10 +17,10 @@ module.exports = React.createClass
 		created = moment(article.created).format('YYYY/MM/DD')
 		url = '/' + created + '/' + article.slug
 		if url != @getPath()
-			h1 = <Link to={ url }>{ article.title }</Link>
+			h = Link { to: url }, article.title
 		else
-			h1 = article.title
-		<div>
-			<h1>{ h1 }</h1>
-			<div dangerouslySetInnerHTML={{ __html: article.content }}/>
-		</div>
+			h = article.title
+		div(
+			h1 h
+			div dangerouslySetInnerHTML: { __html: article.content }
+		)

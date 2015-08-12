@@ -16,7 +16,6 @@
     "url": "https://github.com/thirdhand/thirdhand.github.com/issues"
   },
   "devDependencies": {
-    "coffee-jsx-loader": "^0.1.2",
     "coffee-loader": "^0.7.2",
     "coffee-react": "^4.0.0",
     "coffee-script": "^1.9.3",
@@ -50,8 +49,8 @@
     "marked": "^0.3.3",
     "moment": "^2.10.3",
     "nano": "^6.1.4",
-    "node-cjsx": "^1.0.0",
     "react": "^0.13.3",
+    "react-coffee-elements": "^0.1.0",
     "react-document-title": "^1.0.2",
     "react-router": "^0.13.3",
     "reflux": "^0.2.10",

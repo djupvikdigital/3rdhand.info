@@ -1,0 +1,26 @@
+.site-menu {
+	list-style: none;
+	padding-left: 10rem;
+	padding-right: 2em;
+	border-bottom: 10px solid #1F152B;
+	margin: 0;
+	background-color: #FFFD00;
+}
+
+.site-menu > li {
+	display: inline;
+}
+
+.site-menu > li:first-child {
+	padding-left: 2em;
+}
+
+.site-menu a {
+	display: inline-block;
+	padding: .5em 1.25em;
+	font-size: 1.2rem;
+	font-weight: bold;
+	text-decoration: none;
+	text-transform: uppercase;
+	color: #000;
+}

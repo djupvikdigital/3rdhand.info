@@ -1,5 +1,3 @@
-require('node-cjsx').transform()
-
 express = require 'express'
 bodyParser = require 'body-parser'
 Promise = require 'bluebird'
@@ -10,7 +8,7 @@ DocumentTitle = require 'react-document-title'
 global.Promise = Promise
 
 db = require './db.coffee'
-routes = require './src/scripts/views/routes.cjsx'
+routes = require './src/scripts/views/routes.coffee'
 articleActions = require './src/scripts/actions/article-actions.coffee'
 articleStore = require './src/scripts/stores/article-store.coffee'
 

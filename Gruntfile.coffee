@@ -7,8 +7,8 @@ module.exports = (grunt) ->
 		module:
 			loaders: [
 				{
-					test: /\.(coffee|cjsx)$/
-					loader: 'coffee-jsx-loader'
+					test: /\.coffee$/
+					loader: 'coffee-loader'
 				}
 				{
 					test: /\.scss$/

@@ -9,7 +9,8 @@ html
 		link(rel="stylesheet" href="http://localhost:8080/dist/styles/main.css")
 	body
 		header.site-header(role="banner")
-			//-img.site-header__logo(src="/dist/svg/logo.svg", alt="")
+			.site-header__logo
+				svg(xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 197")!='<g transform="translate(80 -1007.362)"><circle cx="-27.5" cy="1096.862" r="107.5"/><path d="M-11.475 1082.09c-15.394 2.627-29.647 3.757-45.1 3.757v7.517h15.033v52.617h-15.033v7.518H3.56v-7.517h-15.035zM-26.508 1033.142c-1.284 0-2.538.11-3.76.323v14.798h-1.878v-14.373c-2.773.748-5.324 2.027-7.516 3.73v12.522h-1.88v-10.878c-3.798 3.744-6.15 8.9-6.15 14.593 0 11.442 9.487 20.715 21.184 20.715 11.697 0 21.185-9.273 21.185-20.715 0-5.698-2.346-10.86-6.152-14.608v10.892h-1.88v-12.523c-2.194-1.705-4.74-2.997-7.516-3.744v14.387h-1.88v-14.784c-1.22-.214-2.476-.338-3.758-.338z"/></g>'
 			.site-header__title
 				svg(
 					width="100%"
@@ -34,4 +35,5 @@ html
 						style="opacity: .2; transform: scale(0.3)"
 					)/
 		#app!= app
+		//img(src='http://placebear.com/1920/1080' style='max-width: 100%;')
 		script(src="http://localhost:8080/dist/scripts/main.js")

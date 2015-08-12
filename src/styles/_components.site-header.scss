@@ -8,13 +8,40 @@
 }
 
 .site-header__logo {
-	width: 8rem;
+	float: left;
+	position: absolute;
+	width: 10rem;
 	vertical-align: top;
+}
+
+.site-header__logo::before {
+	content: '';
+	display: block;
+	padding-top: 123.125%;
+}
+
+.site-header__logo > svg {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	overflow: visible;
+}
+
+.site-header__logo circle {
+	fill: #FFFD00;
+	paint-order: stroke;
+	stroke: #1F152B;
+	stroke-dashoffset: -35%;
+	stroke-dasharray: 337.72, 337.72;
+	stroke-width: 20px;
 }
 
 .site-header__title {
 	height: 100px;
-	background-color: hsl(130, 50%, 75%);
+	padding-left: 10rem;
+	background-color: hsl(267, 64%, 13%);
 }
 
 .site-header__title > svg {
@@ -23,5 +50,5 @@
 
 .site-header__title text,
 .site-header__title use {
-	fill: hsl(110, 50%, 60%);
+	fill: hsl(267, 64%, 33%);
 }
