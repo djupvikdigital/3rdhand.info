@@ -1,13 +1,10 @@
 React = require 'react'
-Elements = require 'react-coffee-elements'
 Immutable = require 'immutable'
 
-FormGroup = ((fn) ->
-	(options...) ->
-		if options[0]['_isReactElement'] or options[0].constructor isnt Object
-			options.unshift {}
-		fn.apply this, options
-)(React.createFactory require('./form-group.coffee'))
+Elements = require '../elements.coffee'
+createFactory = require '../create-factory.coffee'
+
+FormGroup = createFactory require './form-group.coffee'
 
 utils = require '../utils.coffee'
 
