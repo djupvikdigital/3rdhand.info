@@ -10,7 +10,6 @@ FormGroup = ((fn) ->
 )(React.createFactory require('./form-group.coffee'))
 
 utils = require '../utils.coffee'
-articleActions = require '../actions/article-actions.coffee'
 
 { form, label, input, textarea, div } = Elements
 
@@ -55,7 +54,7 @@ module.exports = React.createClass
 		@setLanguage e.target.value
 	handleSubmit: (e) ->
 		e.preventDefault()
-		@props.dispatch articleActions.save @state.get('data').toJS()
+		@props.save @state.get('data').toJS()
 	render: ->
 		state = @state.toJS()
 		data = utils.getFieldValueFromFormats utils.localize state.lang, state.data

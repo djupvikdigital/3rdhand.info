@@ -18,6 +18,8 @@ module.exports = React.createClass
 	displayName: 'ArticleList'
 	fetch: (params) ->
 		@props.dispatch articleActions.fetch(params)
+	save: (data) ->
+		@props.dispatch articleActions.save data
 	componentWillMount: ->
 		@fetch @props.params unless @props.lastUpdate
 	componentWillReceiveProps: (nextProps) ->
@@ -42,7 +44,7 @@ module.exports = React.createClass
 				list = [
 					ArticleEditor(
 						data: data
-						dispatch: @props.dispatch
+						save: @save
 						params: @props.params
 					)
 				]
