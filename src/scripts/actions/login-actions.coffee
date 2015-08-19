@@ -1,5 +1,11 @@
-Reflux = require 'reflux'
-
 module.exports =
-	login: Reflux.createAction()
-	logout: Reflux.createAction()
+	login: (login) ->
+		return {
+			type: 'LOGIN'
+			user: login.user
+			password: login.password
+		}
+	logout: ->
+		return {
+			type: 'LOGOUT'
+		}

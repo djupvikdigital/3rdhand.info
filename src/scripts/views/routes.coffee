@@ -1,9 +1,13 @@
 React = require 'react'
 Router = require 'react-router'
+ReactRedux = require 'react-redux'
+
+articleSelector = require '../selectors/article-selector.coffee'
+loginSelector = require '../selectors/login-selector.coffee'
 
 App = require './app.coffee'
-ArticleList = require './article-list.coffee'
-LoginDialog = require './login-dialog.coffee'
+ArticleList = ReactRedux.connect(articleSelector)(require './article-list.coffee')
+LoginDialog = ReactRedux.connect(loginSelector)(require './login-dialog.coffee')
 
 DefaultRoute = React.createFactory Router.DefaultRoute
 Route = React.createFactory Router.Route

@@ -1,7 +1,4 @@
-jest
-	.dontMock 'immutable'
-	.dontMock 'marked'
-	.dontMock '../src/scripts/utils.coffee'
+expect = require 'expect'
 
 Immutable = require 'immutable'
 utils = require '../src/scripts/utils.coffee'

@@ -1,4 +1,4 @@
-jest.autoMockOff()
+expect = require 'expect'
 
 React = require 'react/addons'
 TestUtils = React.addons.TestUtils

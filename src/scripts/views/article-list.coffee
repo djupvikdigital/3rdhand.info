@@ -1,49 +1,56 @@
+Immutable = require 'immutable'
 React = require 'react'
-Elements = require 'react-coffee-elements'
-Reflux = require 'reflux'
-DocumentTitle = React.createFactory require 'react-document-title'
 
 utils = require '../utils.coffee'
+Elements = require '../elements.coffee'
+createFactory = require '../create-factory.coffee'
+
+DocumentTitle = createFactory require 'react-document-title'
+
 articleActions = require '../actions/article-actions.coffee'
-articleStore = require '../stores/article-store.coffee'
-ArticleItem = React.createFactory require './article.coffee'
-ArticleEditor = React.createFactory require './article-editor.coffee'
+store = require '../store.coffee'
+ArticleItem = createFactory require './article.coffee'
+ArticleEditor = createFactory require './article-editor.coffee'
 
 { article, div } = Elements
 
 module.exports = React.createClass
 	displayName: 'ArticleList'
-	mixins: [
-		Reflux.listenTo(articleStore, 'onUpdate')
-	]
 	fetch: (params) ->
-		articleActions.fetch(params)
-	onUpdate: (articles) ->
-		@setState articles: articles
-	getInitialState: ->
-		@fetch @props.params unless articleStore.lastFetched
-		{ articles: articleStore.articles }
+		@props.dispatch articleActions.fetch(params)
+	componentWillMount: ->
+		@fetch @props.params unless @props.lastUpdate
 	componentWillReceiveProps: (nextProps) ->
-		@fetch nextProps.params
+		if nextProps.params != @props.params
+			@fetch nextProps.params
 	render: ->
-		articles = @state.articles
-		lang = articleStore.lang
-		isSingle = articles.length == 1
+		articles = @props.articles
+		lang = @props.lang
+		isSingle = articles.size == 1
 		title = @props.title
-		if isSingle
-			title = utils.getFieldValueFromFormats(utils.localize(lang, articles[0].title)) + ' - ' + title
 		unless isSingle
-			datalist = ({ doc: article, lang: lang } for article in articles)
-			list = (article({ key: data.doc._id }, ArticleItem(data: data)) for data in datalist)
+			list = articles.map((doc) ->
+				data = { doc: doc.toJS(), lang: lang }
+				article(
+					{ key: doc._id }
+					ArticleItem(data: data)
+				)
+			).toJS()
 		else
-			data = doc: articles[0], lang: lang
-			if @props.params.view
-				list = ArticleEditor data: data, params: @props.params
+			data = doc: articles.get(0).toJS(), lang: lang
+			if @props.params?.view
+				list = [
+					ArticleEditor(
+						data: data
+						dispatch: @props.dispatch
+						params: @props.params
+					)
+				]
 			else
-				list = ArticleItem data: data
+				list = [
+					ArticleItem data: data
+				]
 		DocumentTitle(
 			{ title: title }
-			div(
-				list
-			)
+			div.apply(this, list)
 		)

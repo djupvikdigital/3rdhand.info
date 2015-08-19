@@ -63,3 +63,5 @@ module.exports =
 		map = if gotMap then obj else Immutable.Map(obj)
 		map = map.filterNot keyIn '_id', '_rev'
 		unless gotMap then map.toObject() else map
+	validLogin: (obj) ->
+		return typeof obj == "object" && 'user' of obj && 'password' of obj

@@ -1,10 +1,9 @@
 moment = require 'moment'
 React = require 'react'
-Elements = require 'react-coffee-elements'
-Reflux = require 'reflux'
 Router = require 'react-router'
 
 utils = require '../utils.coffee'
+Elements = require '../elements.coffee'
 
 { div, h1 } = Elements
 Link = React.createFactory Router.Link

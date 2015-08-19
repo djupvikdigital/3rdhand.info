@@ -1,33 +1,36 @@
 React = require 'react'
-Elements = require 'react-coffee-elements'
-Reflux = require 'reflux'
+
+createFactory = require '../create-factory.coffee'
+Elements = require '../elements.coffee'
+FormGroup = createFactory require './form-group.coffee'
 
 actions = require '../actions/login-actions.coffee'
-store = require '../stores/login-store.coffee'
 
 { form, label, input } = Elements
 
 module.exports = React.createClass
 	displayName: 'LoginDialog'
-	mixins: [
-		Reflux.listenTo store, 'onUpdate'
-	]
+	propsToState: (props) ->
+		return {
+			user: props.user
+			password: ''
+		}
 	getInitialState: ->
-		store.getLogin()
+		@propsToState(@props)
 	handleChange: (e) ->
 		state = {}
 		state[e.target.name] = e.target.value
 		@setState state
 	handleLogin: (e) ->
 		e.preventDefault()
-		actions.login @state
+		@props.dispatch actions.login @state
 	handleLogout: (e) ->
 		e.preventDefault()
-		actions.logout()
-	onUpdate: (login) ->
-		@replaceState login
+		@props.dispatch actions.logout()
+	componentWillReceiveProps: (nextProps) ->
+		@replaceState @propsToState nextProps
 	render: ->
-		if store.isLoggedIn()
+		if @props.isLoggedIn
 			form(
 				{ onSubmit: @handleLogout }
 				'Logged in as ' + @state.user
@@ -36,7 +39,7 @@ module.exports = React.createClass
 		else
 			form(
 				{ onSubmit: @handleLogin }
-				label(
+				FormGroup(
 					'Username: '
 					input(
 						name:"user"
@@ -44,7 +47,7 @@ module.exports = React.createClass
 						onChange: @handleChange
 					)
 				)
-				label(
+				FormGroup(
 					'Password: '
 					input(
 						type: "password"
@@ -53,5 +56,7 @@ module.exports = React.createClass
 						onChange: @handleChange
 					)
 				)
-				input(type: "submit", value: "Log in")
+				FormGroup(
+					input(type: "submit", value: "Log in")
+				)
 			)

@@ -1,40 +1,54 @@
 React = require 'react'
-Elements = require 'react-coffee-elements'
+ReactRedux = require 'react-redux'
 Router = require 'react-router'
-DocumentTitle = React.createFactory require 'react-document-title'
-moment = require 'moment'
 
-loginStore = require '../stores/login-store.coffee'
+createFactory = require '../create-factory.coffee'
+articleSelector = require '../selectors/article-selector.coffee'
+loginSelector = require '../selectors/login-selector.coffee'
 
-{ div, nav, ul, li } = Elements
+#ReduxDevtools = require 'redux-devtools/lib/react'
+
+# DebugPanel = React.createFactory ReduxDevtools.DebugPanel
+# DevTools = React.createFactory ReduxDevtools.DevTools
+# LogMonitor = ReduxDevtools.LogMonitor
+
+DocumentTitle = React.createFactory ReactRedux.connect(articleSelector)(require 'react-document-title')
+
+Elements = require '../elements.coffee'
+store = require '../store.coffee'
+SiteMenu = createFactory ReactRedux.connect(loginSelector)(require './site-menu.coffee')
+
+{ div } = Elements
+Provider = createFactory ReactRedux.Provider
 RouteHandler = React.createFactory Router.RouteHandler
-Link = React.createFactory Router.Link
+Link = createFactory Router.Link
 
 module.exports = React.createClass
 	displayName: 'App'
 	render: ->
-		newUrl = '/' + moment().format('YYYY/MM/DD') + '/untitled/new'
-		ulArgs = [
-			{ className: "site-menu" }
-			li(Link({ to: "app"} , 'Home'))
-			li(Link({ to: "admin"}, 'Admin'))
-		]
-		if loginStore.isLoggedIn()
-			ulArgs[ulArgs.length] = li({ key: "new-article"}, Link(to: newUrl, 'New article'))
-		title = '3rdhand.info'
-		props =
-			title: title
-		for own k, v of @props
-			props[k] = v
-		DocumentTitle(
-			{ title: title }
-			div(
-				nav(
-					ul(ulArgs...)
-				)
-				div(
-					{ className: "wrapper"}
-					RouteHandler(props)
-				)
+		div(
+			Provider(
+				{ store: store }
+				->
+					DocumentTitle(
+						{ title: '' }
+						div(
+							SiteMenu()
+							div(
+								{ className: "wrapper"}
+								RouteHandler(@props)
+							)
+						)
+					)
 			)
+# 			if (typeof window != 'undefined')
+# 				DebugPanel(
+# 					{
+# 						top: true
+# 						right: true
+# 						bottom: true
+# 						key: 'debugPanel'
+# 					}
+# 					DevTools({ store: store, monitor: LogMonitor })
+# 				)
 		)

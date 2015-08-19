@@ -9,6 +9,7 @@
 
 .form-group > input:not([type]),
 .form-group > input[type=text],
+.form-group > input[type=password],
 .form-group > textarea {
 	width: 75%;
 	text-align: left;

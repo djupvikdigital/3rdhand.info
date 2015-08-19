@@ -55,7 +55,7 @@ module.exports = React.createClass
 		@setLanguage e.target.value
 	handleSubmit: (e) ->
 		e.preventDefault()
-		articleActions.save @state.get('data').toJS()
+		@props.dispatch articleActions.save @state.get('data').toJS()
 	render: ->
 		state = @state.toJS()
 		data = utils.getFieldValueFromFormats utils.localize state.lang, state.data

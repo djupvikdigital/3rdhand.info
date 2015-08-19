@@ -4,6 +4,7 @@ label {
 
 label > input:not([type]),
 label > input[type=text],
+label > input[type=password],
 label > textarea {
 	box-sizing: border-box;
 	margin-bottom: $inuit-base-spacing-unit--small;

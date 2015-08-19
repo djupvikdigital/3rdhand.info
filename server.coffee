@@ -9,8 +9,6 @@ global.Promise = Promise
 
 db = require './db.coffee'
 routes = require './src/scripts/views/routes.coffee'
-articleActions = require './src/scripts/actions/article-actions.coffee'
-articleStore = require './src/scripts/stores/article-store.coffee'
 
 getCookie = (headers) ->
 	if headers && headers['set-cookie']
@@ -27,13 +25,9 @@ main = (req, res) ->
 			console.log err
 	
 	router.run (Handler, state) =>
-		articleActions.fetch.triggerPromise(state.params).then((articles) ->
-			html = React.renderToString React.createElement Handler, params: state.params
-			title = DocumentTitle.rewind()
-			res.render 'index', title: title, app: html, doctype: 'strict'
-		).catch((err) ->
-			res.send err
-		)
+		html = React.renderToString React.createElement Handler, params: state.params
+		title = DocumentTitle.rewind()
+		res.render 'index', title: title, app: html, doctype: 'strict'
 
 server = express()
 server.use(express.static(__dirname))
@@ -68,7 +62,7 @@ server.post '/', (req, res) ->
 		dbauth = cookie if cookie
 		if err
 			console.log err
-			res.send err
+			res.status(err.statusCode).send JSON.stringify err
 		else
 			res.send body
 	auth = req.body.auth
@@ -76,7 +70,7 @@ server.post '/', (req, res) ->
 	if req.body.auth
 		db().auth auth.user, auth.password, (err, body, headers) ->
 			if err
-				res.send err
+				res.status(err.statusCode).send JSON.stringify err
 			else
 				dbauth = getCookie(headers)
 			db(dbauth).insert doc, doc._id, callback
