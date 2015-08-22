@@ -34,7 +34,9 @@ module.exports = React.createClass
 			form(
 				{ onSubmit: @handleLogout }
 				'Logged in as ' + @state.user
-				input(type:"submit", value: "Log out")
+				FormGroup(
+					input(className: 'btn', type:"submit", value: "Log out")
+				)
 			)
 		else
 			form(
@@ -57,6 +59,6 @@ module.exports = React.createClass
 					)
 				)
 				FormGroup(
-					input(type: "submit", value: "Log in")
+					input(className: 'btn', type: "submit", value: "Log in")
 				)
 			)

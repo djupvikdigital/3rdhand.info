@@ -8,6 +8,8 @@
 
 @import "node_modules/inuit-clearfix/trumps.clearfix";
 
+$link-hue: 275;
+$link-color: hsl($link-hue, 52%, 33%);
 @import "node_modules/inuit-starter-kit/node_modules/inuit-page/base.page";
 @import "base.page";
 
@@ -26,8 +28,13 @@ $inuit-heading-size-6: 16px;
 @import "base.forms";
 @import "objects.forms";
 
+@import "beautons";
+
 @import "objects.wrappers";
 
+$site-header-bg-hue: 275;
+$site-logo-bg-color: hsl(60, 100%, 50%);
+$site-header-bg-color: $link-color;
 @import "components.site-header";
 
 @import "components.site-menu";

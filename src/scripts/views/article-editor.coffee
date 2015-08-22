@@ -90,6 +90,6 @@ module.exports = React.createClass
 				textarea(@getTextProps('content', data))
 			)
 			FormGroup(
-				input(type: "submit", value: "Save")
+				input(className: 'btn', type: "submit", value: "Save")
 			)
 		)

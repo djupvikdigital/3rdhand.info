@@ -2,9 +2,9 @@
 	list-style: none;
 	padding-left: 10rem;
 	padding-right: 2em;
-	border-bottom: 10px solid #1F152B;
-	margin: 0;
-	background-color: #FFFD00;
+	border-bottom: 10px solid $site-header-bg-color;
+	margin: 0 0 2em;
+	background-color: $site-logo-bg-color;
 }
 
 .site-menu > li {
@@ -22,5 +22,4 @@
 	font-weight: bold;
 	text-decoration: none;
 	text-transform: uppercase;
-	color: #000;
 }

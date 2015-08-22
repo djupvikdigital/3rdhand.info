@@ -30,9 +30,9 @@
 }
 
 .site-header__logo circle {
-	fill: #FFFD00;
+	fill: $site-logo-bg-color;
 	paint-order: stroke;
-	stroke: #1F152B;
+	stroke: $site-header-bg-color;
 	stroke-dashoffset: -35%;
 	stroke-dasharray: 337.72, 337.72;
 	stroke-width: 20px;
@@ -41,7 +41,7 @@
 .site-header__title {
 	height: 100px;
 	padding-left: 10rem;
-	background-color: hsl(267, 64%, 13%);
+	background-color: $site-header-bg-color;
 }
 
 .site-header__title > svg {
@@ -50,5 +50,5 @@
 
 .site-header__title text,
 .site-header__title use {
-	fill: hsl(267, 64%, 33%);
+	fill: hsl($site-header-bg-hue, 72%, 53%);
 }
