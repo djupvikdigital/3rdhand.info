@@ -21,5 +21,5 @@ module.exports = React.createClass
 			h = article.title
 		div(
 			h1 h
-			div dangerouslySetInnerHTML: { __html: article.content }
+			div innerHtml: article.content
 		)

@@ -9,6 +9,7 @@ global.Promise = Promise
 
 db = require './db.coffee'
 routes = require './src/scripts/views/routes.coffee'
+Template = React.createFactory require './views/index.coffee'
 
 getCookie = (headers) ->
 	if headers && headers['set-cookie']
@@ -25,14 +26,15 @@ main = (req, res) ->
 			console.log err
 	
 	router.run (Handler, state) =>
-		html = React.renderToString React.createElement Handler, params: state.params
+		doctype = '<!DOCTYPE html>'
+		app = React.renderToString React.createElement Handler, params: state.params
 		title = DocumentTitle.rewind()
-		res.render 'index', title: title, app: html, doctype: 'strict'
+		html = React.renderToStaticMarkup Template title: title, app: app
+		res.send doctype + html
 
 server = express()
 server.use(express.static(__dirname))
 server.use(bodyParser.json())
-server.set('view engine', 'jade')
 
 server.use (req, res, next) ->
 	res.header 'Access-Control-Allow-Origin', '*'

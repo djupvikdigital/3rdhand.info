@@ -53,7 +53,6 @@
     "moment": "^2.10.3",
     "nano": "^6.1.4",
     "react": "^0.13.3",
-    "react-coffee-elements": "^0.1.0",
     "react-document-title": "^1.0.2",
     "react-redux": "^0.8.2",
     "react-router": "^0.13.3",
@@ -61,12 +60,5 @@
     "redux-thunk": "^0.1.0",
     "superagent": "^1.2.0",
     "superagent-bluebird-promise": "^2.0.2"
-  },
-  "jest": {
-    "scriptPreprocessor": "preprocessor.js",
-    "testFileExtensions": [
-      "coffee",
-      "js"
-    ]
   }
 }

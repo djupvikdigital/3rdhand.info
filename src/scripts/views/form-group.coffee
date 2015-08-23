@@ -1,5 +1,5 @@
 React = require 'react'
-Elements = require 'react-coffee-elements'
+Elements = require '../elements.coffee'
 { label, div } = Elements
 
 module.exports = React.createClass
