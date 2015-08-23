@@ -12,6 +12,18 @@ utils = require '../utils.coffee'
 
 module.exports = React.createClass
 	displayName: 'ArticleEditor'
+	set: (k, v) ->
+		# this will do for now
+		fieldFormats =
+			title: 'txt'
+			content: 'md'
+		lang = @state.get 'lang'
+		data = @state.get 'data'
+		if data.hasIn [k, lang, fieldFormats[k]]
+			data = data.setIn [k, lang, fieldFormats[k]], v
+		else
+			data = data.set k, v
+		@replaceState @state.set 'data', data
 	setLanguage: (lang) ->
 		@replaceState @state.set('lang', lang)
 	getInitialState: ->
@@ -34,19 +46,7 @@ module.exports = React.createClass
 			props.placeholder = utils.getFieldValueFromFormats utils.localize @state.get('lang'), @props.data.doc[name]
 		props
 	handleChange: (e) ->
-		# this will do for now
-		fieldFormats =
-			title: 'txt'
-			content: 'md'
-		lang = @state.get 'lang'
-		data = @state.get 'data'
-		k = e.target.name
-		v = e.target.value
-		if data.hasIn [k, lang, fieldFormats[k]]
-			data = data.setIn [k, lang, fieldFormats[k]], v
-		else
-			data = data.set k, v
-		@replaceState @state.set 'data', data
+		@set e.target.name, e.target.value
 	handleLanguageChange: (e) ->
 		@setLanguage e.target.value
 	handleSubmit: (e) ->
