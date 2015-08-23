@@ -33,6 +33,8 @@ module.exports = (grunt) ->
 	grunt.initConfig
 		clean: ['dist']
 		jade:
+			options:
+				doctype: 'html'
 			dist:
 				files: [
 					expand: true
@@ -42,6 +44,9 @@ module.exports = (grunt) ->
 					ext: '.svg'
 				]
 		svgmin:
+			options:
+				js2svg:
+					tagShortEnd: ' />'
 			dist:
 				files: [
 					expand: true
