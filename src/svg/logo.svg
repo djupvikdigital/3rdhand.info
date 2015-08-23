@@ -1,88 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="160"
-   height="197"
-   id="svg2"
-   version="1.1"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="logo.svg">
-  <defs
-     id="defs4" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="2.0000001"
-     inkscape:cx="266.06479"
-     inkscape:cy="145.35839"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     showgrid="true"
-     width="256px"
-     inkscape:window-width="1861"
-     inkscape:window-height="1051"
-     inkscape:window-x="55"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
-     fit-margin-left="0"
-     fit-margin-top="0"
-     fit-margin-right="0"
-     fit-margin-bottom="0">
-    <inkscape:grid
-       type="xygrid"
-       id="grid2993"
-       empspacing="4"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true"
-       originx="80"
-       originy="151.99999" />
-  </sodipodi:namedview>
-  <metadata
-     id="metadata7">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(80,-1007.3622)">
-    <circle
-       style="fill:#000000;fill-opacity:1;stroke:none"
-       id="path4145"
-       cx="-27.499998"
-       cy="1096.8622"
-       r="107.5" />
-    <path
-       style="fill:#000000;stroke:none"
-       d="m -11.474706,1082.0885 c -15.394405,2.6285 -29.646908,3.7583 -45.100383,3.7583 l 0,7.5168 15.033461,0 0,52.6171 -15.033461,0 0,7.5168 15.033461,0 30.066923,0 15.033459,0 0,-7.5168 -15.033459,0 z"
-       id="rect2995"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccccccccccc" />
-    <path
-       style="fill:#000000;stroke:none"
-       d="m -26.508167,1033.1417 c -1.283628,0 -2.537676,0.1091 -3.758366,0.323 l 0,14.7985 -1.879182,0 0,-14.3728 c -2.773463,0.7476 -5.324044,2.0271 -7.516731,3.729 l 0,12.523 -1.879182,0 0,-10.8787 c -3.797888,3.7444 -6.151387,8.9016 -6.151387,14.593 0,11.4419 9.487965,20.7151 21.184849,20.7151 11.696881,0 21.184846,-9.2732 21.184846,-20.7151 0,-5.6973 -2.346107,-10.8609 -6.151386,-14.6077 l 0,10.8934 -1.879184,0 0,-12.523 c -2.195087,-1.704 -4.739824,-2.9963 -7.51673,-3.7437 l 0,14.3875 -1.879182,0 0,-14.7839 c -1.219609,-0.2135 -2.476072,-0.3376 -3.758365,-0.3376 z"
-       id="path2993"
-       inkscape:connector-curvature="0" />
-  </g>
+<svg id="svg2" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 197" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+ <metadata id="metadata7">
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g id="layer1" transform="translate(80 -1007.4)">
+  <circle id="path4145" cx="-27.5" cy="1096.9" r="107.5"/>
+  <path id="rect2995" d="m-11.475 1082.1c-15.394 2.6285-29.647 3.7583-45.1 3.7583v7.5168h15.033v52.617h-15.033v7.5168h15.033 30.067 15.033v-7.5168h-15.033z"/>
+  <path id="path2993" d="m-26.508 1033.1c-1.2836 0-2.5377 0.1091-3.7584 0.323v14.798h-1.8792v-14.373c-2.7735 0.7476-5.324 2.0271-7.5167 3.729v12.523h-1.8792v-10.879c-3.7979 3.7444-6.1514 8.9016-6.1514 14.593 0 11.442 9.488 20.715 21.185 20.715s21.185-9.2732 21.185-20.715c0-5.6973-2.3461-10.861-6.1514-14.608v10.893h-1.8792v-12.523c-2.1951-1.704-4.7398-2.9963-7.5167-3.7437v14.388h-1.8792v-14.784c-1.2196-0.2135-2.4761-0.3376-3.7584-0.3376z"/>
+ </g>
 </svg>
