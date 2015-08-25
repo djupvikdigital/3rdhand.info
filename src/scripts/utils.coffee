@@ -1,11 +1,7 @@
 transducers = require 'transducers.js'
 Immutable = require 'immutable'
-marked = require 'marked'
 
 { cat, compose, filter, map, seq, take, toArray, dropWhile } = transducers
-
-marked.setOptions
-	sanitize: true
 
 isFalsy = (v) ->
 	!v
@@ -102,15 +98,11 @@ applyFormatters = shortCircuitScalars (input, formatters) ->
 			seq input, mapValue f
 	f input
 
-format = (input) ->
-	formatters = { md: marked }
-	applyFormatters(input, formatters)
-
 module.exports =
 	filterValueAndKey: filterValueAndKey
 	getFirstValue: getFirstValue
 	getFieldValueFromFormats: applyFormatters
-	format: format
+	format: applyFormatters
 	keyIn: keyIn
 	localize: localize
 	recursiveEmptyMapper: recursiveEmptyMapper

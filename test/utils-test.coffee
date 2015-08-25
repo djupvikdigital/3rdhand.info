@@ -3,6 +3,7 @@ expect = require 'expect'
 Immutable = require 'immutable'
 t = require 'transducers.js'
 
+formatters = require '../src/scripts/formatters.coffee'
 utils = require '../src/scripts/utils.coffee'
 
 describe 'format', ->
@@ -12,7 +13,7 @@ describe 'format', ->
 				md: 'Markdown *em*.'
 		test =
 			field: '<p>Markdown <em>em</em>.</p>\n'
-		expect(utils.format(input)).toEqual test
+		expect(utils.format(input, formatters)).toEqual test
 
 describe 'filterValueAndKey', ->
 	it 'returns an object filtered by key', ->

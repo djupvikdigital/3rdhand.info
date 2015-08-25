@@ -2,6 +2,7 @@ moment = require 'moment'
 React = require 'react'
 Router = require 'react-router'
 
+formatters = require '../formatters.coffee'
 utils = require '../utils.coffee'
 Elements = require '../elements.coffee'
 
@@ -12,7 +13,10 @@ module.exports = React.createClass
 	displayName: 'ArticleItem'
 	mixins: [ Router.State ]
 	render: ->
-		article = utils.format utils.localize @props.data.lang, @props.data.doc
+		article = utils.format(
+			utils.localize(@props.data.lang, @props.data.doc)
+			formatters
+		)
 		created = moment(article.created).format('YYYY/MM/DD')
 		url = '/' + created + '/' + article.slug
 		if url != @getPath()
