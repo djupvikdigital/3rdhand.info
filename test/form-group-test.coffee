@@ -2,7 +2,7 @@ expect = require 'expect'
 
 React = require 'react/addons'
 TestUtils = React.addons.TestUtils
-Elements = require 'react-coffee-elements'
+Elements = require '../src/scripts/elements.coffee'
 FormGroup = React.createFactory require '../src/scripts/views/form-group.coffee'
 
 { input } = Elements

@@ -1,8 +1,39 @@
+transducers = require 'transducers.js'
 Immutable = require 'immutable'
 marked = require 'marked'
 
+{ cat, compose, filter, map, seq, take, toArray, dropWhile } = transducers
+
 marked.setOptions
 	sanitize: true
+
+isFalsy = (v) ->
+	!v
+
+get = (k, noValue) ->
+	(obj) ->
+		if typeof obj[k] != 'undefined'
+			obj[k]
+		else
+			noValue
+
+argArray = (fn) ->
+	(arr) ->
+		fn(arr...)
+
+mapValue = compose map, (fn) ->
+	argArray (k, v) ->
+		[k, fn(v)]
+
+applyValue = (fn) ->
+	compose(fn, get(1))
+
+dropWhileValue = compose dropWhile, applyValue
+filterValue = compose filter, applyValue
+
+filterValueAndKey = compose filter, (fn) ->
+	argArray (k, v) ->
+		fn(v, k)
 
 recursiveEmptyMapper = (v) ->
 	if Immutable.Map.isMap v
@@ -10,50 +41,75 @@ recursiveEmptyMapper = (v) ->
 	else
 		''
 
+shortCircuitScalars = (fn) ->
+	(input) ->
+		if typeof input != 'object'
+			input
+		else
+			fn arguments...
+
+getFirstKeyValue = shortCircuitScalars (input, keys...) ->
+	xforms = [
+		dropWhileValue(isFalsy)
+		take(1)
+		cat
+	]
+	if keys.length
+		xforms.unshift filterValueAndKey(keyIn(keys...))
+	toArray input, compose xforms...
+
+getValueFromPair = (kv, noValue) ->
+	get(1, noValue) kv
+
+getFirstValue = ->
+	get(1) getFirstKeyValue(arguments...)
+
 keyIn = ->
 	keySet = Immutable.Set(arguments)
 	return (v, k) ->
 		keySet.has k
 
-localize = (lang, input) ->
-	if typeof input != 'object'
-		output = input
-	else if input.hasOwnProperty(lang)
-		output = localize(lang, input[lang])
-	else
-		output = {}
-		for own key, val of input
-			output[key] = localize(lang, val)
-	output
+createFunctionMapper = (functionMap, noValue) ->
+	(k, v) ->
+		if typeof v == 'undefined' && typeof noValue != 'undefined'
+			noValue
+		else if typeof functionMap[k] == 'function'
+			functionMap[k](v)
+		else
+			v
 
-getFieldValueFromFormats = (input) ->
-	if typeof input != 'object'
-		output = input
-	else if input.hasOwnProperty('md') && input.md
-		output = input.md
-	else if input.hasOwnProperty('txt')
-		output = input.txt
+localize = (lang, input) ->
+	l = shortCircuitScalars (input) ->
+		if input.hasOwnProperty(lang)
+			l(input[lang])
+		else
+			seq input, mapValue l
+	l input
+
+createFormatMapper = (formatters) ->
+	if typeof formatters != 'undefined'
+		argArray(createFunctionMapper(formatters, ''))
 	else
-		output = {}
-		for own k, v of input
-			output[k] = getFieldValueFromFormats(v)
-	output
+		getValueFromPair
+
+applyFormatters = shortCircuitScalars (input, formatters) ->
+	f = shortCircuitScalars (input) ->
+		keys = [ 'md', 'txt' ]
+		a = toArray input, filterValueAndKey(keyIn(keys...))
+		if a.length
+			createFormatMapper(formatters)(getFirstKeyValue(a))
+		else
+			seq input, mapValue f
+	f input
 
 format = (input) ->
-	if typeof input != 'object'
-		output = input
-	else if input.hasOwnProperty('md') && input.md
-		output = marked input.md
-	else if input.hasOwnProperty('txt')
-		output = input.txt
-	else
-		output = {}
-		for own k, v of input
-			output[k] = format(v)
-	output
+	formatters = { md: marked }
+	applyFormatters(input, formatters)
 
 module.exports =
-	getFieldValueFromFormats: getFieldValueFromFormats
+	filterValueAndKey: filterValueAndKey
+	getFirstValue: getFirstValue
+	getFieldValueFromFormats: applyFormatters
 	format: format
 	keyIn: keyIn
 	localize: localize
