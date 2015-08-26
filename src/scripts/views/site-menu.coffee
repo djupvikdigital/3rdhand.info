@@ -11,14 +11,15 @@ Link = createFactory Router.Link
 module.exports = React.createClass
 	displayName: 'SiteMenu'
 	render: ->
+		{ home, admin, newArticle } = @props
 		newUrl = '/' + moment().format('YYYY/MM/DD') + '/untitled/new'
 		ulArgs = [
 			{ className: "site-menu" }
-			li(Link({ to: "app"} , 'Home'))
-			li(Link({ to: "admin"}, 'Admin'))
+			li(Link({ to: "app"} , home))
+			li(Link({ to: "admin"}, admin))
 		]
-		if @props.isLoggedIn
-			ulArgs[ulArgs.length] = li({ key: "new-article" }, Link(to: newUrl, 'New article'))
+		if @props.login.isLoggedIn
+			ulArgs[ulArgs.length] = li({ key: "new-article" }, Link(to: newUrl, newArticle))
 		nav(
 			ul(ulArgs...)
 		)

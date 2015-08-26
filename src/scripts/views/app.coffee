@@ -1,10 +1,19 @@
 React = require 'react'
 ReactRedux = require 'react-redux'
 Router = require 'react-router'
+Reselect = require 'reselect'
 
 createFactory = require '../create-factory.coffee'
-articleSelector = require '../selectors/article-selector.coffee'
+localeActions = require '../actions/locale-actions.coffee'
+localeSelector = require '../selectors/locale-selector.coffee'
 loginSelector = require '../selectors/login-selector.coffee'
+
+menuSelector = Reselect.createSelector(
+	[localeSelector, loginSelector]
+	(localeStrings, login) ->
+		localeStrings['login'] = login
+		localeStrings
+)
 
 #ReduxDevtools = require 'redux-devtools/lib/react'
 
@@ -12,16 +21,18 @@ loginSelector = require '../selectors/login-selector.coffee'
 # DevTools = React.createFactory ReduxDevtools.DevTools
 # LogMonitor = ReduxDevtools.LogMonitor
 
-DocumentTitle = React.createFactory ReactRedux.connect(articleSelector)(require 'react-document-title')
+DocumentTitle = React.createFactory ReactRedux.connect(localeSelector)(require 'react-document-title')
 
 Elements = require '../elements.coffee'
 store = require '../store.coffee'
-SiteMenu = createFactory ReactRedux.connect(loginSelector)(require './site-menu.coffee')
+SiteMenu = createFactory ReactRedux.connect(menuSelector)(require './site-menu.coffee')
 
 { div } = Elements
 Provider = createFactory ReactRedux.Provider
 RouteHandler = React.createFactory Router.RouteHandler
 Link = createFactory Router.Link
+
+store.dispatch localeActions.fetchStrings(store.getState().localeState.get('lang'))
 
 module.exports = React.createClass
 	displayName: 'App'
