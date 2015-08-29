@@ -45,6 +45,7 @@ module.exports = React.createClass
 					ArticleEditor(
 						data: data
 						save: @save
+						localeStrings: @props.localeStrings
 						params: @props.params
 					)
 				]

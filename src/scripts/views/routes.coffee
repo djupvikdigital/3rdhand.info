@@ -1,9 +1,28 @@
 React = require 'react'
 Router = require 'react-router'
 ReactRedux = require 'react-redux'
+Reselect = require 'reselect'
 
-articleSelector = require '../selectors/article-selector.coffee'
-loginSelector = require '../selectors/login-selector.coffee'
+localeSelector = require '../selectors/locale-selector.coffee'
+
+mergeLocaleStrings = (state, localeState) ->
+	state.localeStrings = localeState.localeStrings
+	state
+
+articleSelector = Reselect.createSelector(
+	[
+		require '../selectors/article-selector.coffee'
+		localeSelector
+	]
+	mergeLocaleStrings
+)
+loginSelector = Reselect.createSelector(
+	[
+		require '../selectors/login-selector.coffee'
+		localeSelector
+	]
+	mergeLocaleStrings
+)
 
 App = require './app.coffee'
 ArticleList = ReactRedux.connect(articleSelector)(require './article-list.coffee')

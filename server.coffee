@@ -8,6 +8,9 @@ DocumentTitle = require 'react-document-title'
 global.Promise = Promise
 
 db = require './db.coffee'
+store = require './src/scripts/store.coffee'
+articleActions = require './src/scripts/actions/article-actions.coffee'
+localeActions = require './src/scripts/actions/locale-actions.coffee'
 routes = require './src/scripts/views/routes.coffee'
 Template = React.createFactory require './views/index.coffee'
 
@@ -18,19 +21,24 @@ getCookie = (headers) ->
 		''
 
 main = (req, res) ->
-	router = Router.create
-		routes: routes
-		location: req.url
-		onError: (err) ->
-			console.log 'Routing error.'
-			console.log err
-	
-	router.run (Handler, state) =>
-		doctype = '<!DOCTYPE html>'
-		app = React.renderToString React.createElement Handler, params: state.params
-		title = DocumentTitle.rewind()
-		html = React.renderToStaticMarkup Template title: title, app: app
-		res.send doctype + html
+	lang = req.acceptsLanguages 'nb', 'en'
+	Promise.all([
+		store.dispatch(localeActions.fetchStrings(lang))
+		store.dispatch(articleActions.fetch())
+	]).then ->
+		router = Router.create
+			routes: routes
+			location: req.url
+			onError: (err) ->
+				console.log 'Routing error.'
+				console.log err
+
+		router.run (Handler, state) =>
+			doctype = '<!DOCTYPE html>'
+			app = React.renderToString React.createElement Handler, params: state.params
+			title = DocumentTitle.rewind()
+			html = React.renderToStaticMarkup Template title: title, app: app
+			res.send doctype + html
 
 server = express()
 server.use(express.static(__dirname))

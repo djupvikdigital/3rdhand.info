@@ -30,19 +30,20 @@ module.exports = React.createClass
 	componentWillReceiveProps: (nextProps) ->
 		@replaceState @propsToState nextProps
 	render: ->
+		{ loggedInAs, logoutLabel, usernameLabel, passwordLabel, loginLabel } = @props.localeStrings
 		if @props.isLoggedIn
 			form(
 				{ onSubmit: @handleLogout }
-				'Logged in as ' + @state.user
+				loggedInAs + ' ' + @state.user
 				FormGroup(
-					input(className: 'btn', type:"submit", value: "Log out")
+					input(className: 'btn', type:"submit", value: logoutLabel)
 				)
 			)
 		else
 			form(
 				{ onSubmit: @handleLogin }
 				FormGroup(
-					'Username: '
+					usernameLabel + ': '
 					input(
 						name:"user"
 						value: @state.user
@@ -50,7 +51,7 @@ module.exports = React.createClass
 					)
 				)
 				FormGroup(
-					'Password: '
+					passwordLabel + ': '
 					input(
 						type: "password"
 						name: "password"
@@ -59,6 +60,6 @@ module.exports = React.createClass
 					)
 				)
 				FormGroup(
-					input(className: 'btn', type: "submit", value: "Log in")
+					input(className: 'btn', type: "submit", value: loginLabel)
 				)
 			)

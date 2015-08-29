@@ -10,9 +10,9 @@ loginSelector = require '../selectors/login-selector.coffee'
 
 menuSelector = Reselect.createSelector(
 	[localeSelector, loginSelector]
-	(localeStrings, login) ->
-		localeStrings['login'] = login
-		localeStrings
+	(localeState, login) ->
+		localeState['login'] = login
+		localeState
 )
 
 #ReduxDevtools = require 'redux-devtools/lib/react'
@@ -31,8 +31,6 @@ SiteMenu = createFactory ReactRedux.connect(menuSelector)(require './site-menu.c
 Provider = createFactory ReactRedux.Provider
 RouteHandler = React.createFactory Router.RouteHandler
 Link = createFactory Router.Link
-
-store.dispatch localeActions.fetchStrings(store.getState().localeState.get('lang'))
 
 module.exports = React.createClass
 	displayName: 'App'

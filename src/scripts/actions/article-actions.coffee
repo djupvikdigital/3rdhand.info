@@ -36,7 +36,7 @@ receiveArticles = (articles, lang) ->
 	}
 
 onResponse = (res) ->
-	if res.ok
+	if res.ok && res.body.docs
 		articles = res.body.docs
 		if !articles.length
 			create().then((article) ->
@@ -99,7 +99,7 @@ receiveSave = (err, res) ->
 module.exports = {
 	fetch: (params) ->
 		(dispatch) ->
-			if params.slug
+			if params?.slug
 				dispatch requestArticles(true)
 				fetchOne(params).then(dispatch)
 			else

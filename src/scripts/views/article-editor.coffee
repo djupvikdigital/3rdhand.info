@@ -55,6 +55,7 @@ module.exports = React.createClass
 	render: ->
 		state = @state.toJS()
 		data = utils.getFieldValueFromFormats utils.localize state.lang, state.data
+		{ norwegian, english, slugLabel, titleLabel, contentLabel, save } = @props.localeStrings
 		form(
 			{ onSubmit: @handleSubmit }
 			FormGroup(
@@ -65,7 +66,7 @@ module.exports = React.createClass
 					checked: (state.lang == 'nb')
 					onChange: @handleLanguageChange
 				)
-				' Norwegian'
+				' ' + norwegian
 			)
 			FormGroup(
 				input(
@@ -75,21 +76,21 @@ module.exports = React.createClass
 					checked: (state.lang == 'en')
 					onChange: @handleLanguageChange
 				)
-				' English'
+				' ' + english
 			)
 			FormGroup(
-				'Slug: '
+				slugLabel + ': '
 				input(@getTextProps('slug', data))
 			)
 			FormGroup(
-				'Title: '
+				titleLabel + ': '
 				input(@getTextProps('title', data))
 			)
 			FormGroup(
-				'Content: '
+				contentLabel + ': '
 				textarea(@getTextProps('content', data))
 			)
 			FormGroup(
-				input(className: 'btn', type: "submit", value: "Save")
+				input(className: 'btn', type: "submit", value: save)
 			)
 		)

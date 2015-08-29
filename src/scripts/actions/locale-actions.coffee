@@ -28,6 +28,11 @@ receiveLocaleStrings = (res) ->
 module.exports =
 	fetchStrings: (lang) ->
 		(dispatch) ->
+			if !lang
+				return dispatch {
+					type: 'REQUEST_LOCALE_STRINGS_ERROR'
+					error: 'lang parameter missing'
+				}
 			dispatch requestLocaleStrings(lang)
 			req = request(server + 'locales/' + lang + '.yaml')
 			if typeof req.buffer == 'function'

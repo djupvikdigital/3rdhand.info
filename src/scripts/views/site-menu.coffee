@@ -11,7 +11,7 @@ Link = createFactory Router.Link
 module.exports = React.createClass
 	displayName: 'SiteMenu'
 	render: ->
-		{ home, admin, newArticle } = @props
+		{ home, admin, newArticle } = @props.localeStrings
 		newUrl = '/' + moment().format('YYYY/MM/DD') + '/untitled/new'
 		ulArgs = [
 			{ className: "site-menu" }
