@@ -32,14 +32,16 @@ module.exports = React.createClass
 		title = @props.title
 		unless isSingle
 			list = articles.map((doc) ->
-				data = { doc: doc.toJS(), lang: lang }
+				data = doc.toJS()
+				data.lang = lang
 				article(
 					{ key: doc._id }
 					ArticleItem(data: data)
 				)
 			).toJS()
 		else
-			data = doc: articles.get(0).toJS(), lang: lang
+			data = articles.get(0).toJS()
+			data.lang = lang
 			if @props.params?.view
 				list = [
 					ArticleEditor(
@@ -50,6 +52,7 @@ module.exports = React.createClass
 					)
 				]
 			else
+				data.lang = lang
 				list = [
 					ArticleItem data: data
 				]

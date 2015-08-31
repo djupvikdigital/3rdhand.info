@@ -1,5 +1,8 @@
 React = require 'react'
 
+isProps = (obj) ->
+	!React.isValidElement(obj) && obj.constructor == Object && !('_reactFragment' of obj)
+
 transformProps = (props) ->
 	res = {}
 	for k, v of props
@@ -11,7 +14,7 @@ transformProps = (props) ->
 
 module.exports = (ReactClass) ->
 	(options...) ->
-		if !options.length or React.isValidElement(options[0]) or options[0].constructor isnt Object
+		if !options.length || !isProps(options[0])
 			options.unshift {}
 		else
 			options[0] = transformProps options[0]

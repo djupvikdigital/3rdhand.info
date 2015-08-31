@@ -14,7 +14,7 @@ module.exports = React.createClass
 	mixins: [ Router.State ]
 	render: ->
 		article = utils.format(
-			utils.localize(@props.data.lang, @props.data.doc)
+			utils.localize(@props.data.lang, @props.data)
 			formatters
 		)
 		created = moment(article.created).format('YYYY/MM/DD')

@@ -1,8 +1,15 @@
 React = require 'react'
 
 createFactory = require '../create-factory.coffee'
+
+DocumentTitle = createFactory require 'react-document-title'
+
 Elements = require '../elements.coffee'
+Form = createFactory require './form.coffee'
+Output = createFactory require './output.coffee'
 FormGroup = createFactory require './form-group.coffee'
+TextInput = createFactory require './text-input.coffee'
+PasswordInput = createFactory require './password-input.coffee'
 
 actions = require '../actions/login-actions.coffee'
 
@@ -10,56 +17,34 @@ actions = require '../actions/login-actions.coffee'
 
 module.exports = React.createClass
 	displayName: 'LoginDialog'
-	propsToState: (props) ->
-		return {
-			user: props.user
-			password: ''
-		}
-	getInitialState: ->
-		@propsToState(@props)
-	handleChange: (e) ->
-		state = {}
-		state[e.target.name] = e.target.value
-		@setState state
-	handleLogin: (e) ->
-		e.preventDefault()
-		@props.dispatch actions.login @state
-	handleLogout: (e) ->
-		e.preventDefault()
+	handleLogin: (data) ->
+		@props.dispatch actions.login data
+	handleLogout: ->
 		@props.dispatch actions.logout()
-	componentWillReceiveProps: (nextProps) ->
-		@replaceState @propsToState nextProps
 	render: ->
 		{ loggedInAs, logoutLabel, usernameLabel, passwordLabel, loginLabel } = @props.localeStrings
-		if @props.isLoggedIn
-			form(
-				{ onSubmit: @handleLogout }
-				loggedInAs + ' ' + @state.user
-				FormGroup(
-					input(className: 'btn', type:"submit", value: logoutLabel)
-				)
+		initialState =
+			user: @props.user
+		DocumentTitle(
+			{ title: 'Admin' }
+			Form.apply(
+				this
+				if @props.isLoggedIn
+					[
+						{ initialState: initialState, onSubmit: @handleLogout }
+						Output label: loggedInAs, name: 'user'
+						FormGroup(
+							input(className: 'btn', type:"submit", value: logoutLabel)
+						)
+					]
+				else
+					[
+						{ onSubmit: @handleLogin }
+						TextInput label: usernameLabel, name: 'user'
+						PasswordInput label: passwordLabel, name: 'password'
+						FormGroup(
+							input(className: 'btn', type: "submit", value: loginLabel)
+						)
+					]
 			)
-		else
-			form(
-				{ onSubmit: @handleLogin }
-				FormGroup(
-					usernameLabel + ': '
-					input(
-						name:"user"
-						value: @state.user
-						onChange: @handleChange
-					)
-				)
-				FormGroup(
-					passwordLabel + ': '
-					input(
-						type: "password"
-						name: "password"
-						value: @state.password
-						onChange: @handleChange
-					)
-				)
-				FormGroup(
-					input(className: 'btn', type: "submit", value: loginLabel)
-				)
-			)
+		)

@@ -2,7 +2,6 @@ fs = require 'fs'
 path = require 'path'
 
 React = require 'react'
-createFactory = require '../src/scripts/create-factory.coffee'
 Elements = require '../src/scripts/elements.coffee'
 
 { html, head, meta, title, link, body, header, div, script } = Elements
