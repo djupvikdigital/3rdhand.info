@@ -6,37 +6,39 @@ PasswordInput = require './password-input.coffee'
 
 { form } = Elements
 
-initialState = Immutable.fromJS
-	placeholders: {}
-	data: {}
-
 module.exports = React.createClass
 	displayName: 'Form'
+	propsToState: (props) ->
+		return {
+			placeholders: Immutable.fromJS props.placeholders
+			data: Immutable.fromJS props.initialData
+		}
+	getDefaultProps: ->
+		return {
+			placeholders: {}
+			initialData: {}
+		}
 	getInitialState: ->
-		initialState.mergeDeep @props.initialState
+		@propsToState @props
 	keyResolver: (k) ->
-		keys = if Array.isArray then k else [ k ]
+		keys = if Array.isArray(k) then k else [ k ]
 		if typeof @props.keyResolver == 'function'
 			keys = @props.keyResolver.call(this, keys)
 		keys
 	getPlaceholder: (k) ->
-		keys = if Array.isArray(k) then k else [ k ]
-		keys.unshift 'placeholders'
-		@state.getIn @keyResolver(keys)
+		@state.placeholders.getIn @keyResolver(k)
 	getValue: (k) ->
-		keys = if Array.isArray(k) then k else [ k ]
-		keys.unshift 'data'
-		@state.getIn @keyResolver(keys)
+		@state.data.getIn @keyResolver(k)
 	setValue: (k, v) ->
-		keys = if Array.isArray(k) then k else [ k ]
-		keys.unshift 'data'
-		@replaceState @state.setIn @keyResolver(keys), v
+		@setState data: @state.data.setIn(@keyResolver(k), v)
+	componentWillReceiveProps: (nextProps) ->
+		@setState @propsToState nextProps
 	handleChange: (e) ->
 		@setValue e.target.name, e.target.value
 	handleSubmit: (e) ->
 		e.preventDefault()
 		if typeof @props.onSubmit == 'function'
-			@props.onSubmit @state.get('data').toJS()
+			@props.onSubmit @state.data.toJS()
 	renderChildren: ->
 		React.Children.map(
 			@props.children

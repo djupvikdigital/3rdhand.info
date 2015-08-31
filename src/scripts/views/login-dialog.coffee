@@ -23,7 +23,7 @@ module.exports = React.createClass
 		@props.dispatch actions.logout()
 	render: ->
 		{ loggedInAs, logoutLabel, usernameLabel, passwordLabel, loginLabel } = @props.localeStrings
-		initialState =
+		initialData =
 			user: @props.user
 		DocumentTitle(
 			{ title: 'Admin' }
@@ -31,7 +31,7 @@ module.exports = React.createClass
 				this
 				if @props.isLoggedIn
 					[
-						{ initialState: initialState, onSubmit: @handleLogout }
+						{ initialData: initialData, onSubmit: @handleLogout }
 						Output label: loggedInAs, name: 'user'
 						FormGroup(
 							input(className: 'btn', type:"submit", value: logoutLabel)

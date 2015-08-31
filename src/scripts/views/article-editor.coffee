@@ -19,11 +19,11 @@ keyResolver = (k) ->
 	fieldFormats =
 		title: 'txt'
 		content: 'md'
-	v = @state.getIn k
+	v = @state.data.getIn k
 	if Immutable.Map.isMap(v)
 		len = k.length
 		keys = k.slice 0
-		lang = @state.getIn(['data', 'lang'])
+		lang = @state.data.get 'lang'
 		keys.splice len, 0, lang, fieldFormats[k[len - 1]]
 		keys
 	else
@@ -36,23 +36,22 @@ module.exports = React.createClass
 	render: ->
 		data = Immutable.fromJS(@props.data).filterNot(utils.keyIn('lang'))
 		isNew = @props.params.view == 'new'
-		initialState = {}
+		props = {
+			keyResolver: keyResolver
+			onSubmit: @handleSubmit
+		}
 		if @props.params.view != 'edit'
 			data = utils.stripDbFields data
 		if isNew
-			initialState.placeholders = data.toJS()
+			props.placeholders = data.toJS()
 			data = data.map utils.recursiveEmptyMapper
 		if !data.has('slug') && @props.params.slug
 			data = data.set 'slug', @props.params.slug
-		initialState.data = data.toJS()
-		initialState.data.lang = @props.data.lang
+		props.initialData = data.toJS()
+		props.initialData.lang = @props.data.lang
 		{ norwegian, english, slugLabel, titleLabel, contentLabel, save } = @props.localeStrings
 		Form(
-			{
-				initialState: initialState
-				keyResolver: keyResolver
-				onSubmit: @handleSubmit
-			}
+			props
 			RadioGroup(
 				{ name: 'lang' }
 				RadioOption(label: norwegian, value: 'nb')
