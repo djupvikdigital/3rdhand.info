@@ -76,17 +76,11 @@ localize = (lang, input) ->
 			seq input, mapValue l
 	l input
 
-createFormatMapper = (formatters) ->
-	if typeof formatters != 'undefined'
-		createFunctionMapper(formatters, '')
-	else
-		getValueFromPair
-
 applyFormatters = shortCircuitScalars (input, formatters) ->
 	f = shortCircuitScalars (input) ->
 		if input.hasOwnProperty('format') && input.hasOwnProperty('text')
 			if formatters
-				createFormatMapper(formatters)(input.format, input.text)
+				createFunctionMapper(formatters, '')(input.format, input.text)
 			else
 				input.text
 		else
