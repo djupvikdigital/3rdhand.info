@@ -1,7 +1,7 @@
 transducers = require 'transducers.js'
 Immutable = require 'immutable'
 
-{ cat, compose, filter, map, seq, take, toArray, dropWhile } = transducers
+{ cat, compose, filter, flatten, map, seq, take, toArray, dropWhile } = transducers
 
 isFalsy = (v) ->
 	!v
@@ -30,12 +30,6 @@ filterValue = compose filter, applyValue
 filterValueAndKey = compose filter, (fn) ->
 	argArray (k, v) ->
 		fn(v, k)
-
-recursiveEmptyMapper = (v) ->
-	if Immutable.Map.isMap v
-		v.map recursiveEmptyMapper
-	else
-		''
 
 shortCircuitScalars = (fn) ->
 	(input) ->
@@ -84,16 +78,17 @@ localize = (lang, input) ->
 
 createFormatMapper = (formatters) ->
 	if typeof formatters != 'undefined'
-		argArray(createFunctionMapper(formatters, ''))
+		createFunctionMapper(formatters, '')
 	else
 		getValueFromPair
 
 applyFormatters = shortCircuitScalars (input, formatters) ->
 	f = shortCircuitScalars (input) ->
-		keys = [ 'md', 'txt' ]
-		a = toArray input, filterValueAndKey(keyIn(keys...))
-		if a.length
-			createFormatMapper(formatters)(getFirstKeyValue(a))
+		if input.hasOwnProperty('format') && input.hasOwnProperty('text')
+			if formatters
+				createFormatMapper(formatters)(input.format, input.text)
+			else
+				input.text
 		else
 			seq input, mapValue f
 	f input
@@ -105,11 +100,10 @@ module.exports =
 	format: applyFormatters
 	keyIn: keyIn
 	localize: localize
-	recursiveEmptyMapper: recursiveEmptyMapper
 	stripDbFields: (obj) ->
 		gotMap = Immutable.Map.isMap(obj)
-		map = if gotMap then obj else Immutable.Map(obj)
-		map = map.filterNot keyIn '_id', '_rev'
-		unless gotMap then map.toObject() else map
+		m = if gotMap then obj else Immutable.Map(obj)
+		m = m.filterNot keyIn '_id', '_rev'
+		unless gotMap then m.toObject() else m
 	validLogin: (obj) ->
 		return typeof obj == "object" && 'user' of obj && 'password' of obj

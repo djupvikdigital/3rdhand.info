@@ -15,16 +15,12 @@ utils = require '../utils.coffee'
 { form, label, input, textarea, div } = Elements
 
 keyResolver = (k) ->
-	# this will do for now
-	fieldFormats =
-		title: 'txt'
-		content: 'md'
 	v = @state.data.getIn k
 	if Immutable.Map.isMap(v)
 		len = k.length
 		keys = k.slice 0
 		lang = @state.data.get 'lang'
-		keys.splice len, 0, lang, fieldFormats[k[len - 1]]
+		keys.splice len, 0, lang, 'text'
 		keys
 	else
 		k
@@ -44,7 +40,7 @@ module.exports = React.createClass
 			data = utils.stripDbFields data
 		if isNew
 			props.placeholders = data.toJS()
-			data = data.map utils.recursiveEmptyMapper
+			data = @props.defaults
 		if !data.has('slug') && @props.params.slug
 			data = data.set 'slug', @props.params.slug
 		props.initialData = data.toJS()

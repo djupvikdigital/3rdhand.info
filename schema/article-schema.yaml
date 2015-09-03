@@ -1,20 +1,8 @@
 $schema: http://json-schema.org/draft-04/schema#
 
-formats: &formats
-    type: object
-    properties:
-        txt:
-            type: string
-            default: ''
-        md:
-            type: string
-            default: ''
-
-langs: &langs
-    type: object
-    properties:
-        nb: *formats
-        en: *formats
+text: &text
+    type: string
+    default: ''
 
 title: Article
 type: object
@@ -28,5 +16,37 @@ properties:
     slug:
         description: Slug for constructing URL
         type: string
-    title: *langs
-    content: *langs
+    title:
+        type: object
+        properties:
+            nb:
+                type: object
+                properties:
+                    format:
+                        type: string
+                        default: 'plaintext'
+                    text: *text
+            en:
+                type: object
+                properties:
+                    format:
+                        type: string
+                        default: 'plaintext'
+                    text: *text
+    content:
+        type: object
+        properties:
+            nb:
+                type: object
+                properties:
+                    format:
+                        type: string
+                        default: 'markdown'
+                    text: *text
+            en:
+                type: object
+                properties:
+                    format:
+                        type: string
+                        default: 'markdown'
+                    text: *text

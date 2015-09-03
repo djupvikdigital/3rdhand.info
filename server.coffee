@@ -24,6 +24,7 @@ main = (req, res) ->
 	lang = req.acceptsLanguages 'nb', 'en'
 	Promise.all([
 		store.dispatch(localeActions.fetchStrings(lang))
+		store.dispatch(articleActions.fetchSchema())
 		store.dispatch(articleActions.fetch())
 	]).then ->
 		router = Router.create

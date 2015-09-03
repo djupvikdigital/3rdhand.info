@@ -6,13 +6,13 @@ module.exports = (state) ->
 	articles = state.get('articles')
 	title = state.getIn ['title', lang]
 	if articles.size == 1
-		articleTitle = utils.getFieldValueFromFormats(
-			articles.getIn([0, 'title', lang]).toJS()
-		)
+		articleTitle = articles.getIn([0, 'title', lang])
 		if articleTitle
-			title = articleTitle + ' - ' + title
+			articleTitle = utils.getFieldValueFromFormats articleTitle.toJS()
+			if articleTitle then title = articleTitle + ' - ' + title
 	return {
 		title: title
 		articles: articles
+		defaults: state.get('defaults')
 		lang: lang
 	}

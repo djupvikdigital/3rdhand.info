@@ -1,4 +1,4 @@
 module.exports =
-	md: require('marked').setOptions
+	markdown: require('marked').setOptions
 		sanitize: true
 

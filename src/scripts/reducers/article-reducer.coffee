@@ -1,4 +1,5 @@
 Immutable = require 'immutable'
+defaults = require 'json-schema-defaults'
 
 initialState = Immutable.fromJS({
 	title:
@@ -10,6 +11,10 @@ initialState = Immutable.fromJS({
 
 module.exports = (state = initialState, action) ->
 	switch action.type
+		when 'RECEIVE_ARTICLE_SCHEMA_SUCCESS'
+			return state.merge({
+				defaults: defaults(action.schema)
+			})
 		when 'RECEIVE_ARTICLES'
 			return state.merge({
 				articles: action.articles

@@ -1,29 +1,11 @@
-Promise = require 'bluebird'
 request = require 'superagent-bluebird-promise'
-YAML = require 'js-yaml'
-defaults = require 'json-schema-defaults'
 
+API = require '../api.coffee'
 store = require '../store.coffee'
 
 protocol = 'http://'
 host = 'localhost:8081'
 server = protocol + host + '/'
-
-articleDefault = null
-
-create = ->
-	if articleDefault
-		return Promise.resolve articleDefault
-	req = request
-		.get(server + 'schema/article-schema.yaml')
-	if typeof req.buffer == 'function'
-		req.buffer()
-	req
-		.promise()
-		.then (res) ->
-			if res.ok
-				schema = YAML.safeLoad(res.text)
-				articleDefault = defaults(schema)
 
 receiveArticles = (articles, lang) ->
 	if Object.prototype.toString.call(articles) != '[object Array]'
@@ -38,12 +20,7 @@ receiveArticles = (articles, lang) ->
 onResponse = (res) ->
 	if res.ok && res.body.docs
 		articles = res.body.docs
-		if !articles.length
-			create().then((article) ->
-				receiveArticles([ article ], res.body.lang)
-			)
-		else
-			receiveArticles(articles, res.body.lang)
+		receiveArticles(articles, res.body.lang)
 	else
 		return {
 			type: 'RECEIVE_ARTICLES_ERROR'
@@ -96,6 +73,24 @@ receiveSave = (err, res) ->
 			error: err
 		}
 
+requestArticleSchema = ->
+	return {
+		type: 'REQUEST_ARTICLE_SCHEMA'
+	}
+
+receiveArticleSchema = (schema) ->
+	return {
+		type: 'RECEIVE_ARTICLE_SCHEMA_SUCCESS'
+		schema: schema
+		receivedAt: new Date()
+	}
+
+receiveArticleSchemaError = (err) ->
+	return {
+		type: 'RECEIVE_ARTICLE_SCHEMA_ERROR'
+		error: err
+	}
+
 module.exports = {
 	fetch: (params) ->
 		(dispatch) ->
@@ -105,6 +100,13 @@ module.exports = {
 			else
 				dispatch requestArticles(false)
 				fetchAll().then(dispatch)
+	fetchSchema: (params) ->
+		(dispatch) ->
+			dispatch requestArticleSchema
+			API.fetchArticleSchema()
+				.then(receiveArticleSchema)
+				.catch(receiveArticleSchemaError)
+				.then(dispatch)
 	receiveArticles: receiveArticles
 	save: (article) ->
 		(dispatch) ->

@@ -27,6 +27,8 @@ module.exports = React.createClass
 			@fetch nextProps.params
 	render: ->
 		articles = @props.articles
+		if !articles.size
+			articles = Immutable.List [ @props.defaults ]
 		lang = @props.lang
 		isSingle = articles.size == 1
 		title = @props.title
@@ -46,6 +48,7 @@ module.exports = React.createClass
 				list = [
 					ArticleEditor(
 						data: data
+						defaults: @props.defaults
 						save: @save
 						localeStrings: @props.localeStrings
 						params: @props.params

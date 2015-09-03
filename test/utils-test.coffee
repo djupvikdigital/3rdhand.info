@@ -10,7 +10,8 @@ describe 'format', ->
 	it 'returns an object with field values formatted from a format subfield', ->
 		input =
 			field:
-				md: 'Markdown *em*.'
+				format: 'markdown'
+				text: 'Markdown *em*.'
 		test =
 			field: '<p>Markdown <em>em</em>.</p>\n'
 		expect(utils.format(input, formatters)).toEqual test
@@ -45,7 +46,8 @@ describe 'getFieldValueFromFormats', ->
 	it 'returns an object with field values from a format subfield', ->
 		input =
 			field:
-				md: 'Markdown *em*.'
+				format: 'markdown'
+				text: 'Markdown *em*.'
 		test =
 			field: 'Markdown *em*.'
 		expect(utils.getFieldValueFromFormats(input)).toEqual test
@@ -66,18 +68,6 @@ describe 'localize', ->
 			en: 'field'
 		test = 'felt'
 		expect(utils.localize('nb', input)).toBe 'felt'
-
-describe 'recursiveEmptyMapper', ->
-	it 'removes all values recursively when used as a mapper function', ->
-		input = Immutable.fromJS
-			field: 'field'
-			parent:
-				child: 'child'
-		test =
-			field: ''
-			parent:
-				child: ''
-		expect(input.map(utils.recursiveEmptyMapper).toJS()).toEqual test
 
 describe 'stripDbFields', ->
 	it 'removes fields _id and _rev from an object', ->

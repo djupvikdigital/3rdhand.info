@@ -23,7 +23,7 @@ describe 'articleSelector', ->
 	it 'returns the article title merged with the title when a single article with a title is provided', ->
 		state = setupState
 			articles: [
-				{ _id: '_id', title: { nb: { txt: 'Article Title' }}}
+				{ _id: '_id', title: { nb: { format: '', text: 'Article Title' }}}
 			]
 		lang = state.get('lang')
 		output = articleSelector(articleState: state)
@@ -35,7 +35,7 @@ describe 'articleSelector', ->
 	it 'returns just the title when a single article without a title is provided', ->
 		state = setupState
 			articles: [
-				{ _id: '_id', title: { nb: { txt: '' }}}
+				{ _id: '_id', title: { nb: { format: '', text: '' }}}
 			]
 		lang = state.get('lang')
 		output = articleSelector(articleState: state)

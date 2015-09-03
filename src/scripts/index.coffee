@@ -9,6 +9,7 @@ localeActions = require './actions/locale-actions.coffee'
 
 Promise.all([
 	store.dispatch localeActions.fetchStrings(store.getState().localeState.get('lang'))
+	store.dispatch articleActions.fetchSchema()
 	store.dispatch articleActions.fetch()
 ]).then ->
 	Router.run routes, Router.HistoryLocation, (Handler, state) ->
