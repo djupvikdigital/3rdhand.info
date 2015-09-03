@@ -1,17 +1,7 @@
 transducers = require 'transducers.js'
 Immutable = require 'immutable'
 
-{ cat, compose, filter, flatten, map, seq, take, toArray, dropWhile } = transducers
-
-isFalsy = (v) ->
-	!v
-
-get = (k, noValue) ->
-	(obj) ->
-		if typeof obj[k] != 'undefined'
-			obj[k]
-		else
-			noValue
+{ compose, map, seq, toArray } = transducers
 
 argArray = (fn) ->
 	(arr) ->
@@ -21,38 +11,12 @@ mapValue = compose map, (fn) ->
 	argArray (k, v) ->
 		[k, fn(v)]
 
-applyValue = (fn) ->
-	compose(fn, get(1))
-
-dropWhileValue = compose dropWhile, applyValue
-filterValue = compose filter, applyValue
-
-filterValueAndKey = compose filter, (fn) ->
-	argArray (k, v) ->
-		fn(v, k)
-
 shortCircuitScalars = (fn) ->
 	(input) ->
 		if typeof input != 'object'
 			input
 		else
 			fn arguments...
-
-getFirstKeyValue = shortCircuitScalars (input, keys...) ->
-	xforms = [
-		dropWhileValue(isFalsy)
-		take(1)
-		cat
-	]
-	if keys.length
-		xforms.unshift filterValueAndKey(keyIn(keys...))
-	toArray input, compose xforms...
-
-getValueFromPair = (kv, noValue) ->
-	get(1, noValue) kv
-
-getFirstValue = ->
-	get(1) getFirstKeyValue(arguments...)
 
 keyIn = ->
 	keySet = Immutable.Set(arguments)
@@ -77,19 +41,18 @@ localize = (lang, input) ->
 	l input
 
 applyFormatters = shortCircuitScalars (input, formatters) ->
+	if formatters
+		formatMapper = createFunctionMapper(formatters, '')
+	else
+		formatMapper = ((k, v) -> v)
 	f = shortCircuitScalars (input) ->
 		if input.hasOwnProperty('format') && input.hasOwnProperty('text')
-			if formatters
-				createFunctionMapper(formatters, '')(input.format, input.text)
-			else
-				input.text
+			formatMapper(input.format, input.text)
 		else
 			seq input, mapValue f
 	f input
 
 module.exports =
-	filterValueAndKey: filterValueAndKey
-	getFirstValue: getFirstValue
 	getFieldValueFromFormats: applyFormatters
 	format: applyFormatters
 	keyIn: keyIn

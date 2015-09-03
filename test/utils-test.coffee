@@ -16,32 +16,6 @@ describe 'format', ->
 			field: '<p>Markdown <em>em</em>.</p>\n'
 		expect(utils.format(input, formatters)).toEqual test
 
-describe 'filterValueAndKey', ->
-	it 'returns an object filtered by key', ->
-		input =
-			bar: 2
-			foo: 1
-			baz: 0
-		test =
-			baz: 0
-			bar: 2
-		output = t.seq input, utils.filterValueAndKey utils.keyIn 'bar', 'baz'
-		expect(output).toEqual test
-
-describe 'getFirstValue', ->
-	it 'returns the first value from a list of keys that is not falsy', ->
-		input =
-			bar: 0
-			foo: 1
-			baz: 2
-		expect(utils.getFirstValue(input, 'bar', 'baz')).toBe 2
-# 	it 'returns the last value from the keys if no values are not falsy', ->
-# 		input =
-# 			foo: 1
-# 			bar: 0
-# 			baz: ''
-# 		expect(utils.getFirstValue(input, 'bar', 'baz')).toBe ''
-
 describe 'getFieldValueFromFormats', ->
 	it 'returns an object with field values from a format subfield', ->
 		input =
