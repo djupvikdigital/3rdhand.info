@@ -10,6 +10,7 @@ module.exports = (state) ->
 			lang: 'nb'
 		localeState: Immutable.fromJS
 			localeStrings:
+				SiteMenu: {}
 				ArticleEditor: {}
 				LoginDialog: {}
 		loginState: Immutable.fromJS

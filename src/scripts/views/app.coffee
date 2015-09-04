@@ -11,8 +11,10 @@ loginSelector = require '../selectors/login-selector.coffee'
 menuSelector = Reselect.createSelector(
 	[localeSelector, loginSelector]
 	(localeState, login) ->
-		localeState['login'] = login
-		localeState
+		return {
+			login: login
+			localeStrings: localeState.localeStrings.SiteMenu
+		}
 )
 
 #ReduxDevtools = require 'redux-devtools/lib/react'

@@ -1,7 +1,8 @@
 title: 3rdhand.info
-home: Hjem
-admin: Admin
-newArticle: Ny artikkel
+SiteMenu:
+    home: Hjem
+    admin: Admin
+    newArticle: Ny artikkel
 ArticleEditor:
     norwegian: Norsk
     english: Engelsk

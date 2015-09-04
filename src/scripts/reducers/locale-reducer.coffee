@@ -2,7 +2,11 @@ Immutable = require 'immutable'
 
 initialState = Immutable.fromJS({
 	lang: 'nb'
-	localeStrings: {}
+	localeStrings: {
+		SiteMenu: {}
+		ArticleEditor: {}
+		LoginDialog: {}
+	}
 })
 
 module.exports = (state = initialState, action) ->
