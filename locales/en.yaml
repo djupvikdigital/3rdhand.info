@@ -2,14 +2,16 @@ title: 3rdhand.info
 home: Home
 admin: Admin
 newArticle: New Article
-norwegian: Norwegian
-english: English
-slugLabel: Slug
-titleLabel: Title
-contentLabel: Content
-save: Save
-loggedInAs: Logged in as
-logoutLabel: Log out
-usernameLabel: Username
-passwordLabel: Password
-loginLabel: Log in
+ArticleEditor:
+    norwegian: Norwegian
+    english: English
+    slug: Slug
+    title: Title
+    content: Content
+    save: Save
+LoginDialog:
+    loggedInAs: Logged in as
+    logout: Log out
+    username: Username
+    password: Password
+    login: Log in

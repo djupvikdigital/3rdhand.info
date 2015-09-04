@@ -14,8 +14,9 @@ describe 'articleSelector', ->
 				{ _id: '_id' }
 			]
 			foo: 'bar'
-		lang = state.get('lang')
-		output = articleSelector(articleState: state)
+		lang = state.articleState.get('lang')
+		output = articleSelector(state)
+		state = state.articleState
 		expect(output.title).toBe(state.getIn ['title', lang])
 		expect(output.articles).toEqual(state.get('articles'))
 		expect(output.lang).toBe(lang)
@@ -25,8 +26,9 @@ describe 'articleSelector', ->
 			articles: [
 				{ _id: '_id', title: { nb: { format: '', text: 'Article Title' }}}
 			]
-		lang = state.get('lang')
-		output = articleSelector(articleState: state)
+		lang = state.articleState.get('lang')
+		output = articleSelector(state)
+		state = state.articleState
 		title = utils.getFieldValueFromFormats utils.localize lang, state.get('title').toJS()
 		articleTitle = utils.getFieldValueFromFormats(
 			state.getIn([ 'articles', 0, 'title', lang ]).toJS()
@@ -37,7 +39,8 @@ describe 'articleSelector', ->
 			articles: [
 				{ _id: '_id', title: { nb: { format: '', text: '' }}}
 			]
-		lang = state.get('lang')
-		output = articleSelector(articleState: state)
+		lang = state.articleState.get('lang')
+		output = articleSelector(state)
+		state = state.articleState
 		title = utils.getFieldValueFromFormats utils.localize lang, state.get('title').toJS()
 		expect(output.title).toBe(title)

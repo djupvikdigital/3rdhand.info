@@ -1,6 +1,7 @@
 utils = require '../utils.coffee'
 
 module.exports = (state) ->
+	localeStrings = state.localeState.getIn [ 'localeStrings', 'ArticleEditor' ]
 	state = state.articleState
 	lang = state.get('lang')
 	articles = state.get('articles')
@@ -15,4 +16,5 @@ module.exports = (state) ->
 		articles: articles
 		defaults: state.get('defaults')
 		lang: lang
+		localeStrings: localeStrings.toJS()
 	}

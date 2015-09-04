@@ -20,8 +20,8 @@ module.exports = React.createClass
 		@props.dispatch articleActions.fetch(params)
 	save: (data) ->
 		@props.dispatch articleActions.save data
-	componentWillMount: ->
-		@fetch @props.params unless @props.lastUpdate
+# 	componentWillMount: ->
+# 		@fetch @props.params unless @props.lastUpdate
 	componentWillReceiveProps: (nextProps) ->
 		if nextProps.params != @props.params
 			@fetch nextProps.params
