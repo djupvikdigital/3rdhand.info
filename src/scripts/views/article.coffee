@@ -1,6 +1,7 @@
 moment = require 'moment'
 React = require 'react'
 Router = require 'react-router'
+DocumentTitle = React.createFactory require 'react-document-title'
 
 formatters = require '../formatters.coffee'
 utils = require '../utils.coffee'
@@ -14,7 +15,7 @@ module.exports = React.createClass
 	mixins: [ Router.State ]
 	render: ->
 		article = utils.format(
-			utils.localize(@props.data.lang, @props.data)
+			utils.localize(@props.lang, @props.article)
 			formatters
 		)
 		created = moment(article.created).format('YYYY/MM/DD')
@@ -23,7 +24,11 @@ module.exports = React.createClass
 			h = Link { to: url }, article.title
 		else
 			h = article.title
-		div(
+		res = div(
 			h1 h
 			div innerHtml: article.content
 		)
+		if @props.title
+			DocumentTitle { title: @props.title }, res
+		else
+			res

@@ -4,6 +4,8 @@ Immutable = require 'immutable'
 Elements = require '../elements.coffee'
 createFactory = require '../create-factory.coffee'
 
+DocumentTitle = createFactory require 'react-document-title'
+
 Form = createFactory require './form.coffee'
 FormGroup = createFactory require './form-group.coffee'
 RadioGroup = createFactory require './radio-group.coffee'
@@ -30,7 +32,7 @@ module.exports = React.createClass
 	handleSubmit: (data) ->
 		@props.save Immutable.fromJS(data).filterNot(utils.keyIn('lang')).toJS()
 	render: ->
-		data = Immutable.fromJS(@props.data).filterNot(utils.keyIn('lang'))
+		data = @props.article
 		isNew = @props.params.view == 'new'
 		props = {
 			keyResolver: keyResolver
@@ -39,24 +41,27 @@ module.exports = React.createClass
 		if @props.params.view != 'edit'
 			data = utils.stripDbFields data
 		if isNew
-			props.placeholders = data.toJS()
+			props.placeholders = data
 			data = @props.defaults
-		if !data.has('slug') && @props.params.slug
-			data = data.set 'slug', @props.params.slug
-		props.initialData = data.toJS()
-		props.initialData.lang = @props.data.lang
+		if !data.slug && @props.params.slug
+			data.slug = @props.params.slug
+		data.lang = @props.lang
+		props.initialData = data
 		{ norwegian, english, slug, title, content, save } = @props.localeStrings
-		Form(
-			props
-			RadioGroup(
-				{ name: 'lang' }
-				RadioOption(label: norwegian, value: 'nb')
-				RadioOption(label: english, value: 'en')
-			)
-			TextInput label: slug, name: 'slug'
-			TextInput label: title, name: 'title'
-			TextInput label: content, name: 'content', multiline: true
-			FormGroup(
-				input(className: 'btn', type: "submit", value: save)
+		DocumentTitle(
+			{ title: @props.title }
+			Form(
+				props
+				RadioGroup(
+					{ name: 'lang' }
+					RadioOption(label: norwegian, value: 'nb')
+					RadioOption(label: english, value: 'en')
+				)
+				TextInput label: slug, name: 'slug'
+				TextInput label: title, name: 'title'
+				TextInput label: content, name: 'content', multiline: true
+				FormGroup(
+					input(className: 'btn', type: "submit", value: save)
+				)
 			)
 		)

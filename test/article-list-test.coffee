@@ -7,11 +7,11 @@ createComponent = require '../testutils/create-component.coffee'
 createStore = require '../testutils/create-store.coffee'
 setupState = require '../testutils/setup-state.coffee'
 articleActions = require '../src/scripts/actions/article-actions.coffee'
-articleSelector = require '../src/scripts/selectors/article-selector.coffee'
+selectors = require '../src/scripts/selectors/article-selectors.coffee'
 ArticleList = require '../src/scripts/views/article-list.coffee'
 
 getArticles = (component) ->
-	return component.props.children.props.children
+	return component.props.children
 
 describe 'ArticleList', ->
 	it 'renders a list of articles', ->
@@ -22,7 +22,7 @@ describe 'ArticleList', ->
 		]
 		store.dispatch {}, setupState()
 		store.dispatch articleActions.receiveArticles(articles)
-		props = articleSelector(store.getState())
+		props = selectors.containerSelector(store.getState())
 		props.dispatch = (action) ->
 			console.log action
 			return
