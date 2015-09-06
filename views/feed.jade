@@ -1,0 +1,12 @@
+doctype xml
+feed(xmlns="http://www.w3.org/2005/Atom")
+	title 3rdhand.info
+	id http://3rdhand.info/
+	updated= updated
+	each article in articles
+		entry
+			title= article.title
+			id= article._id
+			updated= article.updated
+			content(type="xhtml")
+				div(xmlns="http://www.w3.org/1999/xhtml")!= article.content

@@ -34,7 +34,9 @@ createFunctionMapper = (functionMap, noValue) ->
 
 localize = (lang, input) ->
 	l = shortCircuitScalars (input) ->
-		if input.hasOwnProperty(lang)
+		if Array.isArray input
+			input.map l
+		else if input.hasOwnProperty(lang)
 			l(input[lang])
 		else
 			seq input, mapValue l
@@ -46,7 +48,9 @@ applyFormatters = shortCircuitScalars (input, formatters) ->
 	else
 		formatMapper = ((k, v) -> v)
 	f = shortCircuitScalars (input) ->
-		if input.hasOwnProperty('format') && input.hasOwnProperty('text')
+		if Array.isArray input
+			input.map f
+		else if input.hasOwnProperty('format') && input.hasOwnProperty('text')
 			formatMapper(input.format, input.text)
 		else
 			seq input, mapValue f

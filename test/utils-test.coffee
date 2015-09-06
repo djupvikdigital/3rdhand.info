@@ -42,6 +42,20 @@ describe 'localize', ->
 			en: 'field'
 		test = 'felt'
 		expect(utils.localize('nb', input)).toBe 'felt'
+	it 'supports mapping arrays', ->
+		input = [
+			field:
+				nb: 'felt1'
+				en: 'field1'
+			field:
+				nb: 'felt2'
+				en: 'field2'
+		]
+		test = [
+			field: 'felt1'
+			field: 'felt2'
+		]
+		expect(utils.localize('nb', input)).toEqual test
 
 describe 'stripDbFields', ->
 	it 'removes fields _id and _rev from an object', ->

@@ -9,7 +9,10 @@ global.Promise = Promise
 
 db = require './db.coffee'
 init = require './src/scripts/init.coffee'
+formatters = require './src/scripts/formatters.coffee'
+store = require './src/scripts/store.coffee'
 routes = require './src/scripts/views/routes.coffee'
+utils = require './src/scripts/utils.coffee'
 Template = React.createFactory require './views/index.coffee'
 
 getCookie = (headers) ->
@@ -45,7 +48,23 @@ server.use (req, res, next) ->
 	res.header 'Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept'
 	next()
 
+server.set 'views', './views'
+server.set 'view engine', 'jade'
+
 server.get '/admin', main
+
+server.get '/index.atom', (req, res) ->
+	lang = req.acceptsLanguages 'nb', 'en'
+	res.header 'Content-Type', 'application/atom+xml; charset=utf8'
+	init().then ->
+		articles = utils.format(
+			utils.localize(
+				lang
+				store.getState().articleState.get('articles').toJS()
+			)
+			formatters
+		)
+		res.render 'feed', id: '', updated: '', articles: articles
 
 server.get '/:view', (req, res) ->
 	query = {}
