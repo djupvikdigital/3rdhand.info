@@ -2,6 +2,7 @@ Immutable = require 'immutable'
 Reselect = require 'reselect'
 
 utils = require '../utils.coffee'
+formatters = require '../formatters.coffee'
 localeSelector = require './locale-selector.coffee'
 
 itemSelector = (state) ->
@@ -22,10 +23,21 @@ itemSelector = (state) ->
 		lang: state.lang
 	}
 
-module.exports = 
-	containerSelector: (state) ->
-		state.articleState.filter(utils.keyIn('articles', 'lang')).toJS()
-	itemSelector: itemSelector
+formatSelector = (state) ->
+	lang = state.lang
+	utils.localize lang, utils.format state, formatters
+
+module.exports =
+	containerSelector: Reselect.createSelector(
+		[
+			(state) ->
+				state.articleState.filter(
+					utils.keyIn('articles', 'lang')
+				).toJS()
+		],
+		formatSelector
+	)
+	itemSelector: Reselect.createSelector [ itemSelector ], formatSelector
 	editorSelector: Reselect.createSelector(
 		[
 			itemSelector
