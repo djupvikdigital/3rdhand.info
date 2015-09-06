@@ -7,6 +7,10 @@ module.exports = (grunt) ->
 		module:
 			loaders: [
 				{
+					test: /\.json$/
+					loader: 'json-loader'
+				}
+				{
 					test: /\.coffee$/
 					loader: 'coffee-loader'
 				}

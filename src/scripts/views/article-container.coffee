@@ -1,13 +1,11 @@
-Immutable = require 'immutable'
 React = require 'react'
 ReactRedux = require 'react-redux'
 
-utils = require '../utils.coffee'
 createFactory = require '../create-factory.coffee'
 
-articleActions = require '../actions/article-actions.coffee'
+actions = require '../actions/article-actions.coffee'
 selectors = require '../selectors/article-selectors.coffee'
-store = require '../store.coffee'
+
 ArticleList = createFactory(
 	ReactRedux.connect(selectors.listSelector)(
 		require './article-list.coffee'
@@ -25,9 +23,9 @@ ArticleEditor = createFactory(
 module.exports = React.createClass
 	displayName: 'ArticleContainer'
 	fetch: (params) ->
-		@props.dispatch articleActions.fetch(params)
+		@props.dispatch actions.fetch(params)
 	save: (data) ->
-		@props.dispatch articleActions.save data
+		@props.dispatch actions.save data
  	componentWillMount: ->
  		@fetch @props.params unless @props.lastUpdate
 	componentWillReceiveProps: (nextProps) ->
@@ -35,7 +33,7 @@ module.exports = React.createClass
 			@fetch nextProps.params
 	render: ->
 		articles = @props.articles
-		unless articles.length <= 1
+		if articles.length > 1
 			ArticleList articles: articles, lang: @props.lang
 		else if @props.params?.view
 			ArticleEditor save: @save, params: @props.params

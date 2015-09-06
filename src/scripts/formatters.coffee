@@ -1,4 +1,5 @@
+md = require('markdown-it')(xhtmlOut: true)
+
 module.exports =
-	markdown: require('marked').setOptions
-		sanitize: true
-		xhtml: true
+	markdown: md.render.bind(md)
+	markdownInline: md.renderInline.bind(md)

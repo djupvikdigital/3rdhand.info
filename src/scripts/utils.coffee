@@ -60,8 +60,12 @@ applyFormatters = shortCircuitScalars (input, formatters) ->
 addHrefToArticles = shortCircuitScalars (input) ->
 	if Array.isArray input
 		input.map addHrefToArticles
-	else if input.hasOwnProperty('created') && input.hasOwnProperty('slug')
-		created = moment(input.created).format('YYYY/MM/DD')
+	else if input.hasOwnProperty('slug')
+		if input.hasOwnProperty('created')
+			created = input.created
+		else
+			created = new Date() # fake it
+		created = moment(created).format('YYYY/MM/DD')
 		input.href = '/' + created + '/' + input.slug
 		input
 	else

@@ -2,10 +2,11 @@ React = require 'react'
 Router = require 'react-router'
 DocumentTitle = React.createFactory require 'react-document-title'
 
+createFactory = require '../create-factory.coffee'
 Elements = require '../elements.coffee'
 
 { div, h1 } = Elements
-Link = React.createFactory Router.Link
+Link = createFactory Router.Link
 
 module.exports = React.createClass
 	displayName: 'ArticleItem'
@@ -14,11 +15,11 @@ module.exports = React.createClass
 		article = @props.article
 		href = article.href
 		if href != @getPath()
-			h = Link { to: href }, article.title
+			h = h1 Link to: href, innerHtml: article.title
 		else
-			h = article.title
+			h = h1 innerHtml: article.title
 		res = div(
-			h1 h
+			h
 			div innerHtml: article.content
 		)
 		if @props.title

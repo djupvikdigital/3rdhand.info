@@ -16,6 +16,7 @@ properties:
     slug:
         description: Slug for constructing URL
         type: string
+        default: 'untitled'
     title:
         type: object
         properties:
@@ -24,14 +25,14 @@ properties:
                 properties:
                     format:
                         type: string
-                        default: 'plaintext'
+                        default: 'markdownInline'
                     text: *text
             en:
                 type: object
                 properties:
                     format:
                         type: string
-                        default: 'plaintext'
+                        default: 'markdownInline'
                     text: *text
     content:
         type: object
