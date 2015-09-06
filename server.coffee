@@ -10,7 +10,7 @@ global.Promise = Promise
 db = require './db.coffee'
 init = require './src/scripts/init.coffee'
 store = require './src/scripts/store.coffee'
-articleSelectors = require '.src/scripts/article-selectors.coffee'
+articleSelectors = require './src/scripts/selectors/article-selectors.coffee'
 routes = require './src/scripts/views/routes.coffee'
 Template = React.createFactory require './views/index.coffee'
 
@@ -56,8 +56,9 @@ server.get '/index.atom', (req, res) ->
 	lang = req.acceptsLanguages 'nb', 'en'
 	res.header 'Content-Type', 'application/atom+xml; charset=utf8'
 	init().then ->
-		articles = articleSelectors.containerSelector store.getState()
-		res.render 'feed', id: '', updated: '', articles: articles
+		articles = articleSelectors.containerSelector(store.getState()).articles
+		updated = if articles.length then articles[0].updated else ''
+		res.render 'feed', id: req.url, updated: updated, articles: articles
 
 server.get '/:view', (req, res) ->
 	query = {}
