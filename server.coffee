@@ -58,7 +58,15 @@ server.get '/index.atom', (req, res) ->
 	init().then ->
 		articles = articleSelectors.containerSelector(store.getState()).articles
 		updated = if articles.length then articles[0].updated else ''
-		res.render 'feed', id: req.url, updated: updated, articles: articles
+		host = req.protocol + '://' + req.get('host')
+		res.render(
+			'feed'
+			host: host
+			root: host + '/'
+			url: host + req.url
+			updated: updated
+			articles: articles
+		)
 
 server.get '/:view', (req, res) ->
 	query = {}

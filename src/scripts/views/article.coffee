@@ -1,4 +1,3 @@
-moment = require 'moment'
 React = require 'react'
 Router = require 'react-router'
 DocumentTitle = React.createFactory require 'react-document-title'
@@ -13,10 +12,9 @@ module.exports = React.createClass
 	mixins: [ Router.State ]
 	render: ->
 		article = @props.article
-		created = moment(article.created).format('YYYY/MM/DD')
-		url = '/' + created + '/' + article.slug
-		if url != @getPath()
-			h = Link { to: url }, article.title
+		href = article.href
+		if href != @getPath()
+			h = Link { to: href }, article.title
 		else
 			h = article.title
 		res = div(

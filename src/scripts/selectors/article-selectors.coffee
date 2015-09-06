@@ -25,7 +25,7 @@ itemSelector = (state) ->
 
 formatSelector = (state) ->
 	lang = state.lang
-	utils.localize lang, utils.format state, formatters
+	utils.addHrefToArticles utils.localize lang, utils.format state, formatters
 
 module.exports =
 	containerSelector: Reselect.createSelector(

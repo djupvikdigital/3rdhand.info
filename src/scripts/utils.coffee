@@ -1,3 +1,4 @@
+moment = require 'moment'
 transducers = require 'transducers.js'
 Immutable = require 'immutable'
 
@@ -56,7 +57,18 @@ applyFormatters = shortCircuitScalars (input, formatters) ->
 			seq input, mapValue f
 	f input
 
+addHrefToArticles = shortCircuitScalars (input) ->
+	if Array.isArray input
+		input.map addHrefToArticles
+	else if input.hasOwnProperty('created') && input.hasOwnProperty('slug')
+		created = moment(input.created).format('YYYY/MM/DD')
+		input.href = '/' + created + '/' + input.slug
+		input
+	else
+		seq input, mapValue addHrefToArticles
+
 module.exports =
+	addHrefToArticles: addHrefToArticles
 	getFieldValueFromFormats: applyFormatters
 	format: applyFormatters
 	keyIn: keyIn
