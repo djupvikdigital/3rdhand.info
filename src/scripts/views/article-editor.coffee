@@ -47,21 +47,24 @@ module.exports = React.createClass
 			data.slug = @props.params.slug
 		data.lang = @props.lang
 		props.initialData = data
-		{ norwegian, english, slug, title, content, save } = @props.localeStrings
+		l = @props.localeStrings
 		DocumentTitle(
 			{ title: @props.title }
 			Form(
 				props
 				RadioGroup(
 					{ name: 'lang' }
-					RadioOption(label: norwegian, value: 'nb')
-					RadioOption(label: english, value: 'en')
+					RadioOption(label: l.norwegian, value: 'nb')
+					RadioOption(label: l.english, value: 'en')
 				)
-				TextInput label: slug, name: 'slug'
-				TextInput label: title, name: 'title'
-				TextInput label: content, name: 'content', multiline: true
+				TextInput label: l.slug, name: 'slug'
+				TextInput label: l.title, name: 'title'
+				TextInput label: l.subtitle, name: 'subtitle'
+				TextInput label: l.teaser, name: 'teaser', multiline: true
+				TextInput label: l.summary, name: 'summary', multiline: true
+				TextInput label: l.body, name: 'body', multiline: true
 				FormGroup(
-					input(className: 'btn', type: "submit", value: save)
+					input(className: 'btn', type: "submit", value: l.save)
 				)
 			)
 		)

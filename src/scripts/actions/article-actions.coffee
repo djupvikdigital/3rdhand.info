@@ -112,6 +112,8 @@ module.exports = {
 		(dispatch) ->
 			now = (new Date()).toISOString()
 			article.created = now unless article.created
+			# might add support for drafts/unpublished articles later
+			article.published = now unless article.published
 			article.updated = now
 			data = doc: article
 			loginState = store.getState().loginState

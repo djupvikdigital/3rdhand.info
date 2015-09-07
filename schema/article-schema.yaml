@@ -4,6 +4,30 @@ text: &text
     type: string
     default: ''
 
+md: &md
+    type: object
+    properties:
+        format:
+            type: string
+            default: markdown
+        text: *text
+
+mdi: &mdi
+    type: object
+    properties:
+        format:
+            type: string
+            default: markdownInline
+        text: *text
+
+lmd: &lmd
+    nb: *md
+    en: *md
+
+lmdi: &lmdi
+    nb: *mdi
+    en: *mdi
+
 title: Article
 type: object
 properties:
@@ -16,38 +40,28 @@ properties:
     slug:
         description: Slug for constructing URL
         type: string
-        default: 'untitled'
+        default: untitled
     title:
+        description: Article title
         type: object
-        properties:
-            nb:
-                type: object
-                properties:
-                    format:
-                        type: string
-                        default: 'markdownInline'
-                    text: *text
-            en:
-                type: object
-                properties:
-                    format:
-                        type: string
-                        default: 'markdownInline'
-                    text: *text
-    content:
+        properties: *lmdi
+    subtitle:
+        description: Optional subtitle
         type: object
-        properties:
-            nb:
-                type: object
-                properties:
-                    format:
-                        type: string
-                        default: 'markdown'
-                    text: *text
-            en:
-                type: object
-                properties:
-                    format:
-                        type: string
-                        default: 'markdown'
-                    text: *text
+        properties: *lmdi
+    teaser:
+        description: Short teaser
+        type: object
+        properties: *lmdi
+    summary:
+        description: Summary of the content of the article
+        type: object
+        properties: *lmd
+    intro:
+        description: Intro (lede)
+        type: object
+        properties: *lmdi
+    body:
+        description: Main content of the article
+        type: object
+        properties: *lmd

@@ -16,4 +16,8 @@ feed(xmlns="http://www.w3.org/2005/Atom")
 			link(rel="alternate" href=(host + article.href) type="text/html")/
 			updated= article.updated
 			content(type="xhtml")
-				div(xmlns="http://www.w3.org/1999/xhtml")!= article.content
+				div(xmlns="http://www.w3.org/1999/xhtml")
+					if article.intro
+						p
+							b!= article.intro
+					div!= article.body

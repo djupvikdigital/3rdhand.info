@@ -8,7 +8,11 @@ ArticleEditor:
     english: English
     slug: Slug
     title: Title
-    content: Content
+    subtitle: Subtitle
+    teaser: Teaser
+    summary: Summary
+    intro: Intro
+    body: Body
     save: Save
 LoginDialog:
     loggedInAs: Logged in as

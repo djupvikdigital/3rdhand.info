@@ -8,7 +8,11 @@ ArticleEditor:
     english: Engelsk
     slug: Slug
     title: Tittel
-    content: Brødtekst
+    subtitle: Undertittel
+    teaser: Teaser
+    summary: Sammendrag
+    intro: Intro
+    body: Brødtekst
     save: Lagre
 LoginDialog:
     loggedInAs: Innlogget som
