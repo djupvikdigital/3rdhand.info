@@ -2,7 +2,7 @@ moment = require 'moment'
 transducers = require 'transducers.js'
 Immutable = require 'immutable'
 
-{ compose, filter, map, seq, toArray } = transducers
+{ compose, filter, keep, map, seq, take, toArray, transduce } = transducers
 
 identity = (arg) ->
 	arg
@@ -51,18 +51,32 @@ getProps = (input, props) ->
 thisHasProperty = (prop) ->
 	this.hasOwnProperty prop
 
-mapObjectRecursively = shortCircuitScalars (input, props, mapper) ->
-	if !Array.isArray props
-		props = [ props ]
+propsAndMappersMapper = (propsAndMapper) ->
+	i = propsAndMapper.length - 1
+	props = take propsAndMapper, i
+	mapper = propsAndMapper[i]
+	if props.every Object.prototype.hasOwnProperty, this
+		pairs = getProps toArray(this), props
+		args = getValuesFromPairs(pairs)
+		mapper.apply(this, args)
+	else
+		null
+
+mapObjectRecursively = shortCircuitScalars (input, propsAndMappers...) ->
 	f = shortCircuitScalars (input) ->
 		if Array.isArray input
 			input.map f
-		else if props.every Object.prototype.hasOwnProperty, input
-			pairs = getProps toArray(input), props
-			args = getValuesFromPairs(pairs)
-			mapper.apply(input, args)
 		else
-			seq input, mapValue f
+			if !Array.isArray propsAndMappers[0]
+				propsAndMappers = [ propsAndMappers ]
+			results = toArray(
+				propsAndMappers
+				compose map(propsAndMappersMapper, input), keep()
+			)
+			if results.length
+				results[0]
+			else
+				seq input, mapValue f
 	f input
 
 localize = (lang, input) ->
@@ -73,7 +87,7 @@ applyFormatters = shortCircuitScalars (input, formatters) ->
 		formatMapper = createFunctionMapper(formatters, '')
 	else
 		formatMapper = ((k, v) -> v)
-	mapObjectRecursively input, [ 'format', 'text' ], formatMapper
+	mapObjectRecursively input, 'format', 'text', formatMapper
 
 addHrefToArticles = (input) ->
 	mapObjectRecursively input, 'slug', (slug) ->

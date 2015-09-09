@@ -69,7 +69,7 @@ describe 'localize', ->
 		expect(utils.localize('nb', input)).toEqual test
 
 describe 'mapObjectRecursively', ->
-	it 'takes a mapper function and goes over the object recursively, applying to objects with provided props', ->
+	it 'takes mapper functions and goes over the object recursively, applying to objects with provided props', ->
 		input =
 			foo:
 				bar: 1
@@ -78,15 +78,21 @@ describe 'mapObjectRecursively', ->
 				{ foo: 1, baz: 1 }
 			]
 		test =
-			foo:
-				bar: 1
+			foo: 2
 			baz: [
 				3
 				{ foo: 1, baz: 1 }
 			]
-		mapper = (foo, bar) ->
+		mapper1 = (foo, bar) ->
 			foo + bar
-		expect(utils.mapObjectRecursively(input, [ 'foo', 'bar' ], mapper)).toEqual test
+		mapper2 = (bar) ->
+			bar + 1
+		args = [
+			input
+			[ 'foo', 'bar', mapper1 ]
+			[ 'bar', mapper2 ]
+		]
+		expect(utils.mapObjectRecursively.apply(null, args)).toEqual test
 
 describe 'stripDbFields', ->
 	it 'removes fields _id and _rev from an object', ->
