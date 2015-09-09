@@ -1,16 +1,12 @@
-fs = require 'fs'
-path = require 'path'
-
 React = require 'react'
+
+utils = require '../utils.coffee'
 Elements = require '../src/scripts/elements.coffee'
 
 { html, head, meta, title, link, body, header, div, script } = Elements
 
-read = (p) ->
-	fs.readFileSync path.join(__dirname, p), 'utf-8'
-
-siteHeader = read '../dist/svg/site-header.svg'
-logo = read '../dist/svg/logo.svg'
+siteHeader = utils.read '/dist/svg/site-header.svg'
+logo = utils.read '/dist/svg/logo.svg'
 
 googleFontsUrl = 'http://fonts.googleapis.com/css?family='
 

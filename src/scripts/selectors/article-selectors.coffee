@@ -20,33 +20,16 @@ formatSelector = (state) ->
 		]
 	)
 
-itemSelector = Reselect.createSelector(
-	[
-		Reselect.createSelector(
-			[
-				(state) ->
-					state = state.articleState.toJS()
-					if state.articles.length
-						article = state.articles[0]
-					else
-						article = state.defaults
-					return {
-						article: article
-						lang: state.lang
-					}
-			]
-			formatSelector
-		)
-		appSelectors.titleSelector
-	]
-	(state, titleState) ->
-		title = titleState.title
-		articleTitle = state.article.title
-		if articleTitle
-			title = articleTitle + ' - ' + title
-		state.title = title
-		state
-)
+itemSelector = (state) ->
+	state = state.articleState.toJS()
+	if state.articles.length
+		article = state.articles[0]
+	else
+		article = state.defaults
+	return {
+		article: article
+		lang: state.lang
+	}
 
 module.exports =
 	containerSelector: Reselect.createSelector(
@@ -58,7 +41,19 @@ module.exports =
 		],
 		formatSelector
 	)
-	itemSelector: itemSelector
+	itemSelector: Reselect.createSelector(
+		[
+			Reselect.createSelector [ itemSelector ], formatSelector
+			appSelectors.titleSelector
+		]
+		(state, titleState) ->
+			title = titleState.title
+			articleTitle = state.article.title
+			if articleTitle
+				title = articleTitle + ' - ' + title
+			state.title = title
+			state
+	)
 	editorSelector: Reselect.createSelector(
 		[
 			itemSelector

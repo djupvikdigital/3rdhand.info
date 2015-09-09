@@ -1,4 +1,9 @@
 Immutable = require 'immutable'
+YAML = require 'js-yaml'
+
+utils = require '../utils.coffee'
+
+localeStrings = YAML.safeLoad utils.read '/locales/nb.yaml'
 
 module.exports = (state) ->
 	initialState =
@@ -9,10 +14,7 @@ module.exports = (state) ->
 			articles: []
 			lang: 'nb'
 		localeState: Immutable.fromJS
-			localeStrings:
-				SiteMenu: {}
-				ArticleEditor: {}
-				LoginDialog: {}
+			localeStrings: localeStrings
 		loginState: Immutable.fromJS
 			isLoggedIn: false
 	if state

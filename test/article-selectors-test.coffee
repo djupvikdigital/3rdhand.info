@@ -27,10 +27,9 @@ describe 'articleSelectors', ->
 				]
 			lang = state.articleState.get('lang')
 			output = selectors.itemSelector(state)
-			state = state.articleState
-			title = utils.getFieldValueFromFormats utils.localize lang, state.get('title').toJS()
+			title = state.localeState.toJS().localeStrings.title
 			articleTitle = utils.getFieldValueFromFormats(
-				state.getIn([ 'articles', 0, 'title', lang ]).toJS()
+				state.articleState.getIn([ 'articles', 0, 'title', lang ]).toJS()
 			)
 			expect(output.title).toBe(articleTitle + ' - ' + title)
 		it 'returns just the title when a single article without a title is provided', ->
@@ -40,6 +39,5 @@ describe 'articleSelectors', ->
 				]
 			lang = state.articleState.get('lang')
 			output = selectors.itemSelector(state)
-			state = state.articleState
-			title = utils.getFieldValueFromFormats utils.localize lang, state.get('title').toJS()
+			title = state.localeState.toJS().localeStrings.title
 			expect(output.title).toBe(title)
