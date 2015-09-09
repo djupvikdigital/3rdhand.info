@@ -3,7 +3,7 @@ Router = require 'react-router'
 ReactRedux = require 'react-redux'
 
 articleSelectors = require '../selectors/article-selectors.coffee'
-loginSelector = require '../selectors/login-selector.coffee'
+loginSelector = require('../selectors/app-selectors.coffee').loginSelector
 App = require './app.coffee'
 ArticleContainer = ReactRedux.connect(
 	articleSelectors.containerSelector

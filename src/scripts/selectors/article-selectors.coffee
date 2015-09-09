@@ -4,25 +4,7 @@ Reselect = require 'reselect'
 
 utils = require '../utils.coffee'
 formatters = require '../formatters.coffee'
-localeSelector = require './locale-selector.coffee'
-
-itemSelector = (state) ->
-	state = state.articleState.toJS()
-	lang = state.lang
-	title = state.title[lang]
-	if state.articles.length
-		article = state.articles[0]
-	else
-		article = state.defaults
-	articleTitle = article.title[lang]
-	if articleTitle
-		articleTitle = utils.getFieldValueFromFormats articleTitle
-		if articleTitle then title = articleTitle + ' - ' + title
-	return {
-		title: title
-		article: article
-		lang: state.lang
-	}
+appSelectors = require './app-selectors.coffee'
 
 formatSelector = (state) ->
 	lang = state.lang
@@ -38,6 +20,34 @@ formatSelector = (state) ->
 		]
 	)
 
+itemSelector = Reselect.createSelector(
+	[
+		Reselect.createSelector(
+			[
+				(state) ->
+					state = state.articleState.toJS()
+					if state.articles.length
+						article = state.articles[0]
+					else
+						article = state.defaults
+					return {
+						article: article
+						lang: state.lang
+					}
+			]
+			formatSelector
+		)
+		appSelectors.titleSelector
+	]
+	(state, titleState) ->
+		title = titleState.title
+		articleTitle = state.article.title
+		if articleTitle
+			title = articleTitle + ' - ' + title
+		state.title = title
+		state
+)
+
 module.exports =
 	containerSelector: Reselect.createSelector(
 		[
@@ -48,11 +58,11 @@ module.exports =
 		],
 		formatSelector
 	)
-	itemSelector: Reselect.createSelector [ itemSelector ], formatSelector
+	itemSelector: itemSelector
 	editorSelector: Reselect.createSelector(
 		[
 			itemSelector
-			localeSelector
+			appSelectors.localeSelector
 			(state) ->
 				state.articleState.get('defaults').toJS()
 		]

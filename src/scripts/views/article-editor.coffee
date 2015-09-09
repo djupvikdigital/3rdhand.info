@@ -62,6 +62,7 @@ module.exports = React.createClass
 				TextInput label: l.subtitle, name: 'subtitle'
 				TextInput label: l.teaser, name: 'teaser', multiline: true
 				TextInput label: l.summary, name: 'summary', multiline: true
+				TextInput label: l.intro, name: 'intro', multiline: true
 				TextInput label: l.body, name: 'body', multiline: true
 				FormGroup(
 					input(className: 'btn', type: "submit", value: l.save)

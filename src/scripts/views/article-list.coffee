@@ -11,7 +11,5 @@ ArticleItem = createFactory require './article-item.coffee'
 module.exports = React.createClass
 	displayName: 'ArticleList'
 	render: ->
-		lang = @props.lang
 		div @props.articles.map (item) ->
-			console.log item
 			article { key: item._id }, ArticleItem article: item

@@ -34,7 +34,7 @@ module.exports = React.createClass
 	render: ->
 		articles = @props.articles
 		if articles.length > 1
-			ArticleList articles: articles, lang: @props.lang
+			ArticleList articles: articles
 		else if @props.params?.view
 			ArticleEditor save: @save, params: @props.params
 		else

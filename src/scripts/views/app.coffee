@@ -5,17 +5,7 @@ Reselect = require 'reselect'
 
 createFactory = require '../create-factory.coffee'
 localeActions = require '../actions/locale-actions.coffee'
-localeSelector = require '../selectors/locale-selector.coffee'
-loginSelector = require '../selectors/login-selector.coffee'
-
-menuSelector = Reselect.createSelector(
-	[localeSelector, loginSelector]
-	(localeState, login) ->
-		return {
-			login: login
-			localeStrings: localeState.localeStrings.SiteMenu
-		}
-)
+selectors = require '../selectors/app-selectors.coffee'
 
 #ReduxDevtools = require 'redux-devtools/lib/react'
 
@@ -23,11 +13,15 @@ menuSelector = Reselect.createSelector(
 # DevTools = React.createFactory ReduxDevtools.DevTools
 # LogMonitor = ReduxDevtools.LogMonitor
 
-DocumentTitle = React.createFactory ReactRedux.connect(localeSelector)(require 'react-document-title')
+DocumentTitle = React.createFactory(
+	ReactRedux.connect(selectors.titleSelector)(require 'react-document-title')
+)
 
 Elements = require '../elements.coffee'
 store = require '../store.coffee'
-SiteMenu = createFactory ReactRedux.connect(menuSelector)(require './site-menu.coffee')
+SiteMenu = createFactory(
+	ReactRedux.connect(selectors.menuSelector)(require './site-menu.coffee')
+)
 
 { div } = Elements
 Provider = createFactory ReactRedux.Provider
