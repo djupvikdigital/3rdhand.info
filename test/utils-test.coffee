@@ -26,6 +26,17 @@ describe 'getFieldValueFromFormats', ->
 			field: 'Markdown *em*.'
 		expect(utils.getFieldValueFromFormats(input)).toEqual test
 
+describe 'getProps', ->
+	it 'returns an object with only the props in the provided array of keys', ->
+		input =
+			foo: 0
+			bar: 1
+			baz: 2
+		test =
+			foo: 0
+			bar: 1
+		expect(utils.getProps(input, ['foo', 'bar'])).toEqual test
+
 describe 'localize', ->
 	it 'returns an object with field values set to language subfields', ->
 		input =
@@ -56,6 +67,26 @@ describe 'localize', ->
 			field: 'felt2'
 		]
 		expect(utils.localize('nb', input)).toEqual test
+
+describe 'mapObjectRecursively', ->
+	it 'takes a mapper function and goes over the object recursively, applying to objects with provided props', ->
+		input =
+			foo:
+				bar: 1
+			baz: [
+				{ foo: 1, bar: 2 }
+				{ foo: 1, baz: 1 }
+			]
+		test =
+			foo:
+				bar: 1
+			baz: [
+				3
+				{ foo: 1, baz: 1 }
+			]
+		mapper = (foo, bar) ->
+			foo + bar
+		expect(utils.mapObjectRecursively(input, [ 'foo', 'bar' ], mapper)).toEqual test
 
 describe 'stripDbFields', ->
 	it 'removes fields _id and _rev from an object', ->

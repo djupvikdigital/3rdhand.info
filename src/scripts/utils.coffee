@@ -2,15 +2,26 @@ moment = require 'moment'
 transducers = require 'transducers.js'
 Immutable = require 'immutable'
 
-{ compose, map, seq, toArray } = transducers
+{ compose, filter, map, seq, toArray } = transducers
+
+identity = (arg) ->
+	arg
 
 argArray = (fn) ->
 	(arr) ->
 		fn(arr...)
 
+filterKeys = compose filter, (fn) ->
+	argArray (k) ->
+		fn(k)
+
 mapValue = compose map, (fn) ->
 	argArray (k, v) ->
 		[k, fn(v)]
+
+getValuesFromPairs = (pairs) ->
+	map pairs, argArray (k, v) ->
+		v
 
 shortCircuitScalars = (fn) ->
 	(input) ->
@@ -33,50 +44,55 @@ createFunctionMapper = (functionMap, noValue) ->
 		else
 			v
 
-localize = (lang, input) ->
-	l = shortCircuitScalars (input) ->
+getProps = (input, props) ->
+	seq input, filterKeys (k) ->
+		props.indexOf(k) != -1
+
+thisHasProperty = (prop) ->
+	this.hasOwnProperty prop
+
+mapObjectRecursively = shortCircuitScalars (input, props, mapper) ->
+	if !Array.isArray props
+		props = [ props ]
+	f = shortCircuitScalars (input) ->
 		if Array.isArray input
-			input.map l
-		else if input.hasOwnProperty(lang)
-			l(input[lang])
+			input.map f
+		else if props.every Object.prototype.hasOwnProperty, input
+			pairs = getProps toArray(input), props
+			args = getValuesFromPairs(pairs)
+			mapper.apply(input, args)
 		else
-			seq input, mapValue l
-	l input
+			seq input, mapValue f
+	f input
+
+localize = (lang, input) ->
+	mapObjectRecursively input, lang, identity
 
 applyFormatters = shortCircuitScalars (input, formatters) ->
 	if formatters
 		formatMapper = createFunctionMapper(formatters, '')
 	else
 		formatMapper = ((k, v) -> v)
-	f = shortCircuitScalars (input) ->
-		if Array.isArray input
-			input.map f
-		else if input.hasOwnProperty('format') && input.hasOwnProperty('text')
-			formatMapper(input.format, input.text)
-		else
-			seq input, mapValue f
-	f input
+	mapObjectRecursively input, [ 'format', 'text' ], formatMapper
 
-addHrefToArticles = shortCircuitScalars (input) ->
-	if Array.isArray input
-		input.map addHrefToArticles
-	else if input.hasOwnProperty('slug')
-		if input.hasOwnProperty('created')
-			created = input.created
+addHrefToArticles = (input) ->
+	mapObjectRecursively input, 'slug', (slug) ->
+		if @hasOwnProperty('created')
+			created = @created
 		else
 			created = new Date() # fake it
 		created = moment(created).format('YYYY/MM/DD')
-		input.href = '/' + created + '/' + input.slug
-		input
-	else
-		seq input, mapValue addHrefToArticles
+		@href = '/' + created + '/' + slug
+		this
 
 module.exports =
 	addHrefToArticles: addHrefToArticles
 	getFieldValueFromFormats: applyFormatters
+	getProps: getProps
 	format: applyFormatters
 	keyIn: keyIn
 	localize: localize
+	mapObjectRecursively: mapObjectRecursively
 	stripDbFields: (obj) ->
 		gotMap = Immutable.Map.isMap(obj)
 		m = if gotMap then obj else Immutable.Map(obj)
