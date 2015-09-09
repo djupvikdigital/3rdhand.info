@@ -105,6 +105,7 @@ addHrefToArticles = (input) ->
 
 module.exports =
 	addHrefToArticles: addHrefToArticles
+	createFormatMapper: createFormatMapper
 	getFieldValueFromFormats: applyFormatters
 	getProps: getProps
 	format: applyFormatters

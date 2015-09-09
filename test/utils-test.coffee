@@ -6,25 +6,16 @@ t = require 'transducers.js'
 formatters = require '../src/scripts/formatters.coffee'
 utils = require '../src/scripts/utils.coffee'
 
-describe 'format', ->
-	it 'returns an object with field values formatted from a format subfield', ->
-		input =
-			field:
-				format: 'markdown'
-				text: 'Markdown *em*.'
-		test =
-			field: '<p>Markdown <em>em</em>.</p>\n'
-		expect(utils.format(input, formatters)).toEqual test
-
-describe 'getFieldValueFromFormats', ->
-	it 'returns an object with field values from a format subfield', ->
-		input =
-			field:
-				format: 'markdown'
-				text: 'Markdown *em*.'
-		test =
-			field: 'Markdown *em*.'
-		expect(utils.getFieldValueFromFormats(input)).toEqual test
+describe 'createFormatMapper', ->
+	it 'returns text formatted from a format and a text', ->
+		format = 'markdown'
+		text = 'Markdown *em*.'
+		test = '<p>Markdown <em>em</em>.</p>\n'
+		expect(utils.createFormatMapper(formatters)(format, text)).toEqual test
+	it 'returns just the text if there are now formatters', ->
+		format = 'markdown'
+		text = 'Markdown *em*.'
+		expect(utils.createFormatMapper()(format, text)).toEqual text
 
 describe 'getProps', ->
 	it 'returns an object with only the props in the provided array of keys', ->
