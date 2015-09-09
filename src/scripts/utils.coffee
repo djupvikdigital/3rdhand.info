@@ -48,9 +48,6 @@ getProps = (input, props) ->
 	seq input, filterKeys (k) ->
 		props.indexOf(k) != -1
 
-thisHasProperty = (prop) ->
-	this.hasOwnProperty prop
-
 propsAndMappersMapper = (propsAndMapper) ->
 	i = propsAndMapper.length - 1
 	props = take propsAndMapper, i
@@ -63,21 +60,29 @@ propsAndMappersMapper = (propsAndMapper) ->
 		null
 
 mapObjectRecursively = shortCircuitScalars (input, propsAndMappers...) ->
+	if !Array.isArray propsAndMappers[0]
+		propsAndMappers = [ propsAndMappers ]
 	f = shortCircuitScalars (input) ->
 		if Array.isArray input
 			input.map f
 		else
-			if !Array.isArray propsAndMappers[0]
-				propsAndMappers = [ propsAndMappers ]
 			results = toArray(
 				propsAndMappers
 				compose map(propsAndMappersMapper, input), keep()
 			)
 			if results.length
-				results[0]
+				f results[0]
 			else
 				seq input, mapValue f
 	f input
+
+createPropertyMapper = (k, fn) ->
+	->
+		if @hasOwnProperty k
+			null
+		else
+			this[k] = fn.apply this, arguments
+			this
 
 createFormatMapper = (formatters) ->
 	if formatters
@@ -91,14 +96,13 @@ localize = (lang, input) ->
 applyFormatters = shortCircuitScalars (input, formatters) ->
 	mapObjectRecursively input, 'format', 'text', createFormatMapper formatters
 
-hrefMapper = (slug) ->
+hrefMapper = createPropertyMapper 'href', (slug) ->
 	if @hasOwnProperty('created')
 		created = @created
 	else
 		created = new Date() # fake it
 	created = moment(created).format('YYYY/MM/DD')
-	@href = '/' + created + '/' + slug
-	this
+	'/' + created + '/' + slug
 
 addHrefToArticles = (input) ->
 	mapObjectRecursively input, 'slug', hrefMapper
@@ -106,10 +110,12 @@ addHrefToArticles = (input) ->
 module.exports =
 	addHrefToArticles: addHrefToArticles
 	createFormatMapper: createFormatMapper
+	createPropertyMapper: createPropertyMapper
 	getFieldValueFromFormats: applyFormatters
 	getProps: getProps
 	format: applyFormatters
 	hrefMapper: hrefMapper
+	identity: identity
 	keyIn: keyIn
 	localize: localize
 	mapObjectRecursively: mapObjectRecursively

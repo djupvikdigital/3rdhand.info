@@ -1,4 +1,5 @@
 Immutable = require 'immutable'
+moment = require 'moment'
 Reselect = require 'reselect'
 
 utils = require '../utils.coffee'
@@ -25,7 +26,17 @@ itemSelector = (state) ->
 
 formatSelector = (state) ->
 	lang = state.lang
-	utils.addHrefToArticles utils.localize lang, utils.format state, formatters
+	utils.mapObjectRecursively(
+		state
+		[ lang, utils.identity ]
+ 		[ 'format', 'text', utils.createFormatMapper(formatters) ]
+ 		[ 'slug', utils.hrefMapper ]
+		[ 
+			'published'
+			utils.createPropertyMapper 'publishedFormatted', (published) ->
+				moment(published).format('YYYY-MM-DD HH:mm:ss')
+		]
+	)
 
 module.exports =
 	containerSelector: Reselect.createSelector(
