@@ -11,8 +11,8 @@ ArticleList = createFactory(
 		require './article-list.coffee'
 	)
 )
-ArticleItem = createFactory(
-	ReactRedux.connect(selectors.itemSelector)(require './article.coffee')
+ArticleFull = createFactory(
+	ReactRedux.connect(selectors.itemSelector)(require './article-full.coffee')
 )
 ArticleEditor = createFactory(
 	ReactRedux.connect(selectors.editorSelector)(
@@ -38,4 +38,4 @@ module.exports = React.createClass
 		else if @props.params?.view
 			ArticleEditor save: @save, params: @props.params
 		else
-			ArticleItem()
+			ArticleFull()

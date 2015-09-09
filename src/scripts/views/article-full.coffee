@@ -9,7 +9,7 @@ Elements = require '../elements.coffee'
 Link = createFactory Router.Link
 
 module.exports = React.createClass
-	displayName: 'ArticleItem'
+	displayName: 'ArticleFull'
 	mixins: [ Router.State ]
 	render: ->
 		{ href, title, subtitle, intro, body } = @props.article

@@ -3,7 +3,7 @@ React = require 'react'
 Elements = require '../elements.coffee'
 createFactory = require '../create-factory.coffee'
 
-ArticleItem = createFactory require './article.coffee'
+ArticleItem = createFactory require './article-item.coffee'
 
 { article, div } = Elements
 
