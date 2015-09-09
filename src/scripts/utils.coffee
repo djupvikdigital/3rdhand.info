@@ -79,31 +79,36 @@ mapObjectRecursively = shortCircuitScalars (input, propsAndMappers...) ->
 				seq input, mapValue f
 	f input
 
+createFormatMapper = (formatters) ->
+	if formatters
+		createFunctionMapper(formatters, '')
+	else
+		((k, v) -> v)
+
 localize = (lang, input) ->
 	mapObjectRecursively input, lang, identity
 
 applyFormatters = shortCircuitScalars (input, formatters) ->
-	if formatters
-		formatMapper = createFunctionMapper(formatters, '')
+	mapObjectRecursively input, 'format', 'text', createFormatMapper formatters
+
+hrefMapper = (slug) ->
+	if @hasOwnProperty('created')
+		created = @created
 	else
-		formatMapper = ((k, v) -> v)
-	mapObjectRecursively input, 'format', 'text', formatMapper
+		created = new Date() # fake it
+	created = moment(created).format('YYYY/MM/DD')
+	@href = '/' + created + '/' + slug
+	this
 
 addHrefToArticles = (input) ->
-	mapObjectRecursively input, 'slug', (slug) ->
-		if @hasOwnProperty('created')
-			created = @created
-		else
-			created = new Date() # fake it
-		created = moment(created).format('YYYY/MM/DD')
-		@href = '/' + created + '/' + slug
-		this
+	mapObjectRecursively input, 'slug', hrefMapper
 
 module.exports =
 	addHrefToArticles: addHrefToArticles
 	getFieldValueFromFormats: applyFormatters
 	getProps: getProps
 	format: applyFormatters
+	hrefMapper: hrefMapper
 	keyIn: keyIn
 	localize: localize
 	mapObjectRecursively: mapObjectRecursively
