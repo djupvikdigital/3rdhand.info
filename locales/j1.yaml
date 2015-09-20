@@ -1,0 +1,22 @@
+title: 3rdhand.info
+SiteMenu:
+    home: Homz
+    admin: Admin
+    newArticle: Nüaw artikel
+ArticleEditor:
+    norwegian: Norwégaz
+    english: Anglaz
+    slug: Blétsnaagh
+    title: Titel
+    subtitle: Sübtitel
+    teaser: Knabelat
+    summary: Semvassin
+    intro: Intrö
+    body: Liytext
+    save: Réd
+LoginDialog:
+    loggedInAs: Intlogi és
+    logout: Otlog
+    username: Ütighatnimen
+    password: Päswäut
+    login: Intlog
