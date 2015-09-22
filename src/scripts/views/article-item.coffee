@@ -13,8 +13,14 @@ module.exports = React.createClass
 		{ href, title, summary, published, publishedFormatted } = @props.article
 		div(
 			header(
-				h1 Link to: href, innerHtml: title
-				time { dateTime: published }, publishedFormatted
+				h1(
+					{ className: 'article__heading' }
+					Link to: href, innerHtml: title
+				)
+				time(
+					{ className: 'milli', dateTime: published }
+					publishedFormatted
+				)
 			)
 			div innerHtml: summary
 		)

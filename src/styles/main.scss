@@ -25,6 +25,10 @@ $inuit-heading-size-6: 16px;
 @import "node_modules/inuit-headings-trumps/trumps.headings";
 @import "trumps.headings";
 
+.milli {
+	@include inuit-font-size(14px);
+}
+
 @import "base.forms";
 @import "objects.forms";
 
@@ -38,3 +42,5 @@ $site-header-bg-color: $link-color;
 @import "components.site-header";
 
 @import "components.site-menu";
+
+@import "components.article";
