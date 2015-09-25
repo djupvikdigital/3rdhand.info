@@ -33,6 +33,10 @@ menuSelector = Reselect.createSelector(
 )
 
 module.exports =
+	langPickerSelector: (state) ->
+		return {
+			localeStrings: state.localeState.toJS().localeStrings.LangPicker
+		}
 	localeSelector: localeSelector
 	loginSelector: Reselect.createSelector(
 		[ loginSelector, localeSelector ]

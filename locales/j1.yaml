@@ -3,6 +3,9 @@ SiteMenu:
     home: Homz
     admin: Admin
     newArticle: Nüaw artikel
+LangPicker:
+    norwegian: no
+    english: en
 ArticleEditor:
     norwegian: Norwégaz
     english: Anglaz

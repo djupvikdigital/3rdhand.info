@@ -21,6 +21,9 @@ getCookie = (headers) ->
 		''
 
 main = (req, res) ->
+	# strip slashes from beginning and end of url, split on slashes and dots
+	params = req.url.replace(/(?:^\/+)|(?:\/+$)/g, '').split /\/|\./
+	return res.send JSON.stringify params
 	lang = req.acceptsLanguages 'nb', 'en'
 	router = Router.create
 		routes: routes
@@ -53,6 +56,7 @@ server.set 'view engine', 'jade'
 server.get '/admin', main
 
 server.get '/index.atom', (req, res) ->
+	res.header 'Content-Type', 'text/plain; charset=utf8'
 	lang = req.acceptsLanguages 'nb', 'en'
 	res.header 'Content-Type', 'application/atom+xml; charset=utf8'
 	init().then ->
@@ -68,6 +72,8 @@ server.get '/index.atom', (req, res) ->
 			articles: articles
 		)
 
+server.get '*', main
+
 server.get '/:view', (req, res) ->
 	query = {}
 	for key, val of req.query
@@ -79,8 +85,6 @@ server.get '/:view', (req, res) ->
 		lang = req.acceptsLanguages 'nb', 'en'
 		docs = (row.value for row in body.rows)
 		res.send docs: docs, lang: lang
-
-server.get '*', main
 
 server.post '/', (req, res) ->
 	dbauth = ''

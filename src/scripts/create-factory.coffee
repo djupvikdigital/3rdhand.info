@@ -14,11 +14,11 @@ transformProps = (props) ->
 
 module.exports = (ReactClass) ->
 	(options...) ->
+		if Array.isArray options[options.length - 1]
+			options = Array.prototype.concat.apply([], options)
 		if !options.length || !options[0] || !isProps(options[0])
 			options.unshift {}
 		else
 			options[0] = transformProps options[0]
-		if Array.isArray options[1]
-			options = Array.prototype.concat.apply([], options)
 		options.unshift ReactClass
 		React.createElement options...

@@ -3,6 +3,9 @@ SiteMenu:
     home: Hjem
     admin: Admin
     newArticle: Ny artikkel
+LangPicker:
+    norwegian: no
+    english: en
 ArticleEditor:
     norwegian: Norsk
     english: Engelsk

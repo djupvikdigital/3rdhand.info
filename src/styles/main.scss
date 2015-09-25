@@ -29,6 +29,8 @@ $inuit-heading-size-6: 16px;
 	@include inuit-font-size(14px);
 }
 
+@import "node_modules/inuit-list-inline/objects.list-inline";
+
 @import "base.forms";
 @import "objects.forms";
 

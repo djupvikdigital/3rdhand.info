@@ -1,15 +1,17 @@
 .site-header {
+	height: 100px;
 	text-align: center;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 10rem;
 	font-weight: 800;
 	font-style: italic;
 	letter-spacing: -0.08em;
+	background-color: $site-header-bg-color;
 }
 
 .site-header__logo {
 	float: left;
-	position: absolute;
+	position: relative;
 	width: 10rem;
 	vertical-align: top;
 }
@@ -26,6 +28,7 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
+	z-index: 1;
 	overflow: visible;
 }
 
@@ -39,13 +42,17 @@
 }
 
 .site-header__title {
-	height: 100px;
-	padding-left: 10rem;
-	background-color: $site-header-bg-color;
+	position: relative;
+	height: 100%;
+	margin-left: 10rem;
 }
 
 .site-header__title > svg {
-	vertical-align: top;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 }
 
 .site-header__title text,
