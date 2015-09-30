@@ -12,18 +12,21 @@ requestLocaleStrings = (lang) ->
 		lang: lang
 	}
 
-receiveLocaleStrings = (res) ->
-	if res.ok
-		return {
-			type: 'RECEIVE_LOCALE_STRINGS_SUCCESS'
-			data: YAML.safeLoad(res.text)
-			receivedAt: new Date()
-		}
-	else
-		return {
-			type: 'RECEIVE_LOCALE_STRINGS_ERROR'
-			error: res.error
-		}
+receiveLocaleStrings = (lang) ->
+	(res) ->
+		if res.ok
+			return {
+				type: 'RECEIVE_LOCALE_STRINGS_SUCCESS'
+				lang: lang
+				data: YAML.safeLoad(res.text)
+				receivedAt: new Date()
+			}
+		else
+			return {
+				type: 'RECEIVE_LOCALE_STRINGS_ERROR'
+				lang: lang
+				error: res
+			}
 
 module.exports =
 	fetchStrings: (lang) ->
@@ -35,9 +38,11 @@ module.exports =
 				}
 			dispatch requestLocaleStrings(lang)
 			req = request(server + 'locales/' + lang + '.yaml')
+			handler = receiveLocaleStrings lang
 			if typeof req.buffer == 'function'
 				req.buffer()
 			req
 				.promise()
-				.then(receiveLocaleStrings)
+				.then(handler)
+				.catch(handler)
 				.then(dispatch)

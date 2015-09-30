@@ -5,7 +5,7 @@ store = require '../store.coffee'
 
 protocol = 'http://'
 host = 'localhost:8081'
-server = protocol + host + '/'
+server = protocol + host + '/views/'
 
 receiveArticles = (articles, lang) ->
 	if Object.prototype.toString.call(articles) != '[object Array]'

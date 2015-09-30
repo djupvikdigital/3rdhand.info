@@ -16,7 +16,7 @@ Route = React.createFactory Router.Route
 module.exports = Route(
 	{ name: "app", path: "/", handler: App }
 	Route(name: "admin", path: "admin", handler: LoginDialog)
-	Route(path: ":year/:month/:day/:slug", handler: ArticleContainer)
-	Route(path: ":year/:month/:day/:slug/:view", handler: ArticleContainer)
+	Route path: '/locales/:file', handler: App
+	Route(path: '*', handler: ArticleContainer)
 	DefaultRoute(handler: ArticleContainer)
 )

@@ -2,6 +2,7 @@ Immutable = require 'immutable'
 
 initialState = Immutable.fromJS({
 	lang: 'nb'
+	supportedLocales: [ 'nb', 'en' ]
 	localeStrings: {
 		SiteMenu: {}
 		ArticleEditor: {}
@@ -13,6 +14,7 @@ module.exports = (state = initialState, action) ->
 	switch action.type
 		when 'RECEIVE_LOCALE_STRINGS_SUCCESS'
 			return state.merge({
+				lang: action.lang
 				localeStrings: action.data
 				lastUpdate: action.receivedAt
 			})

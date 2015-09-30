@@ -13,6 +13,7 @@ googleFontsUrl = 'http://fonts.googleapis.com/css?family='
 module.exports = React.createClass
 	render: ->
 		html(
+			{ lang: @props.lang }
 			head(
 				meta(charSet: "utf-8")
 				meta(

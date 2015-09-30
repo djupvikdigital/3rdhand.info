@@ -4,8 +4,15 @@ Immutable = require 'immutable'
 
 { compose, filter, keep, map, seq, take, toArray, transduce } = transducers
 
+array = ->
+	# cast to array
+	Array.prototype.concat.apply [], arguments
+
 identity = (arg) ->
 	arg
+
+defaultFilter = (item) ->
+	!!item
 
 argArray = (fn) ->
 	(arr) ->
@@ -14,6 +21,10 @@ argArray = (fn) ->
 filterKeys = compose filter, (fn) ->
 	argArray (k) ->
 		fn(k)
+
+filterValues = compose filter, (fn=defaultFilter) ->
+	argArray (k, v) ->
+		fn(v)
 
 mapValue = compose map, (fn) ->
 	argArray (k, v) ->
@@ -29,6 +40,15 @@ shortCircuitScalars = (fn) ->
 			input
 		else
 			fn arguments...
+
+zip = (arrs) ->
+	if arguments.length > 1
+		arrs = Array.prototype.slice.call arguments
+	len = arrs.length
+	res = for i in [0...arrs[0].length]
+		item = []
+		for j in [0...len]
+			item[item.length] = arrs[j][i]
 
 keyIn = ->
 	keySet = Immutable.Set(arguments)
@@ -109,10 +129,12 @@ addHrefToArticles = (input) ->
 
 module.exports =
 	addHrefToArticles: addHrefToArticles
+	array: array
 	createFormatMapper: createFormatMapper
 	createPropertyMapper: createPropertyMapper
 	getFieldValueFromFormats: applyFormatters
 	getProps: getProps
+	filterValues: filterValues
 	format: applyFormatters
 	hrefMapper: hrefMapper
 	identity: identity
@@ -126,3 +148,4 @@ module.exports =
 		unless gotMap then m.toObject() else m
 	validLogin: (obj) ->
 		return typeof obj == "object" && 'user' of obj && 'password' of obj
+	zip: zip

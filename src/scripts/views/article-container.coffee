@@ -6,11 +6,7 @@ createFactory = require '../create-factory.coffee'
 actions = require '../actions/article-actions.coffee'
 selectors = require '../selectors/article-selectors.coffee'
 
-ArticleList = createFactory(
-	ReactRedux.connect(selectors.listSelector)(
-		require './article-list.coffee'
-	)
-)
+ArticleList = createFactory require './article-list.coffee'
 ArticleFull = createFactory(
 	ReactRedux.connect(selectors.itemSelector)(require './article-full.coffee')
 )
@@ -27,15 +23,16 @@ module.exports = React.createClass
 	save: (data) ->
 		@props.dispatch actions.save data
  	componentWillMount: ->
- 		@fetch @props.params unless @props.lastUpdate
+ 		@fetch @props.urlParams unless @props.lastUpdate
 	componentWillReceiveProps: (nextProps) ->
-		if nextProps.params != @props.params
-			@fetch nextProps.params
+		if nextProps.urlParams != @props.urlParams
+			@fetch nextProps.urlParams
 	render: ->
+		params = @props.urlParams || {}
 		articles = @props.articles
 		if articles.length > 1
 			ArticleList articles: articles
-		else if @props.params?.view
-			ArticleEditor save: @save, params: @props.params
+		else if params.view
+			ArticleEditor save: @save, params: params
 		else
 			ArticleFull()

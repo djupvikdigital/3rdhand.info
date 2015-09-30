@@ -12,8 +12,8 @@ module.exports = (state) ->
 				nb:
 					'Test'
 			articles: []
-			lang: 'nb'
 		localeState: Immutable.fromJS
+			lang: 'nb'
 			localeStrings: localeStrings
 		loginState: Immutable.fromJS
 			isLoggedIn: false

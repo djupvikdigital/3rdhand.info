@@ -6,12 +6,13 @@ articleActions = require '../src/scripts/actions/article-actions.coffee'
 createStore = require '../testutils/create-store.coffee'
 
 describe 'store', ->
-	describe 'articleState', ->
+	describe 'localeState', ->
 		it 'has a language', ->
 			store = createStore()
-			state = store.getState().articleState
+			state = store.getState().localeState
 			expect(state.has('lang')).toBe(true)
 			expect(typeof state.get('lang')).toBe('string')
+	describe 'articleState', ->
 		it 'has a list of articles', ->
 			store = createStore()
 			state = store.getState().articleState

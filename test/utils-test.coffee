@@ -6,106 +6,129 @@ t = require 'transducers.js'
 formatters = require '../src/scripts/formatters.coffee'
 utils = require '../src/scripts/utils.coffee'
 
-describe 'createFormatMapper', ->
-	it 'returns text formatted from a format and a text', ->
-		format = 'markdown'
-		text = 'Markdown *em*.'
-		test = '<p>Markdown <em>em</em>.</p>\n'
-		expect(utils.createFormatMapper(formatters)(format, text)).toEqual test
-	it 'returns just the text if there are now formatters', ->
-		format = 'markdown'
-		text = 'Markdown *em*.'
-		expect(utils.createFormatMapper()(format, text)).toEqual text
+describe 'utils module', ->
+	describe 'array', ->
+		it 'converts non-arrays to array', ->
+			test = [ 'item1', 'item2' ]
+			expect(utils.array('item1', 'item2')).toEqual test
+		it 'leaves an array alone', ->
+			input = [ 'item1', 'item2' ]
+			expect(utils.array input).toEqual input
 
-describe 'getProps', ->
-	it 'returns an object with only the props in the provided array of keys', ->
-		input =
-			foo: 0
-			bar: 1
-			baz: 2
-		test =
-			foo: 0
-			bar: 1
-		expect(utils.getProps(input, ['foo', 'bar'])).toEqual test
+	describe 'createFormatMapper', ->
+		it 'returns text formatted from a format and a text', ->
+			format = 'markdown'
+			text = 'Markdown *em*.'
+			test = '<p>Markdown <em>em</em>.</p>\n'
+			expect(utils.createFormatMapper(formatters)(format, text)).toEqual test
+		it 'returns just the text if there are now formatters', ->
+			format = 'markdown'
+			text = 'Markdown *em*.'
+			expect(utils.createFormatMapper()(format, text)).toEqual text
 
-describe 'hrefMapper', ->
-	it 'takes a slug argument and adds this.href from created date and slug', ->
-		input =
-			created: new Date('1983-11-28T23:55:00')
-		test =
-			created: new Date('1983-11-28T23:55:00')
-			href: '/1983/11/28/test'
-		expect(utils.hrefMapper.call(input, 'test')).toEqual test
+	describe 'getProps', ->
+		it 'returns an object with only the props in the provided array of keys', ->
+			input =
+				foo: 0
+				bar: 1
+				baz: 2
+			test =
+				foo: 0
+				bar: 1
+			expect(utils.getProps(input, ['foo', 'bar'])).toEqual test
 
-describe 'localize', ->
-	it 'returns an object with field values set to language subfields', ->
-		input =
-			field:
+	describe 'hrefMapper', ->
+		it 'takes a slug argument and adds this.href from created date and slug', ->
+			input =
+				created: new Date('1983-11-28T23:55:00')
+			test =
+				created: new Date('1983-11-28T23:55:00')
+				href: '/1983/11/28/test'
+			expect(utils.hrefMapper.call(input, 'test')).toEqual test
+
+	describe 'localize', ->
+		it 'returns an object with field values set to language subfields', ->
+			input =
+				field:
+					nb: 'felt'
+					en: 'field'
+			test =
+				field: 'felt'
+			expect(utils.localize('nb', input)).toEqual test
+
+		it 'returns a value from an object with toplevel fields having language keys', ->
+			input =
 				nb: 'felt'
 				en: 'field'
-		test =
-			field: 'felt'
-		expect(utils.localize('nb', input)).toEqual test
-
-	it 'returns a value from an object with toplevel fields having language keys', ->
-		input =
-			nb: 'felt'
-			en: 'field'
-		test = 'felt'
-		expect(utils.localize('nb', input)).toBe 'felt'
-	it 'supports mapping arrays', ->
-		input = [
-			field:
-				nb: 'felt1'
-				en: 'field1'
-			field:
-				nb: 'felt2'
-				en: 'field2'
-		]
-		test = [
-			field: 'felt1'
-			field: 'felt2'
-		]
-		expect(utils.localize('nb', input)).toEqual test
-
-describe 'mapObjectRecursively', ->
-	it 'takes mapper functions and goes over the object recursively, applying to objects with provided props', ->
-		input =
-			foo:
-				bar: 1
-			baz: [
-				{ foo: 1, bar: 2 }
-				{ foo: 1, baz: 1 }
+			test = 'felt'
+			expect(utils.localize('nb', input)).toBe 'felt'
+		it 'supports mapping arrays', ->
+			input = [
+				field:
+					nb: 'felt1'
+					en: 'field1'
+				field:
+					nb: 'felt2'
+					en: 'field2'
 			]
-		test =
-			foo: 2
-			baz: [
-				3
-				{ foo: 1, baz: 1 }
+			test = [
+				field: 'felt1'
+				field: 'felt2'
 			]
-		mapper1 = (foo, bar) ->
-			foo + bar
-		mapper2 = (bar) ->
-			bar + 1
-		args = [
-			input
-			[ 'foo', 'bar', mapper1 ]
-			[ 'bar', mapper2 ]
-		]
-		expect(utils.mapObjectRecursively.apply(null, args)).toEqual test
+			expect(utils.localize('nb', input)).toEqual test
 
-describe 'stripDbFields', ->
-	it 'removes fields _id and _rev from an object', ->
-		input =
-			_id: 'id'
-			_rev: 'rev'
-			field: 'field'
-		test =
-			field: 'field'
-		expect(utils.stripDbFields(input)).toEqual test
+	describe 'mapObjectRecursively', ->
+		it 'takes mapper functions and goes over the object recursively, applying to objects with provided props', ->
+			input =
+				foo:
+					bar: 1
+				baz: [
+					{ foo: 1, bar: 2 }
+					{ foo: 1, baz: 1 }
+				]
+			test =
+				foo: 2
+				baz: [
+					3
+					{ foo: 1, baz: 1 }
+				]
+			mapper1 = (foo, bar) ->
+				foo + bar
+			mapper2 = (bar) ->
+				bar + 1
+			args = [
+				input
+				[ 'foo', 'bar', mapper1 ]
+				[ 'bar', mapper2 ]
+			]
+			expect(utils.mapObjectRecursively.apply(null, args)).toEqual test
 
-	it 'returns an Immutable.Map if provided an Immutable.Map', ->
-		input = Immutable.Map
-			field: 'field'
-		output = utils.stripDbFields input
-		expect(Immutable.Map.isMap(output)).toBe true
+	describe 'stripDbFields', ->
+		it 'removes fields _id and _rev from an object', ->
+			input =
+				_id: 'id'
+				_rev: 'rev'
+				field: 'field'
+			test =
+				field: 'field'
+			expect(utils.stripDbFields(input)).toEqual test
+
+		it 'returns an Immutable.Map if provided an Immutable.Map', ->
+			input = Immutable.Map
+				field: 'field'
+			output = utils.stripDbFields input
+			expect(Immutable.Map.isMap(output)).toBe true
+
+	describe 'zip', ->
+		it 'zips arrays', ->
+			input = [
+				[ 'foo', 'bar', 'baz' ]
+				[ 1, 2, 3 ]
+				[ 'oof', 'rab', 'zab' ]
+			]
+			test = [
+				[ 'foo', 1, 'oof' ]
+				[ 'bar', 2, 'rab' ]
+				[ 'baz', 3, 'zab' ]
+			]
+			expect(utils.zip input).toEqual test

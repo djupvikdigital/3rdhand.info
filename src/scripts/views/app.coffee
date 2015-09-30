@@ -31,6 +31,7 @@ Link = createFactory Router.Link
 module.exports = React.createClass
 	displayName: 'App'
 	render: ->
+		params = @props.params
 		div(
 			Provider(
 				{ store: store }
@@ -41,7 +42,7 @@ module.exports = React.createClass
 							SiteMenu()
 							div(
 								{ className: "wrapper"}
-								RouteHandler(@props)
+								RouteHandler urlParams: params
 							)
 						)
 					)

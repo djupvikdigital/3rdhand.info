@@ -1,4 +1,5 @@
 express = require 'express'
+favicon = require 'serve-favicon'
 bodyParser = require 'body-parser'
 Promise = require 'bluebird'
 React = require 'react'
@@ -7,6 +8,7 @@ DocumentTitle = require 'react-document-title'
 
 global.Promise = Promise
 
+URL = require './src/scripts/url.coffee'
 db = require './db.coffee'
 init = require './src/scripts/init.coffee'
 store = require './src/scripts/store.coffee'
@@ -21,10 +23,11 @@ getCookie = (headers) ->
 		''
 
 main = (req, res) ->
-	# strip slashes from beginning and end of url, split on slashes and dots
-	params = req.url.replace(/(?:^\/+)|(?:\/+$)/g, '').split /\/|\./
-	return res.send JSON.stringify params
-	lang = req.acceptsLanguages 'nb', 'en'
+	supportedLocales = store.getState().localeState.toJS().supportedLocales
+	lang = URL.negotiateLang(
+		(URL.getLang(req.url, supportedLocales) || req.acceptsLanguages.apply(req, supportedLocales))
+		supportedLocales
+	)
 	router = Router.create
 		routes: routes
 		location: req.url
@@ -34,14 +37,21 @@ main = (req, res) ->
 
 	router.run (Handler, state) =>
 		params = state.params
-		init(params).then ->
+		if params.splat
+			params = URL.getParams params.splat, supportedLocales
+		init(params, lang).then ->
 			doctype = '<!DOCTYPE html>'
-			app = React.renderToString React.createElement Handler, params: params
+			app = React.renderToString(
+				React.createElement Handler, params: params
+			)
 			title = DocumentTitle.rewind()
-			html = React.renderToStaticMarkup Template title: title, app: app
+			html = React.renderToStaticMarkup(
+				Template title: title, app: app, lang: params.lang
+			)
 			res.send doctype + html
 
 server = express()
+server.use favicon './favicon.ico'
 server.use(express.static(__dirname))
 server.use(bodyParser.json())
 
@@ -72,9 +82,7 @@ server.get '/index.atom', (req, res) ->
 			articles: articles
 		)
 
-server.get '*', main
-
-server.get '/:view', (req, res) ->
+server.get '/views/:view', (req, res) ->
 	query = {}
 	for key, val of req.query
 		query[key] = val
@@ -82,9 +90,14 @@ server.get '/:view', (req, res) ->
 	db().view 'app', req.params.view, query, (err, body) ->
 		if err
 			return res.send err
-		lang = req.acceptsLanguages 'nb', 'en'
 		docs = (row.value for row in body.rows)
-		res.send docs: docs, lang: lang
+		res.send docs: docs
+
+server.get 'locales/*', (req, res) ->
+	console.log req.url
+	res.send ''
+
+server.get '*', main
 
 server.post '/', (req, res) ->
 	dbauth = ''

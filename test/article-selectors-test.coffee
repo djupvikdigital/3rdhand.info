@@ -14,7 +14,7 @@ describe 'articleSelectors', ->
 					{ _id: '_id' }
 					{ _id: '_id' }
 				]
-			lang = state.articleState.get('lang')
+			lang = state.localeState.get('lang')
 			output = selectors.containerSelector(state)
 			state = state.articleState
 			expect(output.articles).toEqual(state.get('articles').toJS())
@@ -25,7 +25,7 @@ describe 'articleSelectors', ->
 				articles: [
 					{ _id: '_id', title: { nb: { format: '', text: 'Article Title' }}}
 				]
-			lang = state.articleState.get('lang')
+			lang = state.localeState.get('lang')
 			output = selectors.itemSelector(state)
 			title = state.localeState.toJS().localeStrings.title
 			articleTitle = utils.getFieldValueFromFormats(
@@ -37,7 +37,7 @@ describe 'articleSelectors', ->
 				articles: [
 					{ _id: '_id', title: { nb: { format: '', text: '' }}}
 				]
-			lang = state.articleState.get('lang')
+			lang = state.localeState.get('lang')
 			output = selectors.itemSelector(state)
 			title = state.localeState.toJS().localeStrings.title
 			expect(output.title).toBe(title)
