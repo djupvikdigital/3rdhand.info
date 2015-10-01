@@ -46,7 +46,7 @@ main = (req, res) ->
 			)
 			title = DocumentTitle.rewind()
 			html = React.renderToStaticMarkup(
-				Template title: title, app: app, lang: params.lang
+				Template title: title, app: app, lang: lang
 			)
 			res.send doctype + html
 

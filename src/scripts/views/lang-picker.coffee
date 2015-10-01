@@ -1,11 +1,13 @@
 React = require 'react'
+ReactRedux = require 'react-redux'
 
+selector = require('../selectors/app-selectors.coffee').linkSelector
 createFactory = require '../create-factory.coffee'
 Elements = require '../elements.coffee'
 
 { ul, li, div } = Elements
 
-Link = createFactory require './link.coffee'
+Link = createFactory ReactRedux.connect(selector)(require './link.coffee')
 
 module.exports = React.createClass
 	displayName: 'LangPicker'
@@ -19,6 +21,6 @@ module.exports = React.createClass
 		{ norwegian, english } = @props.localeStrings
 		ul(
 			{ className: classes.join(' ') }
-			li Link { to: '/no' }, norwegian
-			li Link { to: '/en' }, english
+			li Link { lang: 'no' }, norwegian
+			li Link { lang: 'en' }, english
 		)

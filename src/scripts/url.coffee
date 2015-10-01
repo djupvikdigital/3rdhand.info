@@ -18,6 +18,14 @@ splitPath = (path) ->
 	obj.filename = filenameParts
 	obj
 
+assemblePath = (obj) ->
+	if !Array.isArray(obj.path) || !Array.isArray(obj.filename)
+		throw new Error('invalid object')
+	obj.path.pop()
+	if obj.path[0] then obj.path.unshift ''
+	obj.filename = obj.filename.filter Boolean
+	[ obj.path.join('/'), obj.filename.join('.') ].join('/')
+
 negotiateLang = (lang, supportedLocales) ->
 	if !lang then return ''
 	if !supportedLocales
@@ -36,6 +44,17 @@ getLangFromArray = (arr) ->
 	langs = arr.filter tags.language
 	if langs.length then langs[0] else ''
 
+setLangInArray = (arr, lang) ->
+	reducer = (v, item, i) ->
+		if v == -1 && tags.language(item) then i else v
+	if !arr
+		throw new Error('missing argument arr')
+	if !lang || !tags.language(lang)
+		throw new Error('argument lang is not a valid language')
+	i = arr.reduceRight reducer, -1
+	if i != -1 then arr[i] = lang
+	arr
+
 validate = (item) ->
 	[ k, v, validation ] = item
 	validation.test v
@@ -43,15 +62,19 @@ validate = (item) ->
 module.exports =
 	getHref: (path, params) ->
 		obj = splitPath path
-		obj.path.pop()
 		if !getLangFromArray(obj.filename) && params.lang
 			filename = obj.filename.filter Boolean
 			filename[filename.length] = params.lang
-			path = obj.path.join('/') + '/' + filename.join('.')
+			obj.filename = filename
+			path = assemblePath obj
 		return path
 	getLang: (path, supportedLocales) ->
 		arr = splitPath(path).filename
 		negotiateLang getLangFromArray(arr), supportedLocales
+	setLang: (path, lang) ->
+		obj = splitPath path
+		setLangInArray obj.filename, lang
+		assemblePath obj
 	getParams: (path) ->
 		obj = splitPath path
 		keys = [ 'year', 'month', 'day', 'slug', 'view' ]
@@ -76,5 +99,14 @@ module.exports =
 		lang = getLangFromArray obj.filename
 		params.lang = lang if lang
 		params
+	getPath: (params) ->
+		keys = [ 'year', 'month', 'day', 'slug', 'view' ]
+		path = keys.map (k) ->
+			params[k]
+		path = path.filter Boolean
+		filename = [ path[path.length - 1] ]
+		if params.lang
+			filename[filename.length] = params.lang
+		assemblePath path: path, filename: filename
 	negotiateLang: negotiateLang
 	splitPath: splitPath
