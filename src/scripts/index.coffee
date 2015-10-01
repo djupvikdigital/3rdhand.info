@@ -8,10 +8,13 @@ init = require './init.coffee'
 
 Router.run routes, Router.HistoryLocation, (Handler, state) ->
 	params = state.params
+	supportedLocales = store.getState().localeState.toJS().supportedLocales
 	if params.splat
-		supportedLocales = store.getState().localeState.toJS().supportedLocales
-		params = URL.getParams state.params.splat, supportedLocales
-	lang = params.lang || document.documentElement.lang
+		params = URL.getParams state.params.splat
+	lang = (
+		URL.negotiateLang(params.lang, supportedLocales) ||
+		document.documentElement.lang
+	)
 	init(params, lang).then ->
 		Handler = React.createFactory Handler
 		React.render(Handler(params: params), document.getElementById('app'))

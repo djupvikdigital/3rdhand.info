@@ -38,7 +38,7 @@ main = (req, res) ->
 	router.run (Handler, state) =>
 		params = state.params
 		if params.splat
-			params = URL.getParams params.splat, supportedLocales
+			params = URL.getParams params.splat
 		init(params, lang).then ->
 			doctype = '<!DOCTYPE html>'
 			app = React.renderToString(

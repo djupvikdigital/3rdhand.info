@@ -6,15 +6,17 @@ t = require 'transducers.js'
 utils = require './utils.coffee'
 
 splitPath = (path) ->
-	# trim slashes from path, split on slashes and dots
-	parts = path.replace(/(?:^\/+)|(?:\/+$)/g, '').split '/'
+	parts = path.split '/'
 	i = parts.length - 1
-	filenameParts = parts[i].split '.'
-	parts[i] = filenameParts[0]
-	return {
+	obj = {
 		path: parts
-		filename: filenameParts
 	}
+	filenameParts = parts[i].split '.'
+	if i < 1
+		obj.path = [ '' ]
+	parts[i] = filenameParts[0]
+	obj.filename = filenameParts
+	obj
 
 negotiateLang = (lang, supportedLocales) ->
 	if !lang then return ''
@@ -28,6 +30,8 @@ negotiateLang = (lang, supportedLocales) ->
 	(new locale.Locales(lang)).best(supported).toString()
 
 getLangFromArray = (arr) ->
+	if !arr
+		throw new Error('missing argument arr')
 	arr.reverse()
 	langs = arr.filter tags.language
 	if langs.length then langs[0] else ''
@@ -38,13 +42,17 @@ validate = (item) ->
 
 module.exports =
 	getHref: (path, params) ->
-		if !getLangFromArray splitPath(path).filename && params.lang
-			path = path + '.' + params.lang
+		obj = splitPath path
+		obj.path.pop()
+		if !getLangFromArray(obj.filename) && params.lang
+			filename = obj.filename.filter Boolean
+			filename[filename.length] = params.lang
+			path = obj.path.join('/') + '/' + filename.join('.')
 		return path
 	getLang: (path, supportedLocales) ->
 		arr = splitPath(path).filename
 		negotiateLang getLangFromArray(arr), supportedLocales
-	getParams: (path, supportedLocales) ->
+	getParams: (path) ->
 		obj = splitPath path
 		keys = [ 'year', 'month', 'day', 'slug', 'view' ]
 		twoDigits = /^\d{2}$/
@@ -56,13 +64,16 @@ module.exports =
 			str
 			str
 		]
-		params = t.toObj utils.zip(keys, obj.path, validation), t.compose(
-			t.filter validate
-			t.map (item) ->
-				t.take item, 2
-			utils.filterValues()
+		params = t.toObj(
+			utils.zip keys, obj.path.filter(Boolean), validation
+			t.compose(
+				t.filter validate
+				t.map (item) ->
+					t.take item, 2
+				utils.filterValues()
+			)
 		)
-		lang = negotiateLang getLangFromArray(obj.filename), supportedLocales
+		lang = getLangFromArray obj.filename
 		params.lang = lang if lang
 		params
 	negotiateLang: negotiateLang

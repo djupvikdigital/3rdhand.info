@@ -37,6 +37,9 @@ module.exports =
 		return {
 			localeStrings: state.localeState.toJS().localeStrings.LangPicker
 		}
+	linkSelector: (state) ->
+		supportedLocales = state.localeState.get 'supportedLocales'
+		state.navigationState.set('supportedLocales', supportedLocales).toJS()
 	localeSelector: localeSelector
 	loginSelector: Reselect.createSelector(
 		[ loginSelector, localeSelector ]

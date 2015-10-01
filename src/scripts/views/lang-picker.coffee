@@ -1,12 +1,11 @@
 React = require 'react'
-Router = require 'react-router'
 
 createFactory = require '../create-factory.coffee'
 Elements = require '../elements.coffee'
 
 { ul, li, div } = Elements
 
-Link = createFactory Router.Link
+Link = createFactory require './link.coffee'
 
 module.exports = React.createClass
 	displayName: 'LangPicker'
