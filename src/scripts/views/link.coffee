@@ -9,11 +9,11 @@ module.exports = React.createClass
 	displayName: 'Link'
 	render: ->
 		props = Immutable.fromJS(@props).filterNot(
-			utils.keyIn 'lang', 'href'
+			utils.keyIn 'href'
 		).toJS()
-		if @props.lang
-			props.params.lang = @props.lang
-			props.hrefLang = @props.lang
+		if @props.langParam
+			props.params.lang = @props.langParam
+			props.hrefLang = @props.langParam
 		if !props.to
 			if @props.href
 				href = @props.href

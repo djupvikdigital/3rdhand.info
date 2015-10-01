@@ -21,6 +21,6 @@ module.exports = React.createClass
 		{ norwegian, english } = @props.localeStrings
 		ul(
 			{ className: classes.join(' ') }
-			li Link { lang: 'no' }, norwegian
-			li Link { lang: 'en' }, english
+			li Link { langParam: 'no' }, norwegian
+			li Link { langParam: 'en' }, english
 		)
