@@ -5,6 +5,9 @@ t = require 'transducers.js'
 
 utils = require './utils.coffee'
 
+supportedLocales = [ 'nb', 'en' ]
+supportedLocalesObject = new locale.Locales supportedLocales.join ','
+
 splitPath = (path) ->
 	parts = path.split '/'
 	i = parts.length - 1
@@ -26,32 +29,30 @@ assemblePath = (obj) ->
 	obj.filename = obj.filename.filter Boolean
 	[ obj.path.join('/'), obj.filename.join('.') ].join('/')
 
-negotiateLang = (lang, supportedLocales) ->
-	if !lang then return ''
-	if !supportedLocales
-		throw new Error('missing argument supportedLocales')
+negotiateLang = (lang) ->
+	if !lang || !tags.language(lang) then return ''
 	if typeof lang == 'string' && tags.language(lang).scope() == 'macrolanguage'
 		lang = tags.languages(lang)
 	if Array.isArray lang
 		lang = lang.join ','
-	supported = new locale.Locales supportedLocales.join ','
-	(new locale.Locales(lang)).best(supported).toString()
+	negotiated = (new locale.Locales(lang)).best(supportedLocalesObject)
+	if negotiated.defaulted then return ''
+	negotiated.toString()
 
 getLangFromArray = (arr) ->
 	if !arr
 		throw new Error('missing argument arr')
-	arr.reverse()
-	langs = arr.filter tags.language
+	langs = arr.filter negotiateLang
 	if langs.length then langs[0] else ''
 
 setLangInArray = (arr, lang) ->
 	reducer = (v, item, i) ->
-		if v == -1 && tags.language(item) then i else v
+		if v == -1 && negotiateLang(item) then i else v
 	if !arr
 		throw new Error('missing argument arr')
-	if !lang || !tags.language(lang)
-		throw new Error('argument lang is not a valid language')
-	i = arr.reduceRight reducer, -1
+	if !lang || !negotiateLang(lang)
+		throw new Error('argument lang is not a supported language')
+	i = arr.reduce reducer, -1
 	if i != -1 then arr[i] = lang
 	arr
 
@@ -68,9 +69,9 @@ module.exports =
 			obj.filename = filename
 			path = assemblePath obj
 		return path
-	getLang: (path, supportedLocales) ->
+	getLang: (path) ->
 		arr = splitPath(path).filename
-		negotiateLang getLangFromArray(arr), supportedLocales
+		negotiateLang getLangFromArray arr
 	setLang: (path, lang) ->
 		obj = splitPath path
 		setLangInArray obj.filename, lang
@@ -110,3 +111,4 @@ module.exports =
 		assemblePath path: path, filename: filename
 	negotiateLang: negotiateLang
 	splitPath: splitPath
+	supportedLocales: supportedLocales

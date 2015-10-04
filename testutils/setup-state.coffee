@@ -14,7 +14,6 @@ module.exports = (state) ->
 			articles: []
 		localeState: Immutable.fromJS
 			lang: 'nb'
-			supportedLocales: [ 'nb', 'en' ]
 			localeStrings: localeStrings
 		loginState: Immutable.fromJS
 			isLoggedIn: false

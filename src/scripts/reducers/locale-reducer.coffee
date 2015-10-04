@@ -2,7 +2,6 @@ Immutable = require 'immutable'
 
 initialState = Immutable.fromJS({
 	lang: 'nb'
-	supportedLocales: [ 'nb', 'en' ]
 	localeStrings: {
 		SiteMenu: {}
 		ArticleEditor: {}

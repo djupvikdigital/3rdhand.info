@@ -22,12 +22,14 @@ getCookie = (headers) ->
 	else
 		''
 
-main = (req, res) ->
-	supportedLocales = store.getState().localeState.toJS().supportedLocales
-	lang = URL.negotiateLang(
-		(URL.getLang(req.url, supportedLocales) || req.acceptsLanguages.apply(req, supportedLocales))
-		supportedLocales
+negotiateLang = (req) ->
+	l = URL.supportedLocales
+	URL.negotiateLang(
+		URL.getLang(req.url, l) || req.acceptsLanguages.apply(req, l)
 	)
+
+main = (req, res) ->
+	lang = negotiateLang req
 	router = Router.create
 		routes: routes
 		location: req.url
