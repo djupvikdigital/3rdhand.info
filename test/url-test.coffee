@@ -41,6 +41,13 @@ describe 'URL module', ->
 			params =
 				lang: 'en'
 			expect(URL.getPath params).toBe path
+	describe 'negotiateLang', ->
+		it 'negotiates macrolanguages', ->
+			lang = 'no'
+			expect(URL.negotiateLang lang).toBe 'nb'
+		it 'returns the empty string if locale doesn\'t resolve to a supported locale', ->
+			lang = 'new'
+			expect(URL.negotiateLang lang).toBe ''
 	describe 'setLang', ->
 		it 'changes the lang in a path', ->
 			input = '/2015/09/29/test.no'
