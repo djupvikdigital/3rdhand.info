@@ -5,6 +5,7 @@ Promise = require 'bluebird'
 React = require 'react'
 Router = require 'react-router'
 DocumentTitle = require 'react-document-title'
+t = require 'transducers.js'
 
 global.Promise = Promise
 
@@ -15,6 +16,7 @@ store = require './src/scripts/store.coffee'
 articleSelectors = require './src/scripts/selectors/article-selectors.coffee'
 routes = require './src/scripts/views/routes.coffee'
 Template = React.createFactory require './views/index.coffee'
+utils = require './src/scripts/utils.coffee'
 
 getCookie = (headers) ->
 	if headers && headers['set-cookie']
@@ -85,14 +87,26 @@ server.get '/index.atom', (req, res) ->
 		)
 
 server.get '/views/:view', (req, res) ->
-	query = {}
-	for key, val of req.query
-		query[key] = val
-	query.key = JSON.parse(query.key) if typeof query.key == 'string'
+	query = utils.getProps req.query, [
+		'key'
+		'startkey'
+		'endkey'
+		'descending'
+		'slug'
+	]
 	db().view 'app', req.params.view, query, (err, body) ->
 		if err
 			return res.send err
-		docs = (row.value for row in body.rows)
+		# ensure that slug is matched with strict equality
+		docs = t.seq body.rows, t.compose(
+			t.filter (row) ->
+				slug = query.slug
+				if !slug
+					return true
+				row.value.slug == slug
+			t.map (row) ->
+				row.value
+		)
 		res.send docs: docs
 
 server.get 'locales/*', (req, res) ->

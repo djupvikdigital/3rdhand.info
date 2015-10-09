@@ -1,8 +1,8 @@
 moment = require 'moment'
-transducers = require 'transducers.js'
+t = require 'transducers.js'
 Immutable = require 'immutable'
 
-{ compose, filter, keep, map, seq, take, toArray, transduce } = transducers
+{ compose, filter, keep, map, remove, seq, take, toArray, transduce } = t
 
 array = ->
 	# cast to array
@@ -11,22 +11,36 @@ array = ->
 identity = (arg) ->
 	arg
 
+applyArgOfType = (type, fn) ->
+	(input) ->
+		if typeof input == type
+			fn input
+		else
+			input
+
 defaultFilter = (item) ->
 	!!item
 
 argArray = (fn) ->
-	(arr) ->
-		fn(arr...)
+	(arg) ->
+		if Array.isArray arg
+			fn arg...
+		else
+			fn arg
 
-filterKeys = compose filter, (fn) ->
+keyFilter = (fn) ->
 	argArray (k) ->
 		fn(k)
+
+filterKeys = compose filter, keyFilter
+
+removeKeys = compose remove, keyFilter
 
 filterValues = compose filter, (fn=defaultFilter) ->
 	argArray (k, v) ->
 		fn(v)
 
-mapValue = compose map, (fn) ->
+mapValues = compose map, (fn) ->
 	argArray (k, v) ->
 		[k, fn(v)]
 
@@ -93,7 +107,7 @@ mapObjectRecursively = shortCircuitScalars (input, propsAndMappers...) ->
 			if results.length
 				f results[0]
 			else
-				seq input, mapValue f
+				seq input, mapValues f
 	f input
 
 createPropertyMapper = (k, fn) ->
@@ -129,11 +143,13 @@ addHrefToArticles = (input) ->
 
 module.exports =
 	addHrefToArticles: addHrefToArticles
+	argArray: argArray
 	array: array
 	createFormatMapper: createFormatMapper
 	createPropertyMapper: createPropertyMapper
 	getFieldValueFromFormats: applyFormatters
 	getProps: getProps
+	filterKeys: filterKeys
 	filterValues: filterValues
 	format: applyFormatters
 	hrefMapper: hrefMapper
@@ -141,6 +157,8 @@ module.exports =
 	keyIn: keyIn
 	localize: localize
 	mapObjectRecursively: mapObjectRecursively
+	mapValues: mapValues
+	removeKeys: removeKeys
 	stripDbFields: (obj) ->
 		gotMap = Immutable.Map.isMap(obj)
 		m = if gotMap then obj else Immutable.Map(obj)

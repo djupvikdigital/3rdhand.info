@@ -1,11 +1,17 @@
 request = require 'superagent-bluebird-promise'
+Immutable = require 'immutable'
+moment = require 'moment'
+t = require 'transducers.js'
+int = require 'lodash/string/parseInt'
+last = require 'lodash/array/last'
 
+utils = require '../utils.coffee'
 API = require '../api.coffee'
 store = require '../store.coffee'
 
 protocol = 'http://'
 host = 'localhost:8081'
-server = protocol + host + '/views/'
+server = protocol + host + '/'
 
 receiveArticles = (articles, lang) ->
 	if Object.prototype.toString.call(articles) != '[object Array]'
@@ -27,15 +33,30 @@ onResponse = (res) ->
 			error: res.error
 		}
 
-fetchOne = (params) ->
-	# TODO: validate params as numbers
-	date = new Date(params.year, params.month - 1, params.day)
-	query = {
-		key: JSON.stringify [ date.toDateString(), params.slug ]
-	}
+buildQueryKey = (date, slug) ->
+	JSON.stringify [ date.toISOString(), slug ].filter Boolean
+
+fetchByParams = (params) ->
+	dateKeys = [ 'year', 'month', 'day' ]
+	dateParams = t.seq(
+		utils.getProps params, dateKeys
+		utils.mapValues int
+	)
+	dateParams.month = dateParams.month - 1 if dateParams.month
+	date = moment.utc dateParams
+	durationKey = last t.filter(
+		dateKeys
+		Object.prototype.hasOwnProperty.bind dateParams
+	)
+	query = {}
+	if durationKey
+		query =
+			startkey: date.toISOString()
+			endkey: date.add(1, durationKey).toISOString()
+	query.slug = params.slug if params.slug
 	query.view = params.view if params.view
 	request
-		.get(server + 'articlesByDateAndSlug')
+		.get(server + 'views/articlesByDateAndSlug')
 		.query(query)
 		.accept('application/json')
 		.promise()
@@ -43,15 +64,15 @@ fetchOne = (params) ->
 
 fetchAll = ->
 	request
-		.get(server + 'articlesByMostRecentlyUpdated?descending=true')
+		.get(server + 'views/articlesByMostRecentlyUpdated?descending=true')
 		.accept('application/json')
 		.promise()
 		.then(onResponse)
 
-requestArticles = (one) ->
+requestArticles = (byParams) ->
 	return {
 		type: 'REQUEST_ARTICLES'
-		one: one
+		byParams: byParams
 	}
 
 requestSave = (article) ->
@@ -94,11 +115,11 @@ receiveArticleSchemaError = (err) ->
 module.exports = {
 	fetch: (params) ->
 		(dispatch) ->
-			if params?.slug
-				dispatch requestArticles(true)
-				fetchOne(params).then(dispatch)
+			if params
+				dispatch requestArticles true
+				fetchByParams(params).then(dispatch)
 			else
-				dispatch requestArticles(false)
+				dispatch requestArticles false
 				fetchAll().then(dispatch)
 	fetchSchema: (params) ->
 		(dispatch) ->

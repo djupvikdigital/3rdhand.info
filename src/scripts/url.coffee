@@ -15,8 +15,6 @@ splitPath = (path) ->
 		path: parts
 	}
 	filenameParts = parts[i].split '.'
-	if i < 1
-		obj.path = [ '' ]
 	parts[i] = filenameParts[0]
 	obj.filename = filenameParts
 	obj
@@ -56,9 +54,19 @@ setLangInArray = (arr, lang) ->
 	if i != -1 then arr[i] = lang
 	arr
 
-validate = (item) ->
-	[ k, v, validation ] = item
-	validation.test v
+validate = (input, validation) ->
+	if validation.test input
+		input
+	else
+		null
+
+validationReducer = (parts, item, i, keysAndValidations) ->
+	item[1] = validate parts[0], item[1]
+	parts.shift() if item[1]
+	if keysAndValidations.length > i + 1
+		parts
+	else
+		keysAndValidations
 
 module.exports =
 	getHref: (path, params) ->
@@ -78,6 +86,11 @@ module.exports =
 		assemblePath obj
 	getParams: (path) ->
 		obj = splitPath path
+		lang = getLangFromArray obj.filename
+		parts = obj.path
+		i = parts.length - 1
+		if parts[i] == lang
+			parts[i] = ''
 		keys = [ 'year', 'month', 'day', 'slug', 'view' ]
 		twoDigits = /^\d{2}$/
 		str = /^.+$/
@@ -88,16 +101,11 @@ module.exports =
 			str
 			str
 		]
+		parts = parts.filter Boolean
 		params = t.toObj(
-			utils.zip keys, obj.path.filter(Boolean), validation
-			t.compose(
-				t.filter validate
-				t.map (item) ->
-					t.take item, 2
-				utils.filterValues()
-			)
+			utils.zip(keys, validation).reduce validationReducer, parts
+			utils.filterValues()
 		)
-		lang = getLangFromArray obj.filename
 		params.lang = lang if lang
 		params
 	getPath: (params) ->

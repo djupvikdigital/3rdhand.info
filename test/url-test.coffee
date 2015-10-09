@@ -13,6 +13,24 @@ describe 'URL module', ->
 				slug: 'slug'
 				view: 'view'
 			expect(URL.getParams input).toEqual test
+		it 'supports partial dates with slug and view', ->
+			input = '/2015/09/slug/view'
+			test =
+				year: '2015'
+				month: '09'
+				slug: 'slug'
+				view: 'view'
+			expect(URL.getParams input).toEqual test
+		it 'supports a path with only year', ->
+			input = '2015'
+			test =
+				year: '2015'
+			expect(URL.getParams input).toEqual test
+		it 'supports a path with only slug', ->
+			input = 'test'
+			test =
+				slug: 'test'
+			expect(URL.getParams input).toEqual test
 		it 'supports a path with only lang', ->
 			input = '/en'
 			test =
@@ -35,6 +53,11 @@ describe 'URL module', ->
 		it 'can rebuild a path from params', ->
 			path = '/2015/09/29/slug/view'
 			params = URL.getParams path
+			expect(URL.getPath params).toBe path
+		it 'supports a path with only year', ->
+			path = '/2015'
+			params =
+				year: '2015'
 			expect(URL.getPath params).toBe path
 		it 'supports a path with only lang', ->
 			path = '/en'

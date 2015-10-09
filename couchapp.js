@@ -11,8 +11,7 @@ module.exports = {
 		articlesByDateAndSlug: {
 			map: function (doc) {
 				if (doc.created && doc.slug) {
-					var date = new Date(doc.created);
-					emit([date.toDateString(), doc.slug], doc);
+					emit(doc.created, doc);
 				}
 			}
 		},
