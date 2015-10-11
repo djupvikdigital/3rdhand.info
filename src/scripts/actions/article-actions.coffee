@@ -33,46 +33,39 @@ onResponse = (res) ->
 			error: res.error
 		}
 
-buildQueryKey = (date, slug) ->
-	JSON.stringify [ date.toISOString(), slug ].filter Boolean
-
-fetchByParams = (params) ->
-	dateKeys = [ 'year', 'month', 'day' ]
-	dateParams = t.seq(
-		utils.getProps params, dateKeys
-		utils.mapValues int
-	)
-	dateParams.month = dateParams.month - 1 if dateParams.month
-	date = moment.utc dateParams
-	durationKey = last t.filter(
-		dateKeys
-		Object.prototype.hasOwnProperty.bind dateParams
-	)
+fetch = (params) ->
 	query = {}
-	if durationKey
-		query =
-			startkey: date.toISOString()
-			endkey: date.add(1, durationKey).toISOString()
+	if params.year
+		dateKeys = [ 'year', 'month', 'day' ]
+		dateParams = t.seq(
+			utils.getProps params, dateKeys
+			utils.mapValues int
+		)
+		dateParams.month = dateParams.month - 1 if dateParams.month
+		date = moment.utc dateParams
+		durationKey = last t.filter(
+			dateKeys
+			Object.prototype.hasOwnProperty.bind dateParams
+		)
+		if durationKey
+			# endkey is earlier than startkey because we use descending order
+			query =
+				endkey: date.toISOString()
+				startkey: date.add(1, durationKey).toISOString()
 	query.slug = params.slug if params.slug
 	query.view = params.view if params.view
+	query.descending = true
 	request
-		.get(server + 'views/articlesByDateAndSlug')
+		.get(server + 'views/articlesByMostRecentlyUpdated')
 		.query(query)
 		.accept('application/json')
 		.promise()
 		.then(onResponse)
 
-fetchAll = ->
-	request
-		.get(server + 'views/articlesByMostRecentlyUpdated?descending=true')
-		.accept('application/json')
-		.promise()
-		.then(onResponse)
-
-requestArticles = (byParams) ->
+requestArticles = (params) ->
 	return {
 		type: 'REQUEST_ARTICLES'
-		byParams: byParams
+		params: params
 	}
 
 requestSave = (article) ->
@@ -115,12 +108,8 @@ receiveArticleSchemaError = (err) ->
 module.exports = {
 	fetch: (params) ->
 		(dispatch) ->
-			if params
-				dispatch requestArticles true
-				fetchByParams(params).then(dispatch)
-			else
-				dispatch requestArticles false
-				fetchAll().then(dispatch)
+			dispatch requestArticles params
+			fetch(params).then(dispatch)
 	fetchSchema: (params) ->
 		(dispatch) ->
 			dispatch requestArticleSchema
