@@ -44,6 +44,7 @@
   "dependencies": {
     "bluebird": "^2.9.34",
     "body-parser": "^1.13.2",
+    "docuri": "^4.2.1",
     "express": "^4.13.1",
     "immutable": "^3.7.4",
     "inuit-clearfix": "^0.2.2",

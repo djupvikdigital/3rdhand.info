@@ -4,6 +4,7 @@ moment = require 'moment'
 t = require 'transducers.js'
 int = require 'lodash/string/parseInt'
 last = require 'lodash/array/last'
+docuri = require 'docuri'
 
 utils = require '../utils.coffee'
 API = require '../api.coffee'
@@ -12,6 +13,22 @@ store = require '../store.coffee'
 protocol = 'http://'
 host = 'localhost:8081'
 server = protocol + host + '/'
+
+route = docuri.route ':created'
+
+getKey = (slug, date) ->
+	dateKey = null
+	if date
+		if typeof date.toISOString == 'function'
+			dateKey = date.toISOString()
+		else
+			dateKey = date
+	if slug
+		JSON.stringify [ slug, dateKey ].filter Boolean
+	else if dateKey
+		route created: dateKey
+	else
+		throw new Error('could not construct key')
 
 receiveArticles = (articles, lang) ->
 	if Object.prototype.toString.call(articles) != '[object Array]'
@@ -35,6 +52,13 @@ onResponse = (res) ->
 
 fetch = (params) ->
 	query = {}
+	path = server + 'docs'
+	if params.slug
+		path = server + 'views/articlesBySlugAndDate'
+		# endkey is earlier than startkey because we use descending order
+		query =
+			endkey: getKey params.slug
+			startkey: getKey params.slug, {}
 	if params.year
 		dateKeys = [ 'year', 'month', 'day' ]
 		dateParams = t.seq(
@@ -48,15 +72,13 @@ fetch = (params) ->
 			Object.prototype.hasOwnProperty.bind dateParams
 		)
 		if durationKey
-			# endkey is earlier than startkey because we use descending order
 			query =
-				endkey: date.toISOString()
-				startkey: date.add(1, durationKey).toISOString()
+				endkey: getKey params.slug, date
+				startkey: getKey params.slug, date.add(1, durationKey)
 	query.slug = params.slug if params.slug
-	query.view = params.view if params.view
 	query.descending = true
 	request
-		.get(server + 'views/articlesByMostRecentlyUpdated')
+		.get(path)
 		.query(query)
 		.accept('application/json')
 		.promise()

@@ -6,6 +6,7 @@ React = require 'react'
 Router = require 'react-router'
 DocumentTitle = require 'react-document-title'
 t = require 'transducers.js'
+docuri = require 'docuri'
 
 global.Promise = Promise
 
@@ -17,6 +18,8 @@ articleSelectors = require './src/scripts/selectors/article-selectors.coffee'
 routes = require './src/scripts/views/routes.coffee'
 Template = React.createFactory require './views/index.coffee'
 utils = require './src/scripts/utils.coffee'
+
+getDocumentId = docuri.route ':created/:slug'
 
 getCookie = (headers) ->
 	if headers && headers['set-cookie']
@@ -87,6 +90,24 @@ server.get '/index.atom', (req, res) ->
 		)
 
 server.get '/views/:view', (req, res) ->
+	query = t.seq(
+		utils.getProps req.query, [
+			'key'
+			'startkey'
+			'endkey'
+			'descending'
+		]
+		utils.mapValues utils.applyIfString JSON.parse
+	)
+	query.include_docs = true
+	db().view 'app', req.params.view, query, (err, body) ->
+		if err
+			return res.send err
+		docs = t.map body.rows, (row) ->
+			row.doc
+		res.send docs: docs
+
+server.get '/docs', (req, res) ->
 	query = utils.getProps req.query, [
 		'key'
 		'startkey'
@@ -94,18 +115,13 @@ server.get '/views/:view', (req, res) ->
 		'descending'
 		'slug'
 	]
-	db().view 'app', req.params.view, query, (err, body) ->
+	query.include_docs = true
+	db().list query, (err, body) ->
 		if err
 			return res.send err
-		# ensure that slug is matched with strict equality
 		docs = t.seq body.rows, t.compose(
-			t.filter (row) ->
-				slug = query.slug
-				if !slug
-					return true
-				row.value.slug == slug
 			t.map (row) ->
-				row.value
+				row.doc
 		)
 		res.send docs: docs
 
@@ -127,6 +143,7 @@ server.post '/', (req, res) ->
 			res.send body
 	auth = req.body.auth
 	doc = req.body.doc
+	doc._id = getDocumentId doc
 	if req.body.auth
 		db().auth auth.user, auth.password, (err, body, headers) ->
 			if err

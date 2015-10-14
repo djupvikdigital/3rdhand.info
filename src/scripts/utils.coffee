@@ -143,6 +143,12 @@ addHrefToArticles = (input) ->
 
 module.exports =
 	addHrefToArticles: addHrefToArticles
+	applyIfString: (fn) ->
+		(input) ->
+			if typeof input == 'string'
+				fn input
+			else
+				input
 	argArray: argArray
 	array: array
 	createFormatMapper: createFormatMapper

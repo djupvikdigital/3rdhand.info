@@ -8,11 +8,9 @@ module.exports = {
 		}
 	},
 	views: {
-		articlesByMostRecentlyUpdated: {
+		articlesBySlugAndDate: {
 			map: function (doc) {
-				if (doc.updated) {
-					emit(doc.updated, doc);
-				}
+				emit([ doc.slug, doc.created ], null);
 			}
 		}
 	},
