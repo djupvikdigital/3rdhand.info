@@ -1,31 +1,35 @@
 expect = require 'expect'
 
-React = require 'react/addons'
-TestUtils = React.addons.TestUtils
+React = require 'react'
+ReactDOM = require 'react-dom/server'
+ReactRedux = require 'react-redux'
+cheerio = require 'cheerio'
 
-createComponent = require '../testutils/create-component.coffee'
+createFactory = require '../src/scripts/create-factory.coffee'
+
 createStore = require '../testutils/create-store.coffee'
 setupState = require '../testutils/setup-state.coffee'
 articleActions = require '../src/scripts/actions/article-actions.coffee'
 selectors = require '../src/scripts/selectors/article-selectors.coffee'
-ArticleList = require '../src/scripts/views/article-list.coffee'
+ArticleList = createFactory require '../src/scripts/views/article-list.coffee'
 
-getArticles = (component) ->
-	return component.props.children
+Provider = createFactory ReactRedux.Provider
 
 describe 'ArticleList', ->
 	it 'renders a list of articles', ->
 		store = createStore()
 		articles = [
-			{ _id: '_id' }
-			{ _id: '_id' }		
+			{ _id: '_id1' }
+			{ _id: '_id2' }		
 		]
-		store.dispatch {}, setupState()
+		store.dispatch { type: 'INIT' }, setupState()
 		store.dispatch articleActions.receiveArticles(articles)
 		props = selectors.containerSelector(store.getState())
-		props.dispatch = (action) ->
-			console.log action
-			return
-		output = createComponent(ArticleList, props)
-		articles = getArticles(output)
-		expect(articles.length).toBe(2)
+		component = Provider(
+			store: store
+			ArticleList props
+		)
+		html = ReactDOM.renderToStaticMarkup component
+		$ = cheerio.load html
+		articles = $ 'article'
+		expect(articles.length).toBe 2

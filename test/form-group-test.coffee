@@ -1,20 +1,19 @@
 expect = require 'expect'
 
-React = require 'react/addons'
-TestUtils = React.addons.TestUtils
+React = require 'react'
+ReactDOM = require 'react-dom/server'
+cheerio = require 'cheerio'
+
 Elements = require '../src/scripts/elements.coffee'
 FormGroup = React.createFactory require '../src/scripts/views/form-group.coffee'
 
 { input } = Elements
-shallowRenderer = TestUtils.createRenderer()
 
 describe 'FormGroup', ->
 	it 'can render', ->
-		shallowRenderer.render(
-			FormGroup(
-				'Test'
-				input(type: 'text')
-			)
+		component = FormGroup(
+			'Test'
+			input type: 'text'
 		)
-		output = shallowRenderer.getRenderOutput()
-		expect(typeof output).toEqual('object')
+		$ = cheerio.load ReactDOM.renderToStaticMarkup component
+		expect($('input').length).toBe 1
