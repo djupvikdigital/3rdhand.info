@@ -18,7 +18,7 @@ module.exports = (grunt) ->
 					test: /\.scss$/
 					loader: ExtractTextPlugin.extract(
 						'css?sourceMap!' +
-						'sass?sourceMap'
+						'sass?sourceMap&includePaths[]=' + path.resolve __dirname, 'src/styles'
 					)
 				}
 			]
