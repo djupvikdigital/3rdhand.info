@@ -8,12 +8,6 @@ localeActions = require '../actions/locale-actions.coffee'
 selectors = require '../selectors/app-selectors.coffee'
 URL = require '../url.coffee'
 
-#ReduxDevtools = require 'redux-devtools/lib/react'
-
-# DebugPanel = React.createFactory ReduxDevtools.DebugPanel
-# DevTools = React.createFactory ReduxDevtools.DevTools
-# LogMonitor = ReduxDevtools.LogMonitor
-
 DocumentTitle = React.createFactory(
 	ReactRedux.connect(selectors.titleSelector)(require 'react-document-title')
 )
@@ -41,14 +35,4 @@ module.exports = React.createClass
 				className: 'wrapper'
 				React.cloneElement @props.children, params: params
 			)
-# 			if (typeof window != 'undefined')
-# 				DebugPanel(
-# 					{
-# 						top: true
-# 						right: true
-# 						bottom: true
-# 						key: 'debugPanel'
-# 					}
-# 					DevTools({ store: store, monitor: LogMonitor })
-# 				)
 		)

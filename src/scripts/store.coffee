@@ -2,6 +2,7 @@ Redux = require 'redux'
 thunkMiddleware = require 'redux-thunk'
 ReduxRouter = require 'redux-router'
 History = require 'history'
+{ devTools } = require 'redux-devtools'
 
 routes = require './views/routes.coffee'
 
@@ -19,6 +20,7 @@ else
 store = Redux.compose(
 	Redux.applyMiddleware thunkMiddleware
 	ReduxRouter.reduxReactRouter { routes, createHistory }
+	devTools()
 )(Redux.createStore)(reducer)
 
 module.exports = store
