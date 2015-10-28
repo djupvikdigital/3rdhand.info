@@ -5,6 +5,7 @@ initialState = Immutable.fromJS({
 	localeStrings: {
 		SiteMenu: {}
 		ArticleEditor: {}
+		LangPicker: {}
 		LoginDialog: {}
 	}
 })

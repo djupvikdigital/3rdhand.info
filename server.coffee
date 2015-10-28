@@ -3,10 +3,16 @@ favicon = require 'serve-favicon'
 bodyParser = require 'body-parser'
 Promise = require 'bluebird'
 React = require 'react'
-Router = require 'react-router'
+ReactDOM = require 'react-dom/server'
+ReactRouter = require 'react-router'
 DocumentTitle = require 'react-document-title'
 t = require 'transducers.js'
 docuri = require 'docuri'
+createHistory = require 'history/lib/createBrowserHistory'
+ReduxRouter = require 'redux-router'
+
+Router = React.createFactory ReduxRouter.ReduxRouter
+RoutingContext = React.createFactory Router.RoutingContext
 
 global.Promise = Promise
 
@@ -16,6 +22,7 @@ init = require './src/scripts/init.coffee'
 store = require './src/scripts/store.coffee'
 articleSelectors = require './src/scripts/selectors/article-selectors.coffee'
 routes = require './src/scripts/views/routes.coffee'
+Root = React.createFactory require './src/scripts/views/root.coffee'
 Template = React.createFactory require './views/index.coffee'
 utils = require './src/scripts/utils.coffee'
 
@@ -35,27 +42,34 @@ negotiateLang = (req) ->
 
 main = (req, res) ->
 	lang = negotiateLang req
-	router = Router.create
+	config =
 		routes: routes
 		location: req.url
-		onError: (err) ->
-			console.log 'Routing error.'
-			console.log err
 
-	router.run (Handler, state) =>
-		params = state.params
-		if params.splat
-			params = URL.getParams params.splat
-		init(params, lang).then ->
-			doctype = '<!DOCTYPE html>'
-			app = React.renderToString(
-				React.createElement Handler, params: params
+	ReactRouter.match config, (err, redirectLocation, renderProps) ->
+		if err
+			res.send 500, err.message
+		else if redirectLocation
+			res.redirect(
+				302
+				redirectLocation.pathname + redirectLocation.search
 			)
-			title = DocumentTitle.rewind()
-			html = React.renderToStaticMarkup(
-				Template title: title, app: app, lang: lang
-			)
-			res.send doctype + html
+		else if renderProps
+			params = renderProps.params
+			if params.splat
+				params = URL.getParams params.splat
+			init(params, lang).then ->
+				doctype = '<!DOCTYPE html>'
+				app = ReactDOM.renderToString(
+					Root path: req.url
+				)
+				title = DocumentTitle.rewind()
+				html = ReactDOM.renderToStaticMarkup(
+					Template title: title, app: app, lang: lang
+				)
+				res.send doctype + html
+		else
+			res.send 404, 'Not found'
 
 server = express()
 server.use favicon './favicon.ico'

@@ -9,6 +9,8 @@ Elements = require '../elements.coffee'
 module.exports = React.createClass
 	displayName: 'ArticleFull'
 	render: ->
+		if !@props.article
+			return div()
 		{ href, title, subtitle, intro, body } = @props.article
 		h = h1 innerHtml: title
 		if subtitle

@@ -8,7 +8,6 @@ docuri = require 'docuri'
 
 utils = require '../utils.coffee'
 API = require '../api.coffee'
-store = require '../store.coffee'
 
 protocol = 'http://'
 host = 'localhost:8081'
@@ -136,25 +135,21 @@ module.exports = {
 		(dispatch) ->
 			dispatch requestArticleSchema
 			API.fetchArticleSchema()
-				.then(receiveArticleSchema)
-				.catch(receiveArticleSchemaError)
-				.then(dispatch)
+				.then(t.compose dispatch, receiveArticleSchema)
+				.catch(t.compose dispatch, receiveArticleSchemaError)
 	receiveArticles: receiveArticles
 	save: (article) ->
-		(dispatch) ->
+		(dispatch, getState) ->
 			now = (new Date()).toISOString()
 			article.created = now unless article.created
 			# might add support for drafts/unpublished articles later
 			article.published = now unless article.published
 			article.updated = now
 			data = doc: article
-			loginState = store.getState().loginState
+			loginState = getState().loginState
 			if loginState.get('isLoggedIn')
-				data.auth = loginState.filter((v, k) ->
-					if k == 'user' || k == 'password'
-						true
-					else
-						false
+				data.auth = loginState.filter(
+					utils.keyIn 'user', 'password'
 				).toJS()
 			dispatch requestSave article
 			request

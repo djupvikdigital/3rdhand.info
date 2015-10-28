@@ -40,9 +40,10 @@ itemSelector = Reselect.createSelector(
 	]
 	(state, titleState) ->
 		title = titleState.title
-		articleTitle = state.article.title
-		if articleTitle
-			title = articleTitle + ' - ' + title
+		if state.article
+			articleTitle = state.article.title
+			if articleTitle
+				title = articleTitle + ' - ' + title
 		state.title = title
 		state
 )
@@ -63,15 +64,17 @@ module.exports =
 		[
 			articleSelector
 			itemSelector
+			appSelectors.loginSelector
 			appSelectors.localeSelector
 			(state) ->
 				state.articleState.get('defaults').toJS()
 		]
-		(state, item, localeState, defaults) ->
+		(state, item, loginState, localeState, defaults) ->
 			Immutable.Map(state).merge(
 				Immutable.Map(
 					defaults: defaults
 					title: item.title
+					loginState: loginState
 					localeStrings: localeState.localeStrings.ArticleEditor
 				)
 			).toObject()

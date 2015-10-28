@@ -1,6 +1,7 @@
 Promise = require 'bluebird'
 request = require 'superagent-bluebird-promise'
 YAML = require 'js-yaml'
+{ compose } = require 'transducers.js'
 
 protocol = 'http://'
 host = 'localhost:8081'
@@ -38,11 +39,10 @@ module.exports =
 				}
 			dispatch requestLocaleStrings(lang)
 			req = request(server + 'locales/' + lang + '.yaml')
-			handler = receiveLocaleStrings lang
+			handler = compose dispatch, receiveLocaleStrings lang
 			if typeof req.buffer == 'function'
 				req.buffer()
 			req
 				.promise()
 				.then(handler)
 				.catch(handler)
-				.then(dispatch)

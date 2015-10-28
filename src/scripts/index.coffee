@@ -1,19 +1,28 @@
 React = require 'react'
-Router = require 'react-router'
+ReactDOM = require 'react-dom'
+ReduxRouter = require 'redux-router'
 
-routes = require './views/routes.coffee'
-store = require './store.coffee'
-URL = require './url.coffee'
 init = require './init.coffee'
+URL = require './url.coffee'
+store = require './store.coffee'
+routes = require './views/routes.coffee'
+createFactory = require './create-factory.coffee'
+Root = createFactory require './views/root.coffee'
+
+Router = createFactory ReduxRouter.ReduxRouter
 
 getLang = (params) ->
 	l = URL.supportedLocales
 	URL.negotiateLang(params.lang, l) || document.documentElement.lang
 
-Router.run routes, Router.HistoryLocation, (Handler, state) ->
+unsubscribe = store.subscribe(->
+	state = store.getState().router
 	params = state.params
 	if params.splat
-		params = URL.getParams state.params.splat
-	init(params, getLang(params)).then ->
-		Handler = React.createFactory Handler
-		React.render(Handler(params: params), document.getElementById('app'))
+		params = URL.getParams params.splat
+	unsubscribe()
+	init(params, getLang params).then ->
+		ReactDOM.render Root(), document.getElementById 'app'
+)
+
+store.dispatch { type: 'INIT' }

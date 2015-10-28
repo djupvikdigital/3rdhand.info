@@ -10,13 +10,13 @@ ArticleContainer = ReactRedux.connect(
 )(require './article-container.coffee')
 LoginDialog = ReactRedux.connect(loginSelector)(require './login-dialog.coffee')
 
-DefaultRoute = React.createFactory Router.DefaultRoute
 Route = React.createFactory Router.Route
+IndexRoute = React.createFactory Router.IndexRoute
 
 module.exports = Route(
-	{ name: "app", path: "/", handler: App }
-	Route(name: "admin", path: "admin", handler: LoginDialog)
-	Route path: '/locales/:file', handler: App
-	Route(path: '*', handler: ArticleContainer)
-	DefaultRoute(handler: ArticleContainer)
+	path: '/', component: App
+	IndexRoute component: ArticleContainer
+	Route path: 'admin', component: LoginDialog
+	Route path: '/locales/:file', component: App
+	Route path: '*', component: ArticleContainer
 )

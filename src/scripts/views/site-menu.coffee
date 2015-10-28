@@ -23,7 +23,7 @@ module.exports = React.createClass
 		ulArgs = [
 			{ className: "list-inline" }
 			li Link href: '/', home
-			li Link to: "admin", admin
+			li Link to: '/admin', admin
 		]
 		if @props.login.isLoggedIn
 			ulArgs[ulArgs.length] = li(

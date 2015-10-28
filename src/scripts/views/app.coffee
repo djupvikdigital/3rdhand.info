@@ -6,6 +6,7 @@ Reselect = require 'reselect'
 createFactory = require '../create-factory.coffee'
 localeActions = require '../actions/locale-actions.coffee'
 selectors = require '../selectors/app-selectors.coffee'
+URL = require '../url.coffee'
 
 #ReduxDevtools = require 'redux-devtools/lib/react'
 
@@ -32,20 +33,13 @@ module.exports = React.createClass
 	displayName: 'App'
 	render: ->
 		params = @props.params
+		if params.splat
+			params = URL.getParams params.splat
 		div(
-			Provider(
-				{ store: store }
-				->
-					DocumentTitle(
-						{ title: '' }
-						div(
-							SiteMenu()
-							div(
-								{ className: "wrapper"}
-								RouteHandler urlParams: params
-							)
-						)
-					)
+			SiteMenu()
+			div(
+				className: 'wrapper'
+				React.cloneElement @props.children, params: params
 			)
 # 			if (typeof window != 'undefined')
 # 				DebugPanel(

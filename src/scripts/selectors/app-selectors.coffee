@@ -20,7 +20,7 @@ loginSelector = (state) ->
 
 titleSelector = Reselect.createSelector [ localeSelector ], (localeState) ->
 	return {
-		title: localeState.localeStrings.title
+		title: localeState.localeStrings.title || ''
 	}
 
 menuSelector = Reselect.createSelector(
@@ -38,7 +38,7 @@ module.exports =
 			localeStrings: state.localeState.toJS().localeStrings.LangPicker
 		}
 	linkSelector: (state) ->
-		state.navigationState.toJS()
+		state.router
 	localeSelector: localeSelector
 	loginSelector: Reselect.createSelector(
 		[ loginSelector, localeSelector ]
@@ -47,4 +47,6 @@ module.exports =
 			state
 	)
 	menuSelector: menuSelector
+	routeSelector: (state) ->
+		routerState: state.router
 	titleSelector: titleSelector

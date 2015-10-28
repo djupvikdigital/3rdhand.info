@@ -23,12 +23,12 @@ module.exports = React.createClass
 	save: (data) ->
 		@props.dispatch actions.save data
  	componentWillMount: ->
- 		@fetch @props.urlParams unless @props.lastUpdate
+ 		@fetch @props.params unless @props.lastUpdate
 	componentWillReceiveProps: (nextProps) ->
-		if nextProps.urlParams != @props.urlParams
-			@fetch nextProps.urlParams
+		if nextProps.params != @props.params
+			@fetch nextProps.params
 	render: ->
-		params = @props.urlParams || {}
+		params = @props.params || {}
 		articles = @props.articles
 		if articles.length > 1
 			ArticleList articles: articles
