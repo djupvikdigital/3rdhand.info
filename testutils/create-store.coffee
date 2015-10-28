@@ -13,10 +13,7 @@ reducer = Redux.combineReducers
 
 createStore = Redux.compose(
 	Redux.applyMiddleware(thunkMiddleware)
-	ReduxRouter.reduxReactRouter {
-		routes,
-		createHistory
-	}
+	ReduxRouter.reduxReactRouter { routes, createHistory }
 )(Redux.createStore)
 
 module.exports = ->

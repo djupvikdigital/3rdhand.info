@@ -64,12 +64,11 @@ module.exports =
 		[
 			articleSelector
 			itemSelector
-			appSelectors.loginSelector
 			appSelectors.localeSelector
 			(state) ->
 				state.articleState.get('defaults').toJS()
 		]
-		(state, item, loginState, localeState, defaults) ->
+		(state, item, localeState, defaults) ->
 			Immutable.Map(state).merge(
 				Immutable.Map(
 					defaults: defaults

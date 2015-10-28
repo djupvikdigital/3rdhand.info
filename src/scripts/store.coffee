@@ -18,12 +18,7 @@ else
 
 store = Redux.compose(
 	Redux.applyMiddleware thunkMiddleware
-	ReduxRouter.reduxReactRouter {
-		routes,
-		createHistory,
-		routerStateSelector: (state) ->
-			state.router
-	}
+	ReduxRouter.reduxReactRouter { routes, createHistory }
 )(Redux.createStore)(reducer)
 
 module.exports = store
