@@ -1,9 +1,16 @@
-nano = require('nano')
+PouchDB = require 'pouchdb'
+PouchDB.plugin require 'pouchdb-upsert'
 
-url = 'http://localhost:5984'
+ddoc = require './ddoc.coffee'
 
-module.exports = (cookie) ->
-	config =
-		url: url
-	config.cookie = cookie if cookie
-	nano(config).use('thirdhandinfo')
+db = new PouchDB('thirdhandinfo')
+db.putIfNotExists ddoc
+	.then (res) ->
+		if res.updated
+			console.log 'Design document inserted:'
+			console.log res
+	.catch (err) ->
+		console.log 'Error inserting design document:'
+		console.log err
+
+module.exports = db

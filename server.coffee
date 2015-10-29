@@ -34,6 +34,10 @@ getCookie = (headers) ->
 	else
 		''
 
+getQueryProps = (query) ->
+	props = [ 'key', 'startkey', 'endkey', 'descending' ]
+	utils.getProps query, props
+
 negotiateLang = (req) ->
 	l = URL.supportedLocales
 	URL.negotiateLang(
@@ -105,39 +109,30 @@ server.get '/index.atom', (req, res) ->
 
 server.get '/views/:view', (req, res) ->
 	query = t.seq(
-		utils.getProps req.query, [
-			'key'
-			'startkey'
-			'endkey'
-			'descending'
-		]
+		getQueryProps req.query
 		utils.mapValues utils.applyIfString JSON.parse
 	)
 	query.include_docs = true
-	db().view 'app', req.params.view, query, (err, body) ->
-		if err
-			return res.send err
-		docs = t.map body.rows, (row) ->
-			row.doc
-		res.send docs: docs
+	db.query 'app/' + req.params.view, query
+		.then (body) ->
+			docs = t.map body.rows, (row) ->
+				row.doc
+			res.send docs: docs
+		.catch (err) ->
+			res.send err
 
 server.get '/docs', (req, res) ->
-	query = utils.getProps req.query, [
-		'key'
-		'startkey'
-		'endkey'
-		'descending'
-		'slug'
-	]
+	query = getQueryProps req.query
 	query.include_docs = true
-	db().list query, (err, body) ->
-		if err
-			return res.send err
-		docs = t.seq body.rows, t.compose(
-			t.map (row) ->
-				row.doc
-		)
-		res.send docs: docs
+	db.allDocs query
+		.then (body) ->
+			docs = t.seq body.rows, t.compose(
+				t.map (row) ->
+					row.doc
+			)
+			res.send docs: docs
+		.catch (err) ->
+			res.send err
 
 server.get 'locales/*', (req, res) ->
 	console.log req.url
@@ -146,27 +141,14 @@ server.get 'locales/*', (req, res) ->
 server.get '*', main
 
 server.post '/', (req, res) ->
-	dbauth = ''
-	callback = (err, body, headers) ->
-		cookie = getCookie headers
-		dbauth = cookie if cookie
-		if err
-			console.log err
-			res.status(err.statusCode).send JSON.stringify err
-		else
-			res.send body
-	auth = req.body.auth
 	doc = req.body.doc
 	doc._id = getDocumentId doc
-	if req.body.auth
-		db().auth auth.user, auth.password, (err, body, headers) ->
-			if err
-				res.status(err.statusCode).send JSON.stringify err
-			else
-				dbauth = getCookie(headers)
-			db(dbauth).insert doc, doc._id, callback
-	else
-		db().insert doc, doc._id, callback
+	db.put doc
+		.then (body) ->
+			res.send body
+		.catch (err) ->
+			console.log err
+			res.status(err.statusCode).send JSON.stringify err
 
 server.listen 8081, ->
 	console.log 'Express web server listening on port 8081...'
