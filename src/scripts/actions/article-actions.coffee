@@ -13,7 +13,7 @@ protocol = 'http://'
 host = 'localhost:8081'
 server = protocol + host + '/'
 
-route = docuri.route ':created'
+route = docuri.route 'article/:created'
 
 getKey = (slug, date) ->
 	dateKey = null
@@ -23,7 +23,7 @@ getKey = (slug, date) ->
 		else
 			dateKey = date
 	if slug
-		JSON.stringify [ slug, dateKey ].filter Boolean
+		JSON.stringify [ 'article', slug, dateKey ].filter Boolean
 	else if dateKey
 		route created: dateKey
 	else
@@ -50,7 +50,9 @@ onResponse = (res) ->
 		}
 
 fetch = (params) ->
-	query = {}
+	query =
+		endkey: 'article'
+		startkey: 'article\uffff'
 	path = server + 'docs'
 	if params.slug
 		path = server + 'views/articlesBySlugAndDate'

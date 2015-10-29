@@ -9,20 +9,20 @@ Elements = require '../elements.coffee'
 Link = createFactory ReactRedux.connect(linkSelector)(require './link.coffee')
 { div, header, h1, time } = Elements
 
-module.exports = React.createClass
-	displayName: 'ArticleItem'
-	render: ->
-		{ href, title, summary, published, publishedFormatted } = @props.article
-		div(
-			header(
-				h1(
-					{ className: 'article__heading' }
-					Link href: href, innerHtml: title
-				)
-				time(
-					{ className: 'milli', dateTime: published }
-					publishedFormatted
-				)
+module.exports = (props) ->
+	{ href, title, summary, published, publishedFormatted } = props.article
+	div(
+		header(
+			h1(
+				{ className: 'article__heading' }
+				Link href: href, innerHtml: title
 			)
-			div innerHtml: summary
+			time(
+				{ className: 'milli', dateTime: published }
+				publishedFormatted
+			)
 		)
+		div innerHtml: summary
+	)
+
+module.exports.displayName = 'ArticleItem'

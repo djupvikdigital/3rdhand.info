@@ -37,6 +37,10 @@ properties:
     _rev:
         description: CouchDB revision
         type: string
+    type:
+        description: Content type
+        type: string
+        default: article
     slug:
         description: Slug for constructing URL
         type: string

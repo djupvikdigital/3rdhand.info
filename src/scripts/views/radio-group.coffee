@@ -7,15 +7,14 @@ RadioOption = require './radio-option.coffee'
 
 { div, fieldset } = Elements
 
-module.exports = React.createClass
-	displayName: 'RadioGroup'
-	renderChildren: ->
-		value = @props.value
+module.exports = (props) ->
+	renderChildren = ->
+		value = props.value
 		props = Immutable.Map {
-			name: @props.name
-			onChange: @props.onChange
+			name: props.name
+			onChange: props.onChange
 		}
-		React.Children.map @props.children, (child) ->
+		React.Children.map props.children, (child) ->
 			if child.type == RadioOption
 				React.cloneElement(
 					child
@@ -23,11 +22,13 @@ module.exports = React.createClass
 				)
 			else
 				child
-	render: ->
-		if @props.label
-			fieldset(
-				legend(@props.label)
-				@renderChildren()
-			)
-		else
-			div(@renderChildren())
+
+	if props.label
+		fieldset(
+			legend(props.label)
+			renderChildren()
+		)
+	else
+		div(renderChildren())
+
+module.exports.displayName = 'RadioGroup'

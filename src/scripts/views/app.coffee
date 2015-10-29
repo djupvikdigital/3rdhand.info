@@ -23,16 +23,16 @@ Provider = createFactory ReactRedux.Provider
 RouteHandler = React.createFactory Router.RouteHandler
 Link = createFactory Router.Link
 
-module.exports = React.createClass
-	displayName: 'App'
-	render: ->
-		params = @props.params
-		if params.splat
-			params = URL.getParams params.splat
+module.exports = (props) ->
+	params = props.params
+	if params.splat
+		params = URL.getParams params.splat
+	div(
+		SiteMenu()
 		div(
-			SiteMenu()
-			div(
-				className: 'wrapper'
-				React.cloneElement @props.children, params: params
-			)
+			className: 'wrapper'
+			React.cloneElement props.children, params: params
 		)
+	)
+
+module.exports.displayName = 'App'

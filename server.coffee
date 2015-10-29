@@ -26,7 +26,7 @@ Root = React.createFactory require './src/scripts/views/root.coffee'
 Template = React.createFactory require './views/index.coffee'
 utils = require './src/scripts/utils.coffee'
 
-getDocumentId = docuri.route ':created/:slug'
+getDocumentId = docuri.route ':type/:created/:slug'
 
 getCookie = (headers) ->
 	if headers && headers['set-cookie']

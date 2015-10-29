@@ -27,14 +27,13 @@ module.exports = React.createClass
 			user: @props.user
 		DocumentTitle(
 			{ title: 'Admin' }
-			Form.apply(
-				this
+			Form(
 				if @props.isLoggedIn
 					[
 						{ initialData: initialData, onSubmit: @handleLogout }
 						Output label: loggedInAs, name: 'user'
 						FormGroup(
-							input(className: 'btn', type:"submit", value: logout)
+							input className: 'btn', type:"submit", value: logout
 						)
 					]
 				else
@@ -43,7 +42,7 @@ module.exports = React.createClass
 						TextInput label: username, name: 'user'
 						PasswordInput label: password, name: 'password'
 						FormGroup(
-							input(className: 'btn', type: "submit", value: login)
+							input className: 'btn', type: "submit", value: login
 						)
 					]
 			)

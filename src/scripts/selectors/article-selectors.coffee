@@ -73,7 +73,6 @@ module.exports =
 				Immutable.Map(
 					defaults: defaults
 					title: item.title
-					loginState: loginState
 					localeStrings: localeState.localeStrings.ArticleEditor
 				)
 			).toObject()

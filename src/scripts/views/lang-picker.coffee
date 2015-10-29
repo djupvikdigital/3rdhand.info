@@ -9,18 +9,18 @@ Elements = require '../elements.coffee'
 
 Link = createFactory ReactRedux.connect(selector)(require './link.coffee')
 
-module.exports = React.createClass
-	displayName: 'LangPicker'
-	render: ->
-		classes = [
-			'lang-picker'
-			'list-inline'
-		]
-		if @props.className
-			classes[classes.length] = @props.className
-		{ norwegian, english } = @props.localeStrings
-		ul(
-			{ className: classes.join(' ') }
-			li Link { langParam: 'no' }, norwegian
-			li Link { langParam: 'en' }, english
-		)
+module.exports = (props) ->
+	classes = [
+		'lang-picker'
+		'list-inline'
+	]
+	if props.className
+		classes[classes.length] = props.className
+	{ norwegian, english } = props.localeStrings
+	ul(
+		className: classes.join(' ')
+		li Link { langParam: 'no' }, norwegian
+		li Link { langParam: 'en' }, english
+	)
+
+module.exports.displayName = 'LangPicker'

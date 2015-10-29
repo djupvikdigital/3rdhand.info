@@ -10,7 +10,7 @@ module.exports = {
 	views: {
 		articlesBySlugAndDate: {
 			map: function (doc) {
-				emit([ doc.slug, doc.created ], null);
+				emit([ doc.type, doc.slug, doc.created ], null);
 			}
 		}
 	},

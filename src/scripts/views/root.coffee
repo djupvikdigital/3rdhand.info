@@ -23,26 +23,26 @@ DocumentTitle = createFactory(
 
 Router = createFactory ReduxRouter.ReduxRouter
 
-module.exports = React.createClass
-	displayName: 'Root'
-	render: ->
-		router = Router routes
-		if @props.path
-			ac = ReduxRouter.replaceState null, @props.path
-			store.dispatch ac
-		div(
-			Provider(
-				store: store
-				DocumentTitle(
-					title: ''
-					router
-				)
-			)
-			DebugPanel(
-				top: true
-				right: true
-				bottom: true
-				key: 'debugPanel'
-				DevTools store: store, monitor: LogMonitor
+module.exports = (props) ->
+	router = Router routes
+	if props.path
+		ac = ReduxRouter.replaceState null, props.path
+		store.dispatch ac
+	div(
+		Provider(
+			store: store
+			DocumentTitle(
+				title: ''
+				router
 			)
 		)
+		DebugPanel(
+			top: true
+			right: true
+			bottom: true
+			key: 'debugPanel'
+			DevTools store: store, monitor: LogMonitor
+		)
+	)
+
+module.exports.displayName = 'Root'

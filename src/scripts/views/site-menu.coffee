@@ -15,23 +15,23 @@ LangPicker = createFactory ReactRedux.connect(selectors.langPickerSelector)(
 	require './lang-picker.coffee'
 )
 
-module.exports = React.createClass
-	displayName: 'SiteMenu'
-	render: ->
-		{ home, admin, newArticle } = @props.localeStrings
-		newUrl = '/' + moment().format('YYYY/MM/DD') + '/untitled/new'
-		ulArgs = [
-			{ className: "list-inline" }
-			li Link href: '/', home
-			li Link to: '/admin', admin
-		]
-		if @props.login.isLoggedIn
-			ulArgs[ulArgs.length] = li(
-				{ key: "new-article" }
-				Link href: newUrl, newArticle
-			)
-		nav(
-			{ className: 'site-menu' }
-			LangPicker className: 'site-menu__lang-picker'
-			ul ulArgs
+module.exports = (props) ->
+	{ home, admin, newArticle } = props.localeStrings
+	newUrl = '/' + moment().format('YYYY/MM/DD') + '/untitled/new'
+	ulArgs = [
+		{ className: "list-inline" }
+		li Link href: '/', home
+		li Link to: '/admin', admin
+	]
+	if props.login.isLoggedIn
+		ulArgs[ulArgs.length] = li(
+			{ key: "new-article" }
+			Link href: newUrl, newArticle
 		)
+	nav(
+		{ className: 'site-menu' }
+		LangPicker className: 'site-menu__lang-picker'
+		ul ulArgs
+	)
+
+module.exports.displayName = 'SiteMenu'
