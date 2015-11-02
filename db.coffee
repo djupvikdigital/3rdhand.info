@@ -13,4 +13,7 @@ db.putIfNotExists ddoc
 		console.log 'Error inserting design document:'
 		console.log err
 
+if !true
+	db.destroy()
+
 module.exports = db
