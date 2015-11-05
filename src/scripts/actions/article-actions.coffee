@@ -51,11 +51,11 @@ onResponse = (res) ->
 
 fetch = (params) ->
 	query =
-		endkey: 'article'
-		startkey: 'article\uffff'
-	path = server + 'docs'
+		endkey: JSON.stringify [ 'article' ]
+		startkey: JSON.stringify [ 'article\uffff' ]
+	path = server + 'views/by_updated'
 	if params.slug
-		path = server + 'views/articlesBySlugAndDate'
+		path = server + 'views/by_slug_and_date'
 		# endkey is earlier than startkey because we use descending order
 		query =
 			endkey: getKey params.slug
@@ -146,7 +146,9 @@ module.exports = {
 			article.created = now unless article.created
 			# might add support for drafts/unpublished articles later
 			article.published = now unless article.published
-			article.updated = now
+			if !article.updated
+				article.updated = []
+			article.updated[article.updated.length] = now
 			data = doc: article
 			loginState = getState().loginState
 			if loginState.get('isLoggedIn')

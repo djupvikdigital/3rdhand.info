@@ -17,7 +17,7 @@ RoutingContext = React.createFactory Router.RoutingContext
 global.Promise = Promise
 
 URL = require './src/scripts/url.coffee'
-db = require './db.coffee'
+DB = require './db.coffee'
 init = require './src/scripts/init.coffee'
 store = require './src/scripts/store.coffee'
 articleSelectors = require './src/scripts/selectors/article-selectors.coffee'
@@ -26,6 +26,8 @@ Root = React.createFactory require './src/scripts/views/root.coffee'
 Template = React.createFactory require './views/index.coffee'
 utils = require './src/scripts/utils.coffee'
 
+{ db } = DB
+
 getDocumentId = docuri.route ':type/:created/:slug'
 
 getCookie = (headers) ->
@@ -33,10 +35,6 @@ getCookie = (headers) ->
 		headers['set-cookie']
 	else
 		''
-
-getQueryProps = (query) ->
-	props = [ 'key', 'startkey', 'endkey', 'descending' ]
-	utils.getProps query, props
 
 negotiateLang = (req) ->
 	l = URL.supportedLocales
@@ -75,6 +73,13 @@ main = (req, res) ->
 		else
 			res.send 404, 'Not found'
 
+data = (req, res) ->
+	DB.get(req.params.view, req.query).then (docs) ->
+		res.send docs
+	.catch (err) ->
+		res.send 500, err
+
+
 server = express()
 server.use favicon './favicon.ico'
 server.use(express.static(__dirname))
@@ -107,32 +112,9 @@ server.get '/index.atom', (req, res) ->
 			articles: articles
 		)
 
-server.get '/views/:view', (req, res) ->
-	query = t.seq(
-		getQueryProps req.query
-		utils.mapValues utils.applyIfString JSON.parse
-	)
-	query.include_docs = true
-	db.query 'app/' + req.params.view, query
-		.then (body) ->
-			docs = t.map body.rows, (row) ->
-				row.doc
-			res.send docs: docs
-		.catch (err) ->
-			res.send err
+server.get '/views/:view', data
 
-server.get '/docs', (req, res) ->
-	query = getQueryProps req.query
-	query.include_docs = true
-	db.allDocs query
-		.then (body) ->
-			docs = t.seq body.rows, t.compose(
-				t.map (row) ->
-					row.doc
-			)
-			res.send docs: docs
-		.catch (err) ->
-			res.send err
+server.get '/docs', data
 
 server.get 'locales/*', (req, res) ->
 	console.log req.url
