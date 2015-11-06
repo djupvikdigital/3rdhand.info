@@ -49,4 +49,9 @@ module.exports =
 	menuSelector: menuSelector
 	routeSelector: (state) ->
 		routerState: state.router
+	signupSelector: Reselect.createSelector(
+		[ localeSelector ]
+		(state) ->
+			localeStrings: state.localeStrings.SignupDialog
+	)
 	titleSelector: titleSelector

@@ -11,7 +11,7 @@ FormGroup = createFactory require './form-group.coffee'
 TextInput = createFactory require './text-input.coffee'
 PasswordInput = createFactory require './password-input.coffee'
 
-actions = require '../actions/login-actions.coffee'
+actions = require '../actions/user-actions.coffee'
 
 { form, label, input } = Elements
 

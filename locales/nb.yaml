@@ -23,3 +23,9 @@ LoginDialog:
     username: Brukernavn
     password: Passord
     login: Logg inn
+SignupDialog:
+    title: Registrer deg
+    username: Brukernavn
+    password: Passord
+    repeatPassword: Gjenta passord
+    signup: Registrer deg

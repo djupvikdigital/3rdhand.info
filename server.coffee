@@ -123,14 +123,23 @@ server.get 'locales/*', (req, res) ->
 server.get '*', main
 
 server.post '/', (req, res) ->
-	doc = req.body.doc
-	doc._id = getDocumentId doc
-	db.put doc
+	data = req.body
+	data.doc._id = getDocumentId data.doc
+	DB.put data
 		.then (body) ->
 			res.send body
 		.catch (err) ->
 			console.log err
-			res.status(err.statusCode).send JSON.stringify err
+			res.status(err.status).send JSON.stringify err
+
+server.post '/signup', (req, res) ->
+	data = req.body
+	DB.addUser data
+		.then (body) ->
+			res.send body
+		.catch (err) ->
+			console.log err
+			res.send err
 
 server.listen 8081, ->
 	console.log 'Express web server listening on port 8081...'

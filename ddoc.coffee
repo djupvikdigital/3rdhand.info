@@ -10,8 +10,9 @@ module.exports =
 			).toString()
 		by_updated:
 			map: ((doc) ->
-				doc.updated.forEach (update, i, arr) ->
-					# value is count of times a document is reemitted
-					emit [ doc.type, update ], arr.length - 1 - i
+				if doc.updated
+					doc.updated.forEach (update, i, arr) ->
+						# value is count of times a document is reemitted
+						emit [ doc.type, update ], arr.length - 1 - i
 			).toString()
 			reduce: '_sum'

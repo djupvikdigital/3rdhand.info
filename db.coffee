@@ -1,5 +1,12 @@
 PouchDB = require 'pouchdb'
 PouchDB.plugin require 'pouchdb-upsert'
+Promise = require 'bluebird'
+bcrypt = require 'bcrypt'
+docuri = require 'docuri'
+
+genSalt = Promise.promisify bcrypt.genSalt, bcrypt
+hash = Promise.promisify bcrypt.hash, bcrypt
+compare = Promise.promisify bcrypt.compare, bcrypt
 
 t = require 'transducers.js'
 
@@ -60,6 +67,42 @@ get = (arg1) ->
 	else
 		defaultViewHandler view, query
 
+put = (data) ->
+	if !data.auth
+		throw new Error('login required')
+	db.get 'user/' + data.auth.user
+		.then (user) ->
+			if user.roles.indexOf('write') == -1
+				throw new Error('permission denied')
+			compare data.auth.password, user.password_hash
+		.catch (err) ->
+			if err.status == 404
+				console.log 'Invalid login attempt'
+				error = new Error('authentication failed')
+				error.status == 401
+			console.log err
+		.then (res) ->
+			if !res
+				throw new Error('authentication failed')
+			db.put data.doc
+
+getUserId = docuri.route ':type/:name'
+
+addUser = (data) ->
+	if !data || data.password != data.repeatPassword
+		return false
+	genSalt 10
+		.then (salt) ->
+			hash data.password, salt
+		.then (hash) ->
+			doc =
+				type: 'user'
+				name: data.user
+				password_hash: hash
+				roles: [ 'write' ]
+			doc._id = getUserId doc
+			db.put doc
+
 if !true
 	db.upsert ddoc._id, diff
 		.then (res) ->
@@ -74,6 +117,8 @@ if !true
 	db.destroy()
 
 module.exports = {
+	addUser
 	db
 	get
+	put
 }

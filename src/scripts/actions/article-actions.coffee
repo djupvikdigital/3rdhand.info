@@ -155,6 +155,7 @@ module.exports = {
 				data.auth = loginState.filter(
 					utils.keyIn 'user', 'password'
 				).toJS()
+				console.log data.auth
 			dispatch requestSave article
 			request
 				.post(server)

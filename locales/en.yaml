@@ -23,3 +23,9 @@ LoginDialog:
     username: Username
     password: Password
     login: Log in
+SignupDialog:
+    title: Sign Up
+    username: Username
+    password: Password
+    repeatPassword: Repeat password
+    signup: Sign up
