@@ -1,14 +1,12 @@
 Reselect = require 'reselect'
 
-utils = require '../utils.coffee'
-
 localeSelector = (state) ->
 	state = state.localeState
 	return state.toJS()
 
 loginSelector = (state) ->
 	state = state.loginState.toJS()
-	if utils.validLogin(state)
+	if state.user
 		return {
 			isLoggedIn: true
 			user: state.user

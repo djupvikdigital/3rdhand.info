@@ -53,6 +53,20 @@ allHandler = (query) ->
 	db.allDocs query
 		.then defaultTransform
 
+authenticate = (username, password) ->
+	db.get 'user/' + username
+		.then (user) ->
+			compare(password, user.password_hash).then (passwordMatch) ->
+				if passwordMatch then return user
+				throw new Error('authentication failed')
+		.catch (err) ->
+			if err.status == 404
+				console.log 'Invalid login attempt'
+				error = new Error('authentication failed')
+				error.status == 401
+				throw error
+			console.log err
+
 get = (arg1) ->
 	view = if arguments.length == 2 then arg1 else ''
 	if view
@@ -70,21 +84,14 @@ get = (arg1) ->
 put = (data) ->
 	if !data.auth
 		throw new Error('login required')
-	db.get 'user/' + data.auth.user
-		.then (user) ->
-			if user.roles.indexOf('write') == -1
-				throw new Error('permission denied')
-			compare data.auth.password, user.password_hash
-		.catch (err) ->
-			if err.status == 404
-				console.log 'Invalid login attempt'
-				error = new Error('authentication failed')
-				error.status == 401
-			console.log err
-		.then (res) ->
-			if !res
-				throw new Error('authentication failed')
-			db.put data.doc
+	authenticate data.auth.user, data.auth.password
+		.then ->
+			if @roles.indexOf('write') != -1
+				db.put data.doc
+			else
+				error = new Error('permission denied')
+				error.status == 403
+				throw error
 
 getUserId = docuri.route ':type/:name'
 
@@ -118,6 +125,7 @@ if !true
 
 module.exports = {
 	addUser
+	authenticate
 	db
 	get
 	put

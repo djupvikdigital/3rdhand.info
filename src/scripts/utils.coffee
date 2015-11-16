@@ -170,6 +170,4 @@ module.exports =
 		m = if gotMap then obj else Immutable.Map(obj)
 		m = m.filterNot keyIn '_id', '_rev'
 		unless gotMap then m.toObject() else m
-	validLogin: (obj) ->
-		return typeof obj == "object" && 'user' of obj && 'password' of obj
 	zip: zip

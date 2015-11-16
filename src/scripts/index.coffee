@@ -5,6 +5,7 @@ ReduxRouter = require 'redux-router'
 init = require './init.coffee'
 URL = require './url.coffee'
 store = require './store.coffee'
+userActions = require './actions/user-actions.coffee'
 routes = require './views/routes.coffee'
 createFactory = require './create-factory.coffee'
 Root = createFactory require './views/root.coffee'
@@ -21,8 +22,11 @@ unsubscribe = store.subscribe(->
 	if params.splat
 		params = URL.getParams params.splat
 	unsubscribe()
-	init(params, getLang params).then ->
-		ReactDOM.render Root(), document.getElementById 'app'
+	init params, getLang params
+		.then ->
+			store.dispatch userActions.fetchUser()
+		.then ->
+			ReactDOM.render Root(), document.getElementById 'app'
 )
 
 store.dispatch { type: 'INIT' }

@@ -1,6 +1,8 @@
 express = require 'express'
 favicon = require 'serve-favicon'
 bodyParser = require 'body-parser'
+session = require 'cookie-session'
+stringify = require 'json-stringify-safe'
 Promise = require 'bluebird'
 React = require 'react'
 ReactDOM = require 'react-dom/server'
@@ -20,6 +22,7 @@ URL = require './src/scripts/url.coffee'
 DB = require './db.coffee'
 init = require './src/scripts/init.coffee'
 store = require './src/scripts/store.coffee'
+userActions = require './src/scripts/actions/user-actions.coffee'
 articleSelectors = require './src/scripts/selectors/article-selectors.coffee'
 routes = require './src/scripts/views/routes.coffee'
 Root = React.createFactory require './src/scripts/views/root.coffee'
@@ -43,6 +46,7 @@ negotiateLang = (req) ->
 	)
 
 main = (req, res) ->
+	store.dispatch userActions.setUser req.session.user || ''
 	lang = negotiateLang req
 	config =
 		routes: routes
@@ -93,8 +97,6 @@ server.use (req, res, next) ->
 server.set 'views', './views'
 server.set 'view engine', 'jade'
 
-server.get '/admin', main
-
 server.get '/index.atom', (req, res) ->
 	res.header 'Content-Type', 'text/plain; charset=utf8'
 	lang = req.acceptsLanguages 'nb', 'en'
@@ -120,7 +122,31 @@ server.get 'locales/*', (req, res) ->
 	console.log req.url
 	res.send ''
 
-server.get '*', main
+server.use session(
+	secret: 'topsecretstring'
+)
+
+server.get '/admin', main
+
+server.post '/admin', (req, res) ->
+	data = req.body
+	DB.authenticate data.user, data.password
+		.then (user) ->
+				req.session.user = user.name
+				res.send user: user.name
+		.catch (err) ->
+			console.error err
+			res.status(err.status || 500).send stringify err
+
+server.get '/admin/session', (req, res) ->
+	if req.session && req.session.user
+		res.send user: req.session.user
+	else
+		res.send {}
+
+server.get '/admin/logout', (req, res) ->
+	req.session = null
+	res.status(201).send ''
 
 server.post '/', (req, res) ->
 	data = req.body
@@ -129,8 +155,9 @@ server.post '/', (req, res) ->
 		.then (body) ->
 			res.send body
 		.catch (err) ->
-			console.log err
-			res.status(err.status).send JSON.stringify err
+			res.status(err.status || 500).send stringify err
+
+server.get '*', main
 
 server.post '/signup', (req, res) ->
 	data = req.body
