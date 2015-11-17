@@ -16,7 +16,7 @@ ddoc = require './ddoc.coffee'
 diff = ->
 	ddoc
 
-db = new PouchDB('thirdhandinfo')
+db = new PouchDB('./db/thirdhandinfo')
 
 getQueryProps = (query) ->
 	props = [ 'key', 'startkey', 'endkey', 'descending' ]
