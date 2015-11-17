@@ -29,8 +29,9 @@ unsubscribe = store.subscribe(->
 )
 
 cookies = cookie.parse document.cookie
-session = JSON.parse atob cookies.session
-if session.user
-	store.dispatch userActions.setUser session.user
+if cookies.session
+	session = JSON.parse atob cookies.session
+	if session.user
+		store.dispatch userActions.setUser session.user
 
 store.dispatch { type: 'INIT' }

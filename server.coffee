@@ -46,11 +46,11 @@ negotiateLang = (req) ->
 	)
 
 main = (req, res) ->
-	store.dispatch userActions.setUser req.session.user
 	lang = negotiateLang req
+	url = req.originalUrl
 	config =
 		routes: routes
-		location: req.url
+		location: url
 
 	ReactRouter.match config, (err, redirectLocation, renderProps) ->
 		if err
@@ -67,7 +67,7 @@ main = (req, res) ->
 			init(params, lang).then ->
 				doctype = '<!DOCTYPE html>'
 				app = ReactDOM.renderToString(
-					Root path: req.url
+					Root path: url
 				)
 				title = DocumentTitle.rewind()
 				html = ReactDOM.renderToStaticMarkup(
@@ -122,15 +122,22 @@ server.get 'locales/*', (req, res) ->
 	console.log req.url
 	res.send ''
 
-server.use session(
+router = express.Router()
+
+router.use session(
 	name: 'session'
 	secret: 'topsecretstring'
 	httpOnly: false
 )
 
-server.get '/admin', main
+router.use (req, res, next) ->
+	store.dispatch userActions.setUser req.session.user
+	console.log 'in router'
+	next()
 
-server.post '/admin', (req, res) ->
+router.get '/', main
+
+router.post '/', (req, res) ->
 	data = req.body
 	DB.authenticate data.username, data.password
 		.then (user) ->
@@ -140,9 +147,11 @@ server.post '/admin', (req, res) ->
 			console.error err
 			res.status(err.status || 500).send stringify err
 
-server.get '/admin/logout', (req, res) ->
+router.get '/logout', (req, res) ->
 	req.session = null
 	res.status(201).send ''
+
+server.use '/admin', router
 
 server.post '/', (req, res) ->
 	doc = req.body
