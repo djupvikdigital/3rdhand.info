@@ -123,7 +123,9 @@ server.get 'locales/*', (req, res) ->
 	res.send ''
 
 server.use session(
+	name: 'session'
 	secret: 'topsecretstring'
+	httpOnly: false
 )
 
 server.get '/admin', main
@@ -137,12 +139,6 @@ server.post '/admin', (req, res) ->
 		.catch (err) ->
 			console.error err
 			res.status(err.status || 500).send stringify err
-
-server.get '/admin/session', (req, res) ->
-	if req.session && req.session.user
-		res.send user: req.session.user
-	else
-		res.send {}
 
 server.get '/admin/logout', (req, res) ->
 	req.session = null

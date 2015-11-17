@@ -1,6 +1,7 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
 ReduxRouter = require 'redux-router'
+cookie = require 'cookie'
 
 init = require './init.coffee'
 URL = require './url.coffee'
@@ -24,9 +25,12 @@ unsubscribe = store.subscribe(->
 	unsubscribe()
 	init params, getLang params
 		.then ->
-			store.dispatch userActions.fetchUser()
-		.then ->
 			ReactDOM.render Root(), document.getElementById 'app'
 )
+
+cookies = cookie.parse document.cookie
+session = JSON.parse atob cookies.session
+if session.user
+	store.dispatch userActions.setUser session.user
 
 store.dispatch { type: 'INIT' }

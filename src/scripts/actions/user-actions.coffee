@@ -47,11 +47,6 @@ receiveSignupError = (err) ->
 		error: err
 	}
 
-requestUser = ->
-	return {
-		type: 'REQUEST_LOGGEDIN_USER'
-	}
-
 receiveUserSuccess = (res) ->
 	return {
 		type: 'RECEIVE_LOGGEDIN_USER_SUCCESS'
@@ -65,15 +60,6 @@ receiveUserError = (err) ->
 	}
 
 module.exports =
-	fetchUser: ->
-		(dispatch) ->
-			dispatch requestUser()
-			request
-				.get server + 'admin/session'
-				.accept 'application/json'
-				.promise()
-				.then t.compose dispatch, receiveUserSuccess
-				.catch t.compose dispatch, receiveUserError
 	login: (data) ->
 		(dispatch) ->
 			dispatch login data
