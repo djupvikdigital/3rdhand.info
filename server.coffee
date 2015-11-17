@@ -46,7 +46,7 @@ negotiateLang = (req) ->
 	)
 
 main = (req, res) ->
-	store.dispatch userActions.setUser req.session.user || ''
+	store.dispatch userActions.setUser req.session.user
 	lang = negotiateLang req
 	config =
 		routes: routes
@@ -130,10 +130,10 @@ server.get '/admin', main
 
 server.post '/admin', (req, res) ->
 	data = req.body
-	DB.authenticate data.user, data.password
+	DB.authenticate data.username, data.password
 		.then (user) ->
-				req.session.user = user.name
-				res.send user: user.name
+				req.session.user = _id: user._id, name: user.name
+				res.send user: { _id: user._id, name: user.name }
 		.catch (err) ->
 			console.error err
 			res.status(err.status || 500).send stringify err
@@ -149,9 +149,9 @@ server.get '/admin/logout', (req, res) ->
 	res.status(201).send ''
 
 server.post '/', (req, res) ->
-	data = req.body
-	data.doc._id = getDocumentId data.doc
-	DB.put data
+	doc = req.body
+	doc._id = getDocumentId doc
+	DB.put req.session.user._id, doc
 		.then (body) ->
 			res.send body
 		.catch (err) ->

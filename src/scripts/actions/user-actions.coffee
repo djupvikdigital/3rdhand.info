@@ -8,24 +8,11 @@ server = protocol + host + '/'
 login = (login) ->
 	return {
 		type: 'LOGIN'
-		user: login.user
 	}
 
 logout = ->
 	return {
 		type: 'LOGOUT'
-	}
-
-receiveSessionSuccess = (res) ->
-	return {
-		type: 'RECEIVE_SESSION_SUCCESS'
-		user: res.user
-	}
-
-receiveSessionError = (err) ->
-	return {
-		type: 'RECEIVE_SESSION_ERROR'
-		error: err
 	}
 
 receiveSessionDestroySuccess = (res) ->
@@ -68,7 +55,7 @@ requestUser = ->
 receiveUserSuccess = (res) ->
 	return {
 		type: 'RECEIVE_LOGGEDIN_USER_SUCCESS'
-		user: res.body.user || ''
+		user: res.body.user || null
 	}
 
 receiveUserError = (err) ->
@@ -95,8 +82,8 @@ module.exports =
 				.accept 'application/json'
 				.send data
 				.promise()
-				.then t.compose dispatch, receiveSessionSuccess
-				.catch t.compose dispatch, receiveSessionError
+				.then t.compose dispatch, receiveUserSuccess
+				.catch t.compose dispatch, receiveUserError
 	logout: ->
 		(dispatch) ->
 			dispatch logout()
@@ -109,7 +96,7 @@ module.exports =
 	setUser: (user) ->
 		return {
 			type: 'SET_LOGGEDIN_USER'
-			user: user
+			user: user || null
 		}
 	signup: (data) ->
 		(dispatch) ->

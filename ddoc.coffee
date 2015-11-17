@@ -4,6 +4,11 @@ module.exports =
 		if userCtx.roles.indexOf('write') == -1
 			throw unauthorized: 'not authorized'
 	views:
+		by_name:
+			map: ((doc) ->
+				if doc.name
+					emit [ doc.type, doc.name ], null
+			).toString()
 		by_slug_and_date:
 			map: ((doc) ->
 				emit [ doc.type, doc.slug, doc.created ], null

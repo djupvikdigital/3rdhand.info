@@ -141,7 +141,7 @@ module.exports = {
 				.catch(t.compose dispatch, receiveArticleSchemaError)
 	receiveArticles: receiveArticles
 	save: (article) ->
-		(dispatch, getState) ->
+		(dispatch) ->
 			now = (new Date()).toISOString()
 			article.created = now unless article.created
 			# might add support for drafts/unpublished articles later
@@ -149,18 +149,11 @@ module.exports = {
 			if !article.updated
 				article.updated = []
 			article.updated[article.updated.length] = now
-			data = doc: article
-			loginState = getState().loginState
-			if loginState.get('isLoggedIn')
-				data.auth = loginState.filter(
-					utils.keyIn 'user', 'password'
-				).toJS()
-				console.log data.auth
 			dispatch requestSave article
 			request
 				.post(server)
 				.accept('application/json')
-				.send(data)
+				.send article
 				.end (err, res) ->
 					dispatch receiveSave err, res
 }

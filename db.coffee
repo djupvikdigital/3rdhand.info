@@ -2,7 +2,7 @@ PouchDB = require 'pouchdb'
 PouchDB.plugin require 'pouchdb-upsert'
 Promise = require 'bluebird'
 bcrypt = require 'bcrypt'
-docuri = require 'docuri'
+cuid = require 'cuid'
 
 genSalt = Promise.promisify bcrypt.genSalt, bcrypt
 hash = Promise.promisify bcrypt.hash, bcrypt
@@ -35,7 +35,18 @@ defaultTransform = (body) ->
 	return docs: t.map body.rows, getDocFromRow
 
 viewHandlers =
+	by_name: (query) ->
+		query.include_docs = true
+		db.query 'app/by_name', query
+			.then (body) ->
+				if body.rows.length
+					getDocFromRow body.rows[0]
+				else
+					error = new Error('no username match')
+					error.status = 404
+					throw error
 	by_updated: (query) ->
+		query.include_docs = true
 		query.reduce = false
 		db.query 'app/by_updated', query
 			.then (body) ->
@@ -46,15 +57,41 @@ viewHandlers =
 				)
 
 defaultViewHandler = (view, query) ->
+	query.include_docs = true
 	db.query 'app/' + view, query
 		.then defaultTransform
 
 allHandler = (query) ->
+	query.include_docs = true
 	db.allDocs query
 		.then defaultTransform
 
+get = (arg1) ->
+	view = if arguments.length == 2 then arg1 else ''
+	if view
+		query = unserializeQueryProps arguments[arguments.length - 1]
+	else
+		query = getQueryProps arguments[arguments.length - 1]
+	if !view
+		allHandler query
+	else if typeof viewHandlers[view] == 'function'
+		viewHandlers[view](query)
+	else
+		defaultViewHandler view, query
+
+put = (userId, doc) ->
+	if !userId
+		throw new Error('login required')
+	db.get(userId).then (user) ->
+		if user.roles.indexOf('write') != -1
+			db.put doc
+		else
+			error = new Error('permission denied')
+			error.status == 403
+			throw error
+
 authenticate = (username, password) ->
-	db.get 'user/' + username
+	viewHandlers.by_name key: [ 'user', username ]
 		.then (user) ->
 			compare(password, user.password_hash).then (passwordMatch) ->
 				if passwordMatch then return user
@@ -67,33 +104,8 @@ authenticate = (username, password) ->
 				throw error
 			console.log err
 
-get = (arg1) ->
-	view = if arguments.length == 2 then arg1 else ''
-	if view
-		query = unserializeQueryProps arguments[arguments.length - 1]
-	else
-		query = getQueryProps arguments[arguments.length - 1]
-	query.include_docs = true
-	if !view
-		allHandler query
-	else if typeof viewHandlers[view] == 'function'
-		viewHandlers[view](query)
-	else
-		defaultViewHandler view, query
-
-put = (data) ->
-	if !data.auth
-		throw new Error('login required')
-	authenticate data.auth.user, data.auth.password
-		.then ->
-			if @roles.indexOf('write') != -1
-				db.put data.doc
-			else
-				error = new Error('permission denied')
-				error.status == 403
-				throw error
-
-getUserId = docuri.route ':type/:name'
+getUserId = ->
+	'user/' + cuid()
 
 addUser = (data) ->
 	if !data || data.password != data.repeatPassword
@@ -103,11 +115,11 @@ addUser = (data) ->
 			hash data.password, salt
 		.then (hash) ->
 			doc =
+				_id: getUserId()
 				type: 'user'
 				name: data.user
 				password_hash: hash
 				roles: [ 'write' ]
-			doc._id = getUserId doc
 			db.put doc
 
 if !true
