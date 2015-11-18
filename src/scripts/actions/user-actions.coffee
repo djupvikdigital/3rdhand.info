@@ -1,5 +1,8 @@
 request = require 'superagent-bluebird-promise'
+ReduxRouter = require 'redux-router'
 t = require 'transducers.js'
+
+URL = require '../url.coffee'
 
 protocol = 'http://'
 host = 'localhost:8081'
@@ -15,7 +18,7 @@ logout = ->
 		type: 'LOGOUT'
 	}
 
-receiveSessionDestroySuccess = (res) ->
+receiveSessionDestroySuccess = ->
 	return {
 		type: 'RECEIVE_SESSION_DESTROY_SUCCESS'
 	}
@@ -64,20 +67,27 @@ module.exports =
 		(dispatch) ->
 			dispatch login data
 			request
-				.post server + 'admin'
+				.post server + 'users'
 				.accept 'application/json'
 				.send data
 				.promise()
-				.then t.compose dispatch, receiveUserSuccess
+				.then (res) ->
+					dispatch receiveUserSuccess res
+					dispatch ReduxRouter.pushState(
+						null, URL.getUserPath res.body.user._id
+					)
 				.catch t.compose dispatch, receiveUserError
 	logout: ->
-		(dispatch) ->
+		(dispatch, getState) ->
+			user = getState().loginState.toJS().user
 			dispatch logout()
 			request
-				.get server + 'admin/logout'
+				.get protocol + host + URL.getUserPath(user._id) + '/logout'
 				.accept 'application/json'
 				.promise()
-				.then t.compose dispatch, receiveSessionDestroySuccess
+				.then ->
+					dispatch receiveSessionDestroySuccess()
+					dispatch ReduxRouter.pushState null, '/'
 				.catch t.compose dispatch, receiveSessionDestroyError
 	setUser: (user) ->
 		return {

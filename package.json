@@ -59,7 +59,6 @@
     "js-yaml": "^3.3.1",
     "json-loader": "^0.5.2",
     "json-schema-defaults": "^0.1.1",
-    "json-stringify-safe": "^5.0.1",
     "language-tags": "^1.0.3",
     "locale": "0.0.20",
     "lodash": "^3.10.1",

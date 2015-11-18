@@ -3,6 +3,7 @@ SiteMenu:
     home: Hjem
     admin: Admin
     newArticle: Ny artikkel
+    logout: Logg ut
 LangPicker:
     norwegian: no
     english: en

@@ -1,6 +1,7 @@
 React = require 'react'
 
 createFactory = require '../create-factory.coffee'
+URL = require '../url.coffee'
 
 DocumentTitle = createFactory require 'react-document-title'
 
@@ -31,7 +32,10 @@ module.exports = React.createClass
 			Form(
 				if @props.isLoggedIn
 					[
-						{ initialData: initialData, onSubmit: @handleLogout }
+						action: URL.getUserPath(@props.user._id) + '/logout'
+						method: 'GET'
+						initialData: initialData
+						onSubmit: @handleLogout
 						Output label: loggedInAs, name: 'username'
 						FormGroup(
 							input className: 'btn', type:"submit", value: logout
@@ -39,7 +43,7 @@ module.exports = React.createClass
 					]
 				else
 					[
-						{ onSubmit: @handleLogin }
+						action: '/users', method: 'POST', onSubmit: @handleLogin
 						TextInput label: username, name: 'username'
 						PasswordInput label: password, name: 'password'
 						FormGroup(

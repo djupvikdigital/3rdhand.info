@@ -18,12 +18,15 @@ SignupDialog = ReactRedux.connect(signupSelector)(
 
 Route = React.createFactory Router.Route
 IndexRoute = React.createFactory Router.IndexRoute
+Redirect = React.createFactory Router.Redirect
 
 module.exports = Route(
 	path: '/', component: App
 	IndexRoute component: ArticleContainer
-	Route path: 'admin', component: LoginDialog
+	Route path: 'login', component: LoginDialog
 	Route path: 'signup', component: SignupDialog
 	Route path: '/locales/:file', component: App
+	Redirect from: 'users/:id/logout', to: '/'
+	Route path: 'users/:id(/*)', component: ArticleContainer
 	Route path: '*', component: ArticleContainer
 )

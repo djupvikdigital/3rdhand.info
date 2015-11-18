@@ -2,11 +2,14 @@ tags = require 'language-tags'
 locale = require 'locale'
 moment = require 'moment'
 t = require 'transducers.js'
+docuri = require 'docuri'
 
 utils = require './utils.coffee'
 
 supportedLocales = [ 'nb', 'en' ]
 supportedLocalesObject = new locale.Locales supportedLocales.join ','
+
+getUserId = docuri.route 'user/:cuid'
 
 splitPath = (path) ->
 	parts = path.split '/'
@@ -117,6 +120,8 @@ module.exports =
 		if params.lang
 			filename[filename.length] = params.lang
 		assemblePath path: path, filename: filename
+	getUserPath: (userId) ->
+		'/users/' + getUserId(userId).cuid
 	negotiateLang: negotiateLang
 	splitPath: splitPath
 	supportedLocales: supportedLocales
