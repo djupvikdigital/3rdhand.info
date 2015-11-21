@@ -30,11 +30,10 @@ module.exports = React.createClass
 			li Link href: '/login', admin
 		]
 		if @props.login.isLoggedIn
-			logoutUrl = URL.getUserPath(@props.login.user._id) + '/logout'
 			ulArgs.push(
 				li key: 'new-article', Link href: newUrl, newArticle
 				li key: 'logout', Link(
-					href: logoutUrl
+					href: '/logout'
 					onClick: @handleLogout
 					logout
 				)
