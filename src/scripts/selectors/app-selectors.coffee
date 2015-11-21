@@ -1,4 +1,5 @@
 Reselect = require 'reselect'
+Immutable = require 'immutable'
 
 localeSelector = (state) ->
 	state = state.localeState
@@ -41,9 +42,8 @@ module.exports =
 	linkSelector: Reselect.createSelector(
 		[ loginSelector, routeSelector ]
 		(login, state) ->
-			linkState = state.routerState
-			linkState.login = login
-			return linkState
+			linkState = Immutable.fromJS state.routerState
+			linkState.set('login', login).toJS()
 	)
 	localeSelector: localeSelector
 	loginSelector: Reselect.createSelector(

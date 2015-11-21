@@ -20,7 +20,6 @@ getLang = (params) ->
 unsubscribe = store.subscribe(->
 	state = store.getState().router
 	params = state.params
-	console.log state.params
 	if params.splat
 		params = URL.getParams params.splat
 	unsubscribe()
