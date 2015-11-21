@@ -1,4 +1,5 @@
-request = require 'superagent-bluebird-promise'
+request = require 'superagent'
+require('superagent-as-promised')(request)
 ReduxRouter = require 'redux-router'
 t = require 'transducers.js'
 
@@ -70,7 +71,6 @@ module.exports =
 				.post server + 'users'
 				.accept 'application/json'
 				.send data
-				.promise()
 				.then (res) ->
 					dispatch receiveUserSuccess res
 					dispatch ReduxRouter.pushState(
@@ -84,7 +84,6 @@ module.exports =
 			request
 				.get protocol + host + URL.getUserPath(user._id) + '/logout'
 				.accept 'application/json'
-				.promise()
 				.then ->
 					dispatch receiveSessionDestroySuccess()
 					dispatch ReduxRouter.pushState null, '/'
@@ -101,6 +100,5 @@ module.exports =
 				.post server + 'signup'
 				.accept 'application/json'
 				.send data
-				.promise()
 				.then t.compose dispatch, receiveSignupSuccess
 				.catch t.compose dispatch, receiveSignupError

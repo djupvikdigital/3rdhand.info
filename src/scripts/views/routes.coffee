@@ -27,6 +27,7 @@ module.exports = Route(
 	Route path: 'signup', component: SignupDialog
 	Route path: '/locales/:file', component: App
 	Redirect from: 'users/:id/logout', to: '/'
-	Route path: 'users/:id(/*)', component: ArticleContainer
+	Route path: 'users/:id', component: ArticleContainer
+	Route path: 'users/:id/*', component: ArticleContainer
 	Route path: '*', component: ArticleContainer
 )

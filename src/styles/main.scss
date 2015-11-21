@@ -1,16 +1,16 @@
 @import "node_modules/inuit-starter-kit/node_modules/inuit-defaults/settings.defaults";
 
-@import "node_modules/inuit-starter-kit/node_modules/inuit-functions/tools.functions";
-@import "node_modules/inuit-starter-kit/node_modules/inuit-mixins/tools.mixins";
+@import "node_modules/inuit-functions/tools.functions";
+@import "node_modules/inuit-mixins/tools.mixins";
 
-@import "node_modules/inuit-starter-kit/node_modules/inuit-normalize/generic.normalize";
-//@import "node_modules/inuit-starter-kit/node_modules/inuit-box-sizing/generic.box-sizing";
+@import "node_modules/inuit-normalize/generic.normalize";
+//@import "node_modules/inuit-box-sizing/generic.box-sizing";
 
 @import "node_modules/inuit-clearfix/trumps.clearfix";
 
 $link-hue: 275;
 $link-color: hsl($link-hue, 52%, 33%);
-@import "node_modules/inuit-starter-kit/node_modules/inuit-page/base.page";
+@import "node_modules/inuit-page/base.page";
 @import "base.page";
 
 $inuit-heading-size-1: 32px;

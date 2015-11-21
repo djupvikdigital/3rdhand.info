@@ -1,5 +1,6 @@
 Promise = require 'bluebird'
-request = require 'superagent-bluebird-promise'
+request = require 'superagent'
+require('superagent-as-promised')(request)
 YAML = require 'js-yaml'
 
 store = require './store.coffee'
@@ -15,7 +16,6 @@ module.exports =
 		if typeof req.buffer == 'function'
 			req.buffer()
 		req
-			.promise()
 			.then (res) ->
 				if res.ok
 					YAML.safeLoad(res.text)

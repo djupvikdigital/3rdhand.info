@@ -1,4 +1,5 @@
-request = require 'superagent-bluebird-promise'
+request = require 'superagent'
+require('superagent-as-promised')(request)
 Immutable = require 'immutable'
 moment = require 'moment'
 t = require 'transducers.js'
@@ -82,7 +83,6 @@ fetch = (params) ->
 		.get(path)
 		.query(query)
 		.accept('application/json')
-		.promise()
 		.then(onResponse)
 
 requestArticles = (params) ->

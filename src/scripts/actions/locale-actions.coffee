@@ -1,5 +1,5 @@
-Promise = require 'bluebird'
-request = require 'superagent-bluebird-promise'
+request = require 'superagent'
+require('superagent-as-promised')(request)
 YAML = require 'js-yaml'
 { compose } = require 'transducers.js'
 
@@ -43,6 +43,5 @@ module.exports =
 			if typeof req.buffer == 'function'
 				req.buffer()
 			req
-				.promise()
 				.then(handler)
 				.catch(handler)

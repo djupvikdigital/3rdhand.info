@@ -4,6 +4,9 @@ Router = require 'react-router'
 
 utils = require '../utils.coffee'
 URL = require '../url.coffee'
+createFactory = require '../create-factory.coffee'
+
+Link = createFactory Router.Link
 
 module.exports = (props) ->
 	newProps = Immutable.fromJS(props).filterNot(
@@ -19,6 +22,8 @@ module.exports = (props) ->
 			href = URL.getPath props.params
 			newProps.rel = 'alternate'
 		newProps.to = URL.getHref href, props.params
-	React.createElement Router.Link, newProps
+		if props.login.isLoggedIn
+			newProps.to = URL.getUserPath(props.login.user._id) + newProps.to
+	Link newProps
 
 module.exports.displayName = 'Link'
