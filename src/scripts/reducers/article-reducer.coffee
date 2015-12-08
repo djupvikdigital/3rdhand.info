@@ -10,14 +10,24 @@ initialState = Immutable.fromJS({
 
 module.exports = (state = initialState, action) ->
 	switch action.type
-		when 'RECEIVE_ARTICLE_SCHEMA_SUCCESS'
+		when 'FETCH_ARTICLE_SCHEMA_FULFILLED'
 			return state.merge({
-				defaults: defaults(action.schema)
+				defaults: defaults(action.payload)
 			})
-		when 'RECEIVE_ARTICLES'
+		when 'FETCH_ARTICLES_FULFILLED'
 			return state.merge({
-				articles: action.articles
-				lastUpdate: action.receivedAt
+				articles: action.payload.body.docs
+				lastUpdate: new Date()
 			})
+		when 'FETCH_ARTICLES_REJECTED'
+			return state.merge Immutable.Map
+				articles: Immutable.List()
+				error: action.payload
+				lastUpdate: null
+		when 'LOGIN'
+			if state.getIn([ 'error', 'status' ]) == 404
+				return state.set 'refetch', true
+			else
+				return state
 		else
 			return state

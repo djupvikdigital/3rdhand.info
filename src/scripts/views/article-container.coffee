@@ -1,5 +1,6 @@
 React = require 'react'
 ReactRedux = require 'react-redux'
+Immutable = require 'immutable'
 
 createFactory = require '../create-factory.coffee'
 
@@ -25,7 +26,9 @@ module.exports = React.createClass
  	componentWillMount: ->
  		@fetch @props.params unless @props.lastUpdate
 	componentWillReceiveProps: (nextProps) ->
-		if nextProps.params != @props.params
+		nextParams = Immutable.Map nextProps.params
+		params = Immutable.Map @props.params
+		if nextProps.refetch || !Immutable.is nextParams, params 
 			@fetch nextProps.params
 	render: ->
 		params = @props.params || {}

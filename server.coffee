@@ -1,19 +1,17 @@
 express = require 'express'
 favicon = require 'serve-favicon'
 bodyParser = require 'body-parser'
+ReactRouter = require 'react-router'
 
 DB = require './db.coffee'
 store = require './src/scripts/store.coffee'
 articleSelectors = require './src/scripts/selectors/article-selectors.coffee'
 userRouter = require './routers/user-router.coffee'
 siteRouter = require './routers/site-router.coffee'
-
-data = (req, res) ->
-	DB.get(req.params.view, req.query).then (docs) ->
-		res.send docs
-	.catch (err) ->
-		res.send 500, err
-
+negotiateLang = require './negotiate-lang.coffee'
+routes = require './src/scripts/views/routes.coffee'
+URL = require './src/scripts/url.coffee'
+renderTemplate = require './render-template.coffee'
 
 server = express()
 server.use favicon './favicon.ico'
@@ -45,10 +43,6 @@ server.get '/index.atom', (req, res) ->
 			articles: articles
 		)
 
-server.get '/views/:view', data
-
-server.get '/docs', data
-
 server.get 'locales/*', (req, res) ->
 	console.log req.url
 	res.send ''
@@ -64,6 +58,35 @@ server.post '/signup', (req, res) ->
 
 server.use '/users', userRouter
 server.use '/', siteRouter
+
+server.use (err, req, res, next) ->
+	if err.message == 'session timeout'
+		res.status 404
+		res.format
+			html: ->
+				lang = negotiateLang req
+				url = req.originalUrl
+				config =
+					location: url
+					routes: routes
+				ReactRouter.match config, (err, redirectLocation, props) ->
+					if err
+						res.status(500).send err.message
+					else if redirectLocation
+						res.redirect(
+							302
+							redirectLocation.pathname + redirectLocation.search
+						)
+					else if props
+						params = URL.getParams props.params
+						renderTemplate(url, params, lang).then res.send.bind res
+			default: ->
+				res.send { error: 'Not Found' }
+	else if err.message == 'no route match'
+		res.sendStatus 404
+	else
+		console.error err
+		res.sendStatus 500
 
 server.listen 8081, ->
 	console.log 'Express web server listening on port 8081...'

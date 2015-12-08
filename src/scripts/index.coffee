@@ -17,21 +17,20 @@ getLang = (params) ->
 	l = URL.supportedLocales
 	URL.negotiateLang(params.lang, l) || document.documentElement.lang
 
-unsubscribe = store.subscribe(->
+unsubscribe = store.subscribe ->
 	state = store.getState().router
-	params = state.params
-	if params.splat
-		params = URL.getParams params.splat
+	params = URL.getParams state.params
 	unsubscribe()
 	init params, getLang params
 		.then ->
 			ReactDOM.render Root(), document.getElementById 'app'
-)
+		.catch (err) ->
+			console.error err
 
 cookies = cookie.parse document.cookie
 if cookies.session
 	session = JSON.parse atob cookies.session
-	if session.user
-		store.dispatch userActions.setUser session.user
+	if session.user && session.timestamp
+		store.dispatch userActions.setUser session.user, session.timestamp
 
 store.dispatch { type: 'INIT' }

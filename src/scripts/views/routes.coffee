@@ -8,12 +8,17 @@ appSelectors = require '../selectors/app-selectors.coffee'
 { loginSelector, signupSelector } = appSelectors
 
 App = require './app.coffee'
+authenticate = require './authenticate.coffee'
+
 ArticleContainer = ReactRedux.connect(
 	articleSelectors.containerSelector
 )(require './article-container.coffee')
 LoginDialog = ReactRedux.connect(loginSelector)(require './login-dialog.coffee')
 SignupDialog = ReactRedux.connect(signupSelector)(
 	require './signup-dialog.coffee'
+)
+AuthenticatedArticleContainer = ReactRedux.connect(loginSelector)(
+	authenticate ArticleContainer
 )
 
 Route = React.createFactory Router.Route
@@ -27,7 +32,7 @@ module.exports = Route(
 	Route path: 'signup', component: SignupDialog
 	Route path: '/locales/:file', component: App
 	Redirect from: 'users/:id/logout', to: '/'
-	Route path: 'users/:id', component: ArticleContainer
-	Route path: 'users/:id/*', component: ArticleContainer
+	Route path: 'users/:id', component: AuthenticatedArticleContainer
+	Route path: 'users/:id/*', component: AuthenticatedArticleContainer
 	Route path: '*', component: ArticleContainer
 )

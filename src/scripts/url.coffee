@@ -71,6 +71,55 @@ validationReducer = (parts, item, i, keysAndValidations) ->
 	else
 		keysAndValidations
 
+getParams = (arg) ->
+	if !arg
+		return {}
+	if typeof arg == 'string' || arg instanceof String
+		path = arg
+	else if arg.splat
+		path = arg.splat
+	else
+		return arg
+	obj = splitPath path
+	lang = getLangFromArray obj.filename
+	parts = obj.path
+	i = parts.length - 1
+	if parts[i] == lang
+		parts[i] = ''
+	keys = [ 'year', 'month', 'day', 'slug', 'view' ]
+	twoDigits = /^\d{2}$/
+	str = /^.+$/
+	validation = [
+		/^\d{4}$/
+		twoDigits
+		twoDigits
+		str
+		str
+	]
+	parts = parts.filter Boolean
+	params = t.toObj(
+		utils.zip(keys, validation).reduce validationReducer, parts
+		utils.filterValues()
+	)
+	params.lang = lang if lang
+	params
+
+getPath = (params) ->
+	keys = [ 'year', 'month', 'day', 'slug', 'view' ]
+	path = keys.map (k) ->
+		params[k]
+	path = path.filter Boolean
+	filename = [ path[path.length - 1] ]
+	if params.lang
+		filename[filename.length] = params.lang
+	assemblePath path: path, filename: filename
+
+getParamsFromRouterState = (state) ->
+	if !state.router || !state.router.params
+		console.log state
+		throw new Error('invalid router state')
+	getParams state.router.params
+
 module.exports =
 	getHref: (path, params) ->
 		obj = splitPath path
@@ -87,39 +136,10 @@ module.exports =
 		obj = splitPath path
 		setLangInArray obj.filename, lang
 		assemblePath obj
-	getParams: (path) ->
-		obj = splitPath path
-		lang = getLangFromArray obj.filename
-		parts = obj.path
-		i = parts.length - 1
-		if parts[i] == lang
-			parts[i] = ''
-		keys = [ 'year', 'month', 'day', 'slug', 'view' ]
-		twoDigits = /^\d{2}$/
-		str = /^.+$/
-		validation = [
-			/^\d{4}$/
-			twoDigits
-			twoDigits
-			str
-			str
-		]
-		parts = parts.filter Boolean
-		params = t.toObj(
-			utils.zip(keys, validation).reduce validationReducer, parts
-			utils.filterValues()
-		)
-		params.lang = lang if lang
-		params
-	getPath: (params) ->
-		keys = [ 'year', 'month', 'day', 'slug', 'view' ]
-		path = keys.map (k) ->
-			params[k]
-		path = path.filter Boolean
-		filename = [ path[path.length - 1] ]
-		if params.lang
-			filename[filename.length] = params.lang
-		assemblePath path: path, filename: filename
+	getParams: getParams
+	getParamsFromRouterState: getParamsFromRouterState
+	getPath: getPath
+	getPathFromRouterState: t.compose getPath, getParamsFromRouterState
 	getUserPath: (userId) ->
 		'/users/' + getUserId(userId).cuid
 	negotiateLang: negotiateLang

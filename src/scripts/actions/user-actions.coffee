@@ -1,104 +1,37 @@
-request = require 'superagent'
-require('superagent-as-promised')(request)
+Promise = require 'bluebird'
 ReduxRouter = require 'redux-router'
-t = require 'transducers.js'
 
+API = require '../api.coffee'
 URL = require '../url.coffee'
 
-protocol = 'http://'
-host = 'localhost:8081'
-server = protocol + host + '/'
-
-login = (login) ->
-	return {
-		type: 'LOGIN'
-	}
-
-logout = ->
-	return {
-		type: 'LOGOUT'
-	}
-
-receiveSessionDestroySuccess = ->
-	return {
-		type: 'RECEIVE_SESSION_DESTROY_SUCCESS'
-	}
-
-receiveSessionDestroyError = (err) ->
-	return {
-		type: 'RECEIVE_SESSION_DESTROY_ERROR'
-		error: err
-	}
-
-
-requestSignup = (data) ->
-	return {
-		type: 'REQUEST_SIGNUP'
-		user: data.user
-		password: data.password
-		repeatPassword: data.repeatPassword
-	}
-
-receiveSignupSuccess = (res) ->
-	return {
-		type: 'RECEIVE_SIGNUP_SUCCESS'
-		response: res
-	}
-
-receiveSignupError = (err) ->
-	return {
-		type: 'RECEIVE_SIGNUP_ERROR'
-		error: err
-	}
-
-receiveUserSuccess = (res) ->
-	return {
-		type: 'RECEIVE_LOGGEDIN_USER_SUCCESS'
-		user: res.body.user || null
-	}
-
-receiveUserError = (err) ->
-	return {
-		type: 'RECEIVE_LOGGEDIN_USER_ERROR'
-		error: err
-	}
-
 module.exports =
+	sessionTimeout: ->
+		type: 'SESSION_TIMEOUT'
 	login: (data) ->
-		(dispatch) ->
-			dispatch login data
-			request
-				.post server + 'users'
-				.accept 'application/json'
-				.send data
-				.then (res) ->
-					dispatch receiveUserSuccess res
-					dispatch ReduxRouter.pushState(
-						null, URL.getUserPath res.body.user._id
-					)
-				.catch t.compose dispatch, receiveUserError
-	logout: ->
-		(dispatch, getState) ->
-			user = getState().loginState.toJS().user
-			dispatch logout()
-			request
-				.get protocol + host + URL.getUserPath(user._id) + '/logout'
-				.accept 'application/json'
-				.then ->
-					dispatch receiveSessionDestroySuccess()
-					dispatch ReduxRouter.pushState null, '/'
-				.catch t.compose dispatch, receiveSessionDestroyError
-	setUser: (user) ->
-		return {
-			type: 'SET_LOGGEDIN_USER'
+		type: 'LOGIN'
+		payload:
+			promise: API.login(data).then (res) ->
+				(action, dispatch, getState) ->
+					userPath = URL.getUserPath res.body.user._id
+					path = userPath + URL.getPathFromRouterState getState()
+					dispatch ReduxRouter.push path
+					action.payload = res.body
+					dispatch action
+	logout: (userId) ->
+		type: 'LOGOUT'
+		payload:
+			promise: API.logout(userId).then (res) ->
+				(action, dispatch, getState) ->
+					path = URL.getPathFromRouterState getState()
+					dispatch ReduxRouter.push path
+					action.payload = res.body
+					dispatch action
+	setUser: (user, timestamp) ->
+		type: 'SET_LOGGEDIN_USER'
+		payload:
 			user: user || null
-		}
+			authenticationTime: timestamp
 	signup: (data) ->
-		(dispatch) ->
-			dispatch requestSignup data
-			request
-				.post server + 'signup'
-				.accept 'application/json'
-				.send data
-				.then t.compose dispatch, receiveSignupSuccess
-				.catch t.compose dispatch, receiveSignupError
+		type: 'SIGNUP'
+		payload:
+			promise: API.signup data

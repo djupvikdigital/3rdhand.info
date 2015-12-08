@@ -12,11 +12,11 @@ initialState = Immutable.fromJS({
 
 module.exports = (state = initialState, action) ->
 	switch action.type
-		when 'RECEIVE_LOCALE_STRINGS_SUCCESS'
+		when 'FETCH_LOCALE_STRINGS_FULFILLED'
 			return state.merge({
-				lang: action.lang
-				localeStrings: action.data
-				lastUpdate: action.receivedAt
+				lang: action.payload.lang
+				localeStrings: action.payload.data
+				lastUpdate: new Date()
 			})
 		else
 			return state

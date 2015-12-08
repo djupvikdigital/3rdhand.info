@@ -4,6 +4,9 @@ Immutable = require 'immutable'
 
 { compose, filter, keep, map, remove, seq, take, toArray, transduce } = t
 
+isObject = (x) ->
+	x instanceof Object && Object.getPrototypeOf(x) == Object.getPrototypeOf {}
+
 array = ->
 	# cast to array
 	Array.prototype.concat.apply [], arguments
@@ -99,7 +102,7 @@ mapObjectRecursively = shortCircuitScalars (input, propsAndMappers...) ->
 	f = shortCircuitScalars (input) ->
 		if Array.isArray input
 			input.map f
-		else
+		else if isObject input
 			results = toArray(
 				propsAndMappers
 				compose map(propsAndMappersMapper, input), keep()
@@ -108,6 +111,8 @@ mapObjectRecursively = shortCircuitScalars (input, propsAndMappers...) ->
 				f results[0]
 			else
 				seq input, mapValues f
+		else
+			input
 	f input
 
 createPropertyMapper = (k, fn) ->

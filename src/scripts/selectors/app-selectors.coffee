@@ -1,6 +1,8 @@
 Reselect = require 'reselect'
 Immutable = require 'immutable'
 
+URL = require '../url.coffee'
+
 localeSelector = (state) ->
 	state = state.localeState
 	return state.toJS()
@@ -53,6 +55,7 @@ module.exports =
 			state
 	)
 	menuSelector: menuSelector
+	paramSelector: URL.getParamsFromRouterState
 	routeSelector: routeSelector
 	signupSelector: Reselect.createSelector(
 		[ localeSelector ]

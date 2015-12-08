@@ -1,4 +1,5 @@
 Redux = require 'redux'
+promiseMiddleware = require 'redux-promise-middleware'
 thunkMiddleware = require 'redux-thunk'
 ReduxRouter = require 'redux-router'
 History = require 'history'
@@ -18,6 +19,7 @@ else
 	createHistory = History.createMemoryHistory
 
 store = Redux.compose(
+	Redux.applyMiddleware promiseMiddleware()
 	Redux.applyMiddleware thunkMiddleware
 	ReduxRouter.reduxReactRouter { routes, createHistory }
 	devTools()

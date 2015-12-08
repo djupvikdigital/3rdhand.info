@@ -21,6 +21,14 @@ formatSelector = (state) ->
 		]
 	)
 
+containerSelector = Reselect.createSelector(
+	[
+		(state) ->
+			state.articleState.set('lang', state.localeState.get 'lang').toJS()
+	],
+	formatSelector
+)
+
 articleSelector = (state) ->
 	lang = state.localeState.get 'lang'
 	state = state.articleState.toJS()
@@ -51,13 +59,12 @@ itemSelector = Reselect.createSelector(
 module.exports =
 	containerSelector: Reselect.createSelector(
 		[
-			(state) ->
-				return {
-					lang: state.localeState.get 'lang'
-					articles: state.articleState.get('articles').toJS()
-				}
-		],
-		formatSelector
+			containerSelector
+			appSelectors.paramSelector
+		]
+		(state, params) ->
+			state.params = params
+			state
 	)
 	itemSelector: itemSelector
 	editorSelector: Reselect.createSelector(
