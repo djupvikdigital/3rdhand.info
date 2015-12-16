@@ -6,6 +6,8 @@ initialState = Immutable.fromJS({
 		nb: '3rdhand.info'
 		en: '3rdhand.info'
 	articles: []
+	error: null
+	refetch: false
 })
 
 module.exports = (state = initialState, action) ->
@@ -16,16 +18,19 @@ module.exports = (state = initialState, action) ->
 			})
 		when 'FETCH_ARTICLES_FULFILLED'
 			return state.merge({
-				articles: action.payload.body.docs
+				articles: action.payload.docs
+				error: null
 				lastUpdate: new Date()
+				refetch: false
 			})
 		when 'FETCH_ARTICLES_REJECTED'
 			return state.merge Immutable.Map
 				articles: Immutable.List()
 				error: action.payload
 				lastUpdate: null
-		when 'LOGIN'
-			if state.getIn([ 'error', 'status' ]) == 404
+		when 'LOGIN_FULFILLED'
+			err = state.get 'error'
+			if err?.status == 404
 				return state.set 'refetch', true
 			else
 				return state

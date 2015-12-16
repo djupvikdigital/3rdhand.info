@@ -22,12 +22,11 @@ module.exports = React.createClass
 	handleLogout: ->
 		@props.dispatch userActions.logout @props.login.user._id
 	render: ->
-		{ home, admin, newArticle, logout } = @props.localeStrings
+		{ home, login, newArticle, logout } = @props.localeStrings
 		newUrl = '/' + moment().format('YYYY/MM/DD') + '/untitled/new'
 		ulArgs = [
 			className: 'list-inline'
 			li Link href: '/', home
-			li Link href: '/login', admin
 		]
 		if @props.login.isLoggedIn
 			ulArgs.push(
@@ -37,6 +36,10 @@ module.exports = React.createClass
 					onClick: @handleLogout
 					logout
 				)
+			)
+		else
+			ulArgs.push(
+				li key: 'login', Link href: '/login', login
 			)
 		nav(
 			{ className: 'site-menu' }

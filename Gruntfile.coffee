@@ -22,6 +22,8 @@ module.exports = (grunt) ->
 					)
 				}
 			]
+		resolve:
+			extensions: [ '', '.webpack.js', '.web.js', '.js', '.json', '.coffee' ]
 		plugins: [
 			new ExtractTextPlugin('styles/main.css')
 		]
@@ -30,7 +32,7 @@ module.exports = (grunt) ->
 			'styles/main.css': './src/styles/main.scss'
 		}
 		output:
-			path: path.join(__dirname, 'dist')
+			path: path.resolve __dirname, 'dist'
 			publicPath: 'dist/'
 			filename: '[name]'
 

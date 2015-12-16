@@ -22,8 +22,6 @@ module.exports = (props) ->
 			href = URL.getPath props.params
 			newProps.rel = 'alternate'
 		newProps.to = URL.getHref href, props.params
-		if props.login.isLoggedIn
-			newProps.to = URL.getUserPath(props.login.user._id) + newProps.to
 	Link newProps
 
 module.exports.displayName = 'Link'

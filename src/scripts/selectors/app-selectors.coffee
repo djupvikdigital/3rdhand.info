@@ -1,5 +1,4 @@
 Reselect = require 'reselect'
-Immutable = require 'immutable'
 
 URL = require '../url.coffee'
 
@@ -13,6 +12,7 @@ loginSelector = (state) ->
 		return {
 			isLoggedIn: true
 			user: state.user
+			authenticationTime: state.authenticationTime
 		}
 	else
 		return {
@@ -42,10 +42,9 @@ module.exports =
 			localeStrings: state.localeState.toJS().localeStrings.LangPicker
 		}
 	linkSelector: Reselect.createSelector(
-		[ loginSelector, routeSelector ]
-		(login, state) ->
-			linkState = Immutable.fromJS state.routerState
-			linkState.set('login', login).toJS()
+		[ routeSelector ]
+		(state) ->
+			state.routerState
 	)
 	localeSelector: localeSelector
 	loginSelector: Reselect.createSelector(

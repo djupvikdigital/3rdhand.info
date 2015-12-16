@@ -3,7 +3,7 @@ favicon = require 'serve-favicon'
 bodyParser = require 'body-parser'
 ReactRouter = require 'react-router'
 
-DB = require './db.coffee'
+API = require './src/scripts/node_modules/api.coffee'
 store = require './src/scripts/store.coffee'
 articleSelectors = require './src/scripts/selectors/article-selectors.coffee'
 userRouter = require './routers/user-router.coffee'
@@ -48,8 +48,7 @@ server.get 'locales/*', (req, res) ->
 	res.send ''
 
 server.post '/signup', (req, res) ->
-	data = req.body
-	DB.addUser data
+	API.signup req.body
 		.then (body) ->
 			res.send body
 		.catch (err) ->

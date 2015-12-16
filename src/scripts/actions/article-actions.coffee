@@ -1,19 +1,18 @@
-API = require '../api.coffee'
-URL = require '../url.coffee'
+API = require 'api'
 
 module.exports =
 	fetch: (params) ->
 		type: 'FETCH_ARTICLES'
 		payload:
-			promise: API.fetchArticles URL.getPath params
+			promise: API.fetchArticles params
 			data: { params }
 	fetchSchema: (params) ->
 		type: 'FETCH_SCHEMA'
 		payload:
 			promise: API.fetchArticleSchema()
 # 	receiveArticles: receiveArticles
-	save: (article) ->
+	save: (article, userId) ->
 		type: 'SAVE_ARTICLE'
 		payload:
-			promise: API.saveArticle article
+			promise: API.saveArticle article, userId
 			data: { article }

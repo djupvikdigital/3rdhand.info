@@ -2,14 +2,11 @@ tags = require 'language-tags'
 locale = require 'locale'
 moment = require 'moment'
 t = require 'transducers.js'
-docuri = require 'docuri'
 
 utils = require './utils.coffee'
 
 supportedLocales = [ 'nb', 'en' ]
 supportedLocalesObject = new locale.Locales supportedLocales.join ','
-
-getUserId = docuri.route 'user/:cuid'
 
 splitPath = (path) ->
 	parts = path.split '/'
@@ -71,6 +68,32 @@ validationReducer = (parts, item, i, keysAndValidations) ->
 	else
 		keysAndValidations
 
+getUserPath = (userId) ->
+	if userId
+		'/users/' + utils.getUserId userId
+	else
+		''
+
+setUserInArray = (arr, userId) ->
+	i = arr.indexOf 'users'
+	if i != -1
+		arr[i + 1] = userId
+	else
+		arr = [ 'users', userId ].concat arr.slice 1
+	return arr
+
+getPath = (params) ->
+	keys = [ 'year', 'month', 'day', 'slug', 'view' ]
+	path = keys.map (k) ->
+		params[k]
+	path = path.filter Boolean
+	if params.userId
+		path = setUserInArray path, params.userId
+	filename = [ path[path.length - 1] ]
+	if params.lang
+		filename[filename.length] = params.lang
+	assemblePath path: path, filename: filename
+
 getParams = (arg) ->
 	if !arg
 		return {}
@@ -101,18 +124,9 @@ getParams = (arg) ->
 		utils.zip(keys, validation).reduce validationReducer, parts
 		utils.filterValues()
 	)
+	params.userId = arg.userId if arg.userId
 	params.lang = lang if lang
 	params
-
-getPath = (params) ->
-	keys = [ 'year', 'month', 'day', 'slug', 'view' ]
-	path = keys.map (k) ->
-		params[k]
-	path = path.filter Boolean
-	filename = [ path[path.length - 1] ]
-	if params.lang
-		filename[filename.length] = params.lang
-	assemblePath path: path, filename: filename
 
 getParamsFromRouterState = (state) ->
 	if !state.router || !state.router.params
@@ -123,11 +137,13 @@ getParamsFromRouterState = (state) ->
 module.exports =
 	getHref: (path, params) ->
 		obj = splitPath path
+		if params.userId
+			obj.path = setUserInArray obj.path, params.userId
 		if !getLangFromArray(obj.filename) && params.lang
 			filename = obj.filename.filter Boolean
 			filename[filename.length] = params.lang
 			obj.filename = filename
-			path = assemblePath obj
+		path = assemblePath obj
 		return path
 	getLang: (path) ->
 		arr = splitPath(path).filename
@@ -140,8 +156,7 @@ module.exports =
 	getParamsFromRouterState: getParamsFromRouterState
 	getPath: getPath
 	getPathFromRouterState: t.compose getPath, getParamsFromRouterState
-	getUserPath: (userId) ->
-		'/users/' + getUserId(userId).cuid
+	getUserPath: getUserPath
 	negotiateLang: negotiateLang
 	splitPath: splitPath
 	supportedLocales: supportedLocales

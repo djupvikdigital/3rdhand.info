@@ -1,8 +1,11 @@
+docuri = require 'docuri'
 moment = require 'moment'
 t = require 'transducers.js'
 Immutable = require 'immutable'
 
 { compose, filter, keep, map, remove, seq, take, toArray, transduce } = t
+
+getUserId = docuri.route 'user/:cuid'
 
 isObject = (x) ->
 	x instanceof Object && Object.getPrototypeOf(x) == Object.getPrototypeOf {}
@@ -160,6 +163,8 @@ module.exports =
 	createPropertyMapper: createPropertyMapper
 	getFieldValueFromFormats: applyFormatters
 	getProps: getProps
+	getUserId: (userId) ->
+		getUserId(userId).cuid || userId
 	filterKeys: filterKeys
 	filterValues: filterValues
 	format: applyFormatters

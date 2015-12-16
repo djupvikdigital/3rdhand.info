@@ -3,17 +3,21 @@ request = require 'superagent'
 require('superagent-as-promised')(request)
 YAML = require 'js-yaml'
 
-URL = require './url.coffee'
+URL = require '../url.coffee'
 
 protocol = 'http://'
 host = 'localhost:8081'
 server = protocol + host + '/'
 
+getBody = (res) ->
+	res.body
+
 module.exports =
-	fetchArticles: (path) ->
+	fetchArticles: (params) ->
 		request
-			.get server + path
+			.get protocol + host + URL.getPath params
 			.accept 'application/json'
+			.then getBody
 	fetchArticleSchema: ->
 		req = request
 			.get(server + 'schema/article-schema.yaml')
@@ -37,6 +41,7 @@ module.exports =
 			.post server + 'users'
 			.accept 'application/json'
 			.send data
+			.then getBody
 	logout: (userId) ->
 		request
 			.get protocol + host + URL.getUserPath(userId) + '/logout'

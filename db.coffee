@@ -102,7 +102,7 @@ authenticate = (username, password) ->
 				error = new Error('authentication failed')
 				error.status == 401
 				throw error
-			console.log err
+			console.error err
 
 getUserId = ->
 	'user/' + cuid()

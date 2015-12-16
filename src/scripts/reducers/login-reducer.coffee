@@ -9,7 +9,7 @@ module.exports = (state = initialState, action) ->
 			if action.payload.user
 				return state.merge
 					user: action.payload.user
-					authenticationTime: action.payload.authenticationTime
+					authenticationTime: action.payload.timestamp
 					isLoggedIn: true
 			else
 				return initialState

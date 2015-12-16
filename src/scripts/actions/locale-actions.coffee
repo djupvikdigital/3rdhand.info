@@ -1,4 +1,4 @@
-API = require '../api.coffee'
+API = require 'api'
 
 module.exports =
 	fetchStrings: (lang) ->
