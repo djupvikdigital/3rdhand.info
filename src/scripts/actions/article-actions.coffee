@@ -10,7 +10,7 @@ module.exports =
 		type: 'FETCH_SCHEMA'
 		payload:
 			promise: API.fetchArticleSchema()
-# 	receiveArticles: receiveArticles
+# 	receiveArticles: receiveArticles TODO: rewrite tests to not use this
 	save: (article, userId) ->
 		type: 'SAVE_ARTICLE'
 		payload:
