@@ -24,6 +24,8 @@ module.exports = (grunt) ->
 			]
 		resolve:
 			extensions: [ '', '.webpack.js', '.web.js', '.js', '.json', '.coffee' ]
+			alias:
+				'history/lib/createMemoryHistory': 'history/lib/createBrowserHistory'
 		plugins: [
 			new ExtractTextPlugin('styles/main.css')
 		]
