@@ -21,6 +21,10 @@ module.exports = (grunt) ->
 						'sass?sourceMap&includePaths[]=' + path.resolve __dirname, 'src/styles'
 					)
 				}
+				{
+					test: /\.yaml$/
+					loader: 'json-loader!yaml-loader'
+				}
 			]
 		resolve:
 			extensions: [ '', '.webpack.js', '.web.js', '.js', '.json', '.coffee' ]

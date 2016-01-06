@@ -1,5 +1,4 @@
 Immutable = require 'immutable'
-defaults = require 'json-schema-defaults'
 
 initialState = Immutable.fromJS({
 	title:
@@ -11,8 +10,6 @@ initialState = Immutable.fromJS({
 })
 
 reducers =
-	FETCH_ARTICLE_SCHEMA_FULFILLED: (state, payload) ->
-		state.merge defaults: defaults payload
 	FETCH_ARTICLES_FULFILLED: (state, payload) ->
 		state.merge
 			articles: payload.docs

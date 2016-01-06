@@ -6,10 +6,6 @@ module.exports =
 		payload:
 			promise: API.fetchArticles params
 			data: { params }
-	fetchSchema: (params) ->
-		type: 'FETCH_SCHEMA'
-		payload:
-			promise: API.fetchArticleSchema()
 # 	receiveArticles: receiveArticles TODO: rewrite tests to not use this
 	save: (article, userId) ->
 		type: 'SAVE_ARTICLE'

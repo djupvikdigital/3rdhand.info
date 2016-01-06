@@ -1,9 +1,11 @@
 Immutable = require 'immutable'
 moment = require 'moment'
 Reselect = require 'reselect'
+assign = require 'object-assign'
 
 utils = require '../utils.coffee'
 formatters = require '../formatters.coffee'
+API = require 'api'
 appSelectors = require './app-selectors.coffee'
 
 formatSelector = (state) ->
@@ -34,7 +36,7 @@ articleSelector = (state) ->
 	if state.articles.length
 		article = state.articles[0]
 	else
-		article = state.defaults
+		article = API.getArticleDefaults()
 	return {
 		article: article
 		lang: lang
@@ -71,15 +73,10 @@ module.exports =
 			articleSelector
 			itemSelector
 			appSelectors.localeSelector
-			(state) ->
-				state.articleState.get('defaults').toJS()
 		]
-		(state, item, localeState, defaults) ->
-			Immutable.Map(state).merge(
-				Immutable.Map(
-					defaults: defaults
-					title: item.title
-					localeStrings: localeState.localeStrings.ArticleEditor
-				)
-			).toObject()
+		(state, item, localeState) ->
+			assign {}, state, {
+				title: item.title
+				localeStrings: localeState.localeStrings.ArticleEditor
+			}
 	)

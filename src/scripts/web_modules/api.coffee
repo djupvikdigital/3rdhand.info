@@ -1,13 +1,17 @@
 Promise = require 'bluebird'
 request = require 'superagent'
 require('superagent-as-promised')(request)
-YAML = require 'js-yaml'
+defaults = require 'json-schema-defaults'
+assign = require 'object-assign'
 
+articleSchema = require '../../../schema/article-schema.yaml'
 URL = require '../url.coffee'
 
 protocol = 'http://'
 host = 'localhost:8081'
 server = protocol + host + '/'
+
+articleDefaults = defaults articleSchema
 
 getBody = (res) ->
 	res.body
@@ -18,18 +22,12 @@ module.exports =
 			.get protocol + host + URL.getPath params
 			.accept 'application/json'
 			.then getBody
-	fetchArticleSchema: ->
-		req = request
-			.get(server + 'schema/article-schema.yaml')
-		if typeof req.buffer == 'function'
-			req.buffer()
-		req
-			.then (res) ->
-				YAML.safeLoad res.text
 	fetchLocaleStrings: (lang) ->
 		request server + 'locales/' + lang
 			.accept 'application/json'
 			.then getBody
+	getArticleDefaults: ->
+		assign {}, articleDefaults
 	login: (data) ->
 		request
 			.post server + 'users'

@@ -83,6 +83,7 @@
     "serve-favicon": "^2.3.0",
     "superagent": "^1.4.0",
     "superagent-as-promised": "^3.2.1",
-    "transducers.js": "^0.3.2"
+    "transducers.js": "^0.3.2",
+    "yaml-loader": "^0.1.0"
   }
 }

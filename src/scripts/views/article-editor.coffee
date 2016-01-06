@@ -1,6 +1,7 @@
 React = require 'react'
 Immutable = require 'immutable'
 
+API = require 'api'
 Elements = require '../elements.coffee'
 createFactory = require '../create-factory.coffee'
 
@@ -42,7 +43,7 @@ module.exports = React.createClass
 			data = utils.stripDbFields data
 		if isNew
 			props.placeholders = data
-			data = @props.defaults
+			data = API.getArticleDefaults()
 		if !data.slug && @props.params.slug
 			data.slug = @props.params.slug
 		data.lang = @props.lang
