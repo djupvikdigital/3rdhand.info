@@ -32,7 +32,7 @@ getDocFromRow = (row) ->
 	row.doc
 
 defaultTransform = (body) ->
-	return docs: t.map body.rows, getDocFromRow
+	return t.map body.rows, getDocFromRow
 
 viewHandlers =
 	by_name: (query) ->
@@ -50,7 +50,7 @@ viewHandlers =
 		query.reduce = false
 		db.query 'app/by_updated', query
 			.then (body) ->
-				return docs: t.seq body.rows, t.compose(
+				return t.seq body.rows, t.compose(
 					t.filter (row) ->
 						!row.value
 					t.map getDocFromRow

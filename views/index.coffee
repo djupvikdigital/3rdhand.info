@@ -48,6 +48,9 @@ module.exports = React.createClass
 					)
 				)
 				div(id: "app", innerHtml: @props.app)
+				script
+					id: 'state', type: 'application/json'
+					JSON.stringify @props.state
 				script(src: "http://localhost:8080/dist/scripts/main.js")
 			)
 		)

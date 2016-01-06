@@ -25,17 +25,11 @@ module.exports =
 			req.buffer()
 		req
 			.then (res) ->
-				if res.ok
-					YAML.safeLoad(res.text)
-				else
-					Promise.reject res.err
+				YAML.safeLoad res.text
 	fetchLocaleStrings: (lang) ->
-		req = request server + 'locales/' + lang + '.yaml'
-		if typeof req.buffer == 'function'
-			req.buffer()
-		req.then (res) ->
-			lang: lang
-			data: YAML.safeLoad res.text
+		request server + 'locales/' + lang
+			.accept 'application/json'
+			.then getBody
 	login: (data) ->
 		request
 			.post server + 'users'

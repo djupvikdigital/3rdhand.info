@@ -1,6 +1,7 @@
 *.*~
 .*.kate_swp~
-node_modules
+*.log
+/node_modules
 .sass-cache
 dist/styles
 db

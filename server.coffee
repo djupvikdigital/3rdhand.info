@@ -4,13 +4,13 @@ bodyParser = require 'body-parser'
 ReactRouter = require 'react-router'
 
 API = require './src/scripts/node_modules/api.coffee'
-store = require './src/scripts/store.coffee'
+{ store } = require './src/scripts/store.coffee'
 articleSelectors = require './src/scripts/selectors/article-selectors.coffee'
 userRouter = require './routers/user-router.coffee'
 siteRouter = require './routers/site-router.coffee'
 negotiateLang = require './negotiate-lang.coffee'
 routes = require './src/scripts/views/routes.coffee'
-URL = require './src/scripts/url.coffee'
+URL = require './url.coffee'
 renderTemplate = require './render-template.coffee'
 
 server = express()
@@ -43,9 +43,8 @@ server.get '/index.atom', (req, res) ->
 			articles: articles
 		)
 
-server.get 'locales/*', (req, res) ->
-	console.log req.url
-	res.send ''
+server.get '/locales/:lang', (req, res) ->
+	API.fetchLocaleStrings(req.params.lang).then res.send.bind res
 
 server.post '/signup', (req, res) ->
 	API.signup req.body
@@ -84,7 +83,7 @@ server.use (err, req, res, next) ->
 	else if err.message == 'no route match'
 		res.sendStatus 404
 	else
-		console.error err
+		console.error err.stack
 		res.sendStatus 500
 
 server.listen 8081, ->

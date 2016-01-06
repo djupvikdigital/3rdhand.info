@@ -1,5 +1,8 @@
 Reselect = require 'reselect'
+Immutable = require 'immutable'
+assign = require 'object-assign'
 
+utils = require '../utils.coffee'
 URL = require '../url.coffee'
 
 localeSelector = (state) ->
@@ -34,18 +37,24 @@ menuSelector = Reselect.createSelector(
 )
 
 routeSelector = (state) ->
-	routerState: state.router
+	routerState: state.routing
 
 module.exports =
 	langPickerSelector: (state) ->
 		return {
+			params: assign {}, state.routing.state
 			localeStrings: state.localeState.toJS().localeStrings.LangPicker
 		}
-	linkSelector: Reselect.createSelector(
-		[ routeSelector ]
-		(state) ->
-			state.routerState
-	)
+	linkSelector: (state, props) ->
+		params = Immutable.Map state.routing.state
+			.filter utils.keyIn 'lang'
+			.set 'slug', props.slug
+			.update 'lang', (v) ->
+				props.langParam || v
+			.merge props.params
+			.filter Boolean
+			.toJS()
+		return state: params, to: URL.getPath params
 	localeSelector: localeSelector
 	loginSelector: Reselect.createSelector(
 		[ loginSelector, localeSelector ]
@@ -54,7 +63,8 @@ module.exports =
 			state
 	)
 	menuSelector: menuSelector
-	paramSelector: URL.getParamsFromRouterState
+	paramSelector: (state) ->
+		assign {}, state.routing.state
 	routeSelector: routeSelector
 	signupSelector: Reselect.createSelector(
 		[ localeSelector ]

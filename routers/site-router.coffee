@@ -5,7 +5,7 @@ API = require '../src/scripts/node_modules/api.coffee'
 routes = require '../src/scripts/views/routes.coffee'
 renderTemplate = require '../render-template.coffee'
 negotiateLang = require '../negotiate-lang.coffee'
-URL = require '../src/scripts/url.coffee'
+URL = require '../url.coffee'
 
 router.get '*', (req, res) ->
 	lang = negotiateLang req
@@ -31,6 +31,7 @@ router.get '*', (req, res) ->
 					API.fetchArticles params
 						.then res.send.bind res
 						.catch (err) ->
+							console.error err.stack
 							res.status(500).send err
 		else
 			throw new Error('no route match')

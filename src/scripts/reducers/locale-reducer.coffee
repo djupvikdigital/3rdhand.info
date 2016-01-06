@@ -1,5 +1,7 @@
 Immutable = require 'immutable'
 
+utils = require '../utils.coffee'
+
 initialState = Immutable.fromJS({
 	lang: 'nb'
 	localeStrings: {
@@ -10,13 +12,17 @@ initialState = Immutable.fromJS({
 	}
 })
 
+reducers =
+	FETCH_LOCALE_STRINGS_FULFILLED: (state, payload) ->
+		state.merge
+			lang: payload.lang
+			localeStrings: payload.data
+			lastUpdate: new Date()
+	INIT: (state, payload) ->
+		state.merge payload.state.localeState
+
 module.exports = (state = initialState, action) ->
-	switch action.type
-		when 'FETCH_LOCALE_STRINGS_FULFILLED'
-			return state.merge({
-				lang: action.payload.lang
-				localeStrings: action.payload.data
-				lastUpdate: new Date()
-			})
-		else
-			return state
+	if typeof reducers[action.type] == 'function'
+		reducers[action.type](state, action.payload)
+	else
+		return state

@@ -12,8 +12,7 @@ formatSelector = (state) ->
 	utils.mapObjectRecursively(
 		state
 		[ lang, utils.identity ]
- 		[ 'format', 'text', utils.createFormatMapper(formatters) ]
- 		[ 'slug', utils.hrefMapper ]
+		[ 'format', 'text', utils.createFormatMapper(formatters) ]
 		[ 
 			'published'
 			utils.createPropertyMapper 'publishedFormatted', (published) ->

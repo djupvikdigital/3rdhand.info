@@ -37,15 +37,6 @@ describe 'utils module', ->
 				bar: 1
 			expect(utils.getProps(input, ['foo', 'bar'])).toEqual test
 
-	describe 'hrefMapper', ->
-		it 'takes a slug argument and adds this.href from created date and slug', ->
-			input =
-				created: new Date('1983-11-28T23:55:00')
-			test =
-				created: new Date('1983-11-28T23:55:00')
-				href: '/1983/11/28/test'
-			expect(utils.hrefMapper.call(input, 'test')).toEqual test
-
 	describe 'localize', ->
 		it 'returns an object with field values set to language subfields', ->
 			input =

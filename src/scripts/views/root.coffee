@@ -1,17 +1,17 @@
-React = require 'react'
 ReactRedux = require 'react-redux'
-ReduxRouter = require 'redux-router'
+ReactRouter = require 'react-router'
 
 ReduxDevtools = require 'redux-devtools/lib/react'
 
-DebugPanel = React.createFactory ReduxDevtools.DebugPanel
-DevTools = React.createFactory ReduxDevtools.DevTools
+createFactory = require '../create-factory.coffee'
+
+DebugPanel = createFactory ReduxDevtools.DebugPanel
+DevTools = createFactory ReduxDevtools.DevTools
 LogMonitor = ReduxDevtools.LogMonitor
 
-createFactory = require '../create-factory.coffee'
 Elements = require '../elements.coffee'
 selectors = require '../selectors/app-selectors.coffee'
-store = require '../store.coffee'
+{ store, history } = require '../store.coffee'
 routes = require './routes.coffee'
 
 Provider = createFactory ReactRedux.Provider
@@ -21,13 +21,10 @@ DocumentTitle = createFactory(
 	ReactRedux.connect(selectors.titleSelector)(require 'react-document-title')
 )
 
-Router = createFactory ReduxRouter.ReduxRouter
+Router = createFactory ReactRouter.Router
 
 module.exports = (props) ->
-	router = Router routes
-	if props.path
-		ac = ReduxRouter.replaceState null, props.path
-		store.dispatch ac
+	router = Router { history }, routes
 	div(
 		Provider(
 			store: store
@@ -44,5 +41,3 @@ module.exports = (props) ->
 			DevTools store: store, monitor: LogMonitor
 		)
 	)
-
-module.exports.displayName = 'Root'

@@ -1,18 +1,15 @@
 React = require 'react'
 ReactRedux = require 'react-redux'
-moment = require 'moment'
+Router = require 'react-router'
 
 createFactory = require '../create-factory.coffee'
 Elements = require '../elements.coffee'
 selectors = require '../selectors/app-selectors.coffee'
 userActions = require '../actions/user-actions.coffee'
-URL = require '../url.coffee'
 
 { nav, ul, li } = Elements
 
-Link = createFactory ReactRedux.connect(selectors.linkSelector)(
-	require './link.coffee'
-)
+Link = createFactory ReactRedux.connect(selectors.linkSelector)(Router.Link)
 LangPicker = createFactory ReactRedux.connect(selectors.langPickerSelector)(
 	require './lang-picker.coffee'
 )
@@ -23,23 +20,30 @@ module.exports = React.createClass
 		@props.dispatch userActions.logout @props.login.user._id
 	render: ->
 		{ home, login, newArticle, logout } = @props.localeStrings
-		newUrl = '/' + moment().format('YYYY/MM/DD') + '/untitled/new'
+		now = new Date()
+		newParams = {
+			year: now.getFullYear()
+			month: now.getMonth() + 1
+			day: now.getDate()
+			slug: 'untitled'
+			view: 'new'
+		}
 		ulArgs = [
 			className: 'list-inline'
-			li Link href: '/', home
+			li Link home
 		]
 		if @props.login.isLoggedIn
 			ulArgs.push(
-				li key: 'new-article', Link href: newUrl, newArticle
+				li key: 'new-article', Link newParams, newArticle
 				li key: 'logout', Link(
-					href: '/logout'
+					slug: 'logout'
 					onClick: @handleLogout
 					logout
 				)
 			)
 		else
 			ulArgs.push(
-				li key: 'login', Link href: '/login', login
+				li key: 'login', Link slug: 'login', login
 			)
 		nav(
 			{ className: 'site-menu' }

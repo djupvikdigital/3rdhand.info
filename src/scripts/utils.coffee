@@ -1,7 +1,7 @@
 docuri = require 'docuri'
-moment = require 'moment'
 t = require 'transducers.js'
 Immutable = require 'immutable'
+Promise = require 'bluebird'
 
 { compose, filter, keep, map, remove, seq, take, toArray, transduce } = t
 
@@ -138,19 +138,15 @@ localize = (lang, input) ->
 applyFormatters = shortCircuitScalars (input, formatters) ->
 	mapObjectRecursively input, 'format', 'text', createFormatMapper formatters
 
-hrefMapper = createPropertyMapper 'href', (slug) ->
-	if @hasOwnProperty('created')
-		created = @created
-	else
-		created = new Date() # fake it
-	created = moment(created).format('YYYY/MM/DD')
-	'/' + created + '/' + slug
+promisify = (fn) ->
+	(arg) ->
+		Promise.resolve fn arg
 
-addHrefToArticles = (input) ->
-	mapObjectRecursively input, 'slug', hrefMapper
+maybe = (fn) ->
+	(arg) ->
+		if arg then fn(arg) else null
 
 module.exports =
-	addHrefToArticles: addHrefToArticles
 	applyIfString: (fn) ->
 		(input) ->
 			if typeof input == 'string'
@@ -168,12 +164,13 @@ module.exports =
 	filterKeys: filterKeys
 	filterValues: filterValues
 	format: applyFormatters
-	hrefMapper: hrefMapper
 	identity: identity
 	keyIn: keyIn
 	localize: localize
 	mapObjectRecursively: mapObjectRecursively
 	mapValues: mapValues
+	maybe: maybe
+	promisify: promisify
 	removeKeys: removeKeys
 	stripDbFields: (obj) ->
 		gotMap = Immutable.Map.isMap(obj)

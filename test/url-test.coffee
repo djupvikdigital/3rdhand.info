@@ -36,19 +36,6 @@ describe 'URL module', ->
 			test =
 				lang: 'en'
 			expect(URL.getParams input).toEqual test
-	describe 'getHref', ->
-		it 'supports a path with only lang', ->
-			path = '/en'
-			params = URL.getParams path
-			input = '/2015/09/29/'
-			test = input + 'en'
-			expect(URL.getHref input, params).toBe test
-		it 'gives macrolanguage for macrolanguage', ->
-			path = '/no'
-			params = URL.getParams path
-			input = '/test'
-			test = input + '.no'
-			expect(URL.getHref input, params).toBe test
 	describe 'getPath', ->
 		it 'can rebuild a path from params', ->
 			path = '/2015/09/29/slug/view'
@@ -71,8 +58,3 @@ describe 'URL module', ->
 		it 'returns the empty string if locale doesn\'t resolve to a supported locale', ->
 			lang = 'new'
 			expect(URL.negotiateLang lang).toBe ''
-	describe 'setLang', ->
-		it 'changes the lang in a path', ->
-			input = '/2015/09/29/test.no'
-			test = '/2015/09/29/test.en'
-			expect(URL.setLang input, 'en').toBe test
