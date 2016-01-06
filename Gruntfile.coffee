@@ -81,10 +81,9 @@ module.exports = (grunt) ->
 
 	grunt.loadNpmTasks 'grunt-contrib-clean'
 	grunt.loadNpmTasks 'grunt-contrib-jade'
-	grunt.loadNpmTasks 'grunt-contrib-sass'
 	grunt.loadNpmTasks 'grunt-svgmin'
 	grunt.loadNpmTasks 'grunt-webpack'
 
-	grunt.registerTask 'default', ['clean', 'jade', 'sass', 'svgmin']
+	grunt.registerTask 'default', ['clean', 'jade', 'svgmin']
 	grunt.registerTask 'dist', ['default', 'webpack']
 	grunt.registerTask 'server', ['webpack-dev-server']
