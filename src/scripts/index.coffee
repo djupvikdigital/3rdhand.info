@@ -1,5 +1,4 @@
 run = () ->
-	React = require 'react'
 	ReactDOM = require 'react-dom'
 	cookie = require 'cookie'
 	{ XmlEntities } = require 'html-entities'
