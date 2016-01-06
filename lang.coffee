@@ -25,12 +25,9 @@ negotiateLangs = (arg) ->
 	arr = utils.array(arg).filter(Boolean)
 	utils.zip arr, arr.map negotiateLang
 
-negotiateAsync = utils.promisify negotiateLangs
-
 module.exports = {
 	isLanguage
 	negotiateLang
 	negotiateLangs
-	negotiateAsync
 	supportedLocales
 }

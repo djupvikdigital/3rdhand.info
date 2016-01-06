@@ -1,6 +1,5 @@
 Reselect = require 'reselect'
 Immutable = require 'immutable'
-assign = require 'object-assign'
 
 utils = require '../utils.coffee'
 URL = require '../url.coffee'
@@ -42,7 +41,7 @@ routeSelector = (state) ->
 module.exports =
 	langPickerSelector: (state) ->
 		return {
-			params: assign {}, state.routing.state
+			params: Object.assign {}, state.routing.state
 			localeStrings: state.localeState.toJS().localeStrings.LangPicker
 		}
 	linkSelector: (state, props) ->
@@ -64,7 +63,7 @@ module.exports =
 	)
 	menuSelector: menuSelector
 	paramSelector: (state) ->
-		assign {}, state.routing.state
+		Object.assign {}, state.routing.state
 	routeSelector: routeSelector
 	signupSelector: Reselect.createSelector(
 		[ localeSelector ]

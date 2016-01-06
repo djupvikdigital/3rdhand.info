@@ -1,5 +1,3 @@
-Promise = require 'bluebird'
-
 { store } = require './store.coffee'
 articleActions = require './actions/article-actions.coffee'
 { fetchStrings } = require './actions/locale-actions.coffee'

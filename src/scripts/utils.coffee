@@ -1,7 +1,6 @@
 docuri = require 'docuri'
 t = require 'transducers.js'
 Immutable = require 'immutable'
-Promise = require 'bluebird'
 
 { compose, filter, keep, map, remove, seq, take, toArray, transduce } = t
 
@@ -138,10 +137,6 @@ localize = (lang, input) ->
 applyFormatters = shortCircuitScalars (input, formatters) ->
 	mapObjectRecursively input, 'format', 'text', createFormatMapper formatters
 
-promisify = (fn) ->
-	(arg) ->
-		Promise.resolve fn arg
-
 maybe = (fn) ->
 	(arg) ->
 		if arg then fn(arg) else null
@@ -170,7 +165,6 @@ module.exports =
 	mapObjectRecursively: mapObjectRecursively
 	mapValues: mapValues
 	maybe: maybe
-	promisify: promisify
 	removeKeys: removeKeys
 	stripDbFields: (obj) ->
 		gotMap = Immutable.Map.isMap(obj)

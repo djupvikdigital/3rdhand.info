@@ -1,7 +1,6 @@
 Immutable = require 'immutable'
 moment = require 'moment'
 Reselect = require 'reselect'
-assign = require 'object-assign'
 
 utils = require '../utils.coffee'
 formatters = require '../formatters.coffee'
@@ -75,7 +74,7 @@ module.exports =
 			appSelectors.localeSelector
 		]
 		(state, item, localeState) ->
-			assign {}, state, {
+			Object.assign {}, state, {
 				title: item.title
 				localeStrings: localeState.localeStrings.ArticleEditor
 			}

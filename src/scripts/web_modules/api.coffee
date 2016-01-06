@@ -1,8 +1,6 @@
-Promise = require 'bluebird'
 request = require 'superagent'
-require('superagent-as-promised')(request)
+require('superagent-as-promised')(request, Promise)
 defaults = require 'json-schema-defaults'
-assign = require 'object-assign'
 
 articleSchema = require '../../../schema/article-schema.yaml'
 URL = require '../url.coffee'
@@ -27,7 +25,7 @@ module.exports =
 			.accept 'application/json'
 			.then getBody
 	getArticleDefaults: ->
-		assign {}, articleDefaults
+		Object.assign {}, articleDefaults
 	login: (data) ->
 		request
 			.post server + 'users'
