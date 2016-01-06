@@ -11,16 +11,6 @@ run = () ->
 	Root = createFactory require './views/root.coffee'
 	appActions = require './actions/app-actions.coffee'
 
-	unsubscribe = store.subscribe ->
-		state = store.getState()
-		params = state.routing.state || {}
-		unsubscribe()
-		init params, document.documentElement.lang
-			.then ->
-				ReactDOM.render Root(), document.getElementById 'app'
-			.catch (err) ->
-				console.error err.stack
-
 	cookies = cookie.parse document.cookie
 	if cookies.session
 		session = JSON.parse atob cookies.session
@@ -31,6 +21,13 @@ run = () ->
 	serverState = document.getElementById('state').textContent
 	data = JSON.parse entities.decode serverState
 	store.dispatch appActions.init data
+	state = store.getState()
+	params = state.routing.state || {}
+	init params, document.documentElement.lang
+		.then ->
+			ReactDOM.render Root(), document.getElementById 'app'
+		.catch (err) ->
+			console.error err.stack
 
 if window.Promise && Object.assign
 	run()
