@@ -3,6 +3,8 @@ favicon = require 'serve-favicon'
 bodyParser = require 'body-parser'
 ReactRouter = require 'react-router'
 
+global.__DEVTOOLS__ = false
+
 API = require './src/scripts/node_modules/api.coffee'
 { store } = require './src/scripts/store.coffee'
 articleSelectors = require './src/scripts/selectors/article-selectors.coffee'

@@ -1,4 +1,5 @@
 path = require 'path'
+webpack = require 'webpack'
 ExtractTextPlugin = require 'extract-text-webpack-plugin'
 
 module.exports = (grunt) ->
@@ -32,6 +33,8 @@ module.exports = (grunt) ->
 				'history/lib/createMemoryHistory': 'history/lib/createBrowserHistory'
 		plugins: [
 			new ExtractTextPlugin('styles/main.css')
+			new webpack.DefinePlugin
+				__DEVTOOLS__: false
 		]
 		entry: {
 			'scripts/main.js': './src/scripts/index.coffee'
