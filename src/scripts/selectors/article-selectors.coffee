@@ -7,8 +7,10 @@ formatters = require '../formatters.coffee'
 API = require 'api'
 appSelectors = require './app-selectors.coffee'
 
-formatSelector = (state) ->
-	lang = state.lang
+langSelector = (state) ->
+	state.localeState.get 'lang'
+
+formatSelector = (state, lang) ->
 	moment.locale lang
 	utils.mapObjectRecursively(
 		state
@@ -24,13 +26,13 @@ formatSelector = (state) ->
 containerSelector = Reselect.createSelector(
 	[
 		(state) ->
-			state.articleState.set('lang', state.localeState.get 'lang').toJS()
+			state.articleState.toJS()
+		langSelector
 	],
 	formatSelector
 )
 
 articleSelector = (state) ->
-	lang = state.localeState.get 'lang'
 	state = state.articleState.toJS()
 	if state.articles.length
 		article = state.articles[0]
@@ -38,12 +40,14 @@ articleSelector = (state) ->
 		article = API.getArticleDefaults()
 	return {
 		article: article
-		lang: lang
 	}
 
 itemSelector = Reselect.createSelector(
 	[
-		Reselect.createSelector [ articleSelector ], formatSelector
+		Reselect.createSelector(
+			[ articleSelector, langSelector ]
+			formatSelector
+		)
 		appSelectors.titleSelector
 	]
 	(state, titleState) ->
