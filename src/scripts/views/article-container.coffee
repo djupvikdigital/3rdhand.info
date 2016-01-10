@@ -23,8 +23,8 @@ module.exports = React.createClass
 		@props.dispatch actions.fetch(params)
 	save: (data) ->
 		@props.dispatch actions.save data
- 	componentWillMount: ->
- 		@fetch @props.params unless @props.lastUpdate
+	componentWillMount: ->
+		@fetch @props.params unless @props.lastUpdate
 	componentWillReceiveProps: (nextProps) ->
 		nextParams = Immutable.Map nextProps.params
 		params = Immutable.Map @props.params
