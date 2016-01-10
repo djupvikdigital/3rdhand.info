@@ -32,7 +32,6 @@
     "inuit-list-inline": "^0.2.2",
     "inuit-starter-kit": "^0.2.9",
     "mocha": "^2.3.4",
-    "redux-devtools": "^3.0.1",
     "sass-loader": "^3.1.1",
     "webpack": "^1.12.9",
     "webpack-dev-server": "^1.12.1"
