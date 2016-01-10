@@ -3,13 +3,6 @@ ReactRouter = require 'react-router'
 
 createFactory = require '../create-factory.coffee'
 
-if __DEVTOOLS__
-	ReduxDevtools = require 'redux-devtools/lib/react'
-
-	DebugPanel = createFactory ReduxDevtools.DebugPanel
-	DevTools = createFactory ReduxDevtools.DevTools
-	LogMonitor = ReduxDevtools.LogMonitor
-
 Elements = require '../elements.coffee'
 selectors = require '../selectors/app-selectors.coffee'
 { store, history } = require '../store.coffee'
@@ -34,12 +27,4 @@ module.exports = (props) ->
 				router
 			)
 		)
-		if __DEVTOOLS__
-			DebugPanel(
-				top: true
-				right: true
-				bottom: true
-				key: 'debugPanel'
-				DevTools store: store, monitor: LogMonitor
-			)
 	)

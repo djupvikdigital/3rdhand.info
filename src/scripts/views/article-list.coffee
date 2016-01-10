@@ -1,5 +1,3 @@
-React = require 'react'
-
 Elements = require '../elements.coffee'
 createFactory = require '../create-factory.coffee'
 

@@ -4,7 +4,6 @@ thunkMiddleware = require 'redux-thunk'
 Router = require 'react-router'
 createHistory = require 'history/lib/createMemoryHistory' # aliased in webpack
 ReduxRouter = require 'redux-simple-router'
-{ devTools } = require 'redux-devtools'
 
 routes = require './views/routes.coffee'
 
@@ -14,9 +13,9 @@ reducer = Redux.combineReducers
 	loginState: require './reducers/login-reducer.coffee'
 	routing: ReduxRouter.routeReducer
 
-store = Redux.compose(
-	Redux.applyMiddleware promiseMiddleware(), thunkMiddleware
-	devTools()
+store = Redux.applyMiddleware(
+	promiseMiddleware()
+	thunkMiddleware
 )(Redux.createStore)(reducer)
 
 history = createHistory()

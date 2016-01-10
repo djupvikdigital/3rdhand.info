@@ -33,8 +33,6 @@ module.exports = (grunt) ->
 				'history/lib/createMemoryHistory': 'history/lib/createBrowserHistory'
 		plugins: [
 			new ExtractTextPlugin('styles/main.css')
-			new webpack.DefinePlugin
-				__DEVTOOLS__: false
 		]
 		entry: {
 			'scripts/main.js': './src/scripts/index.coffee'
