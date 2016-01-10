@@ -35,9 +35,6 @@ menuSelector = Reselect.createSelector(
 		}
 )
 
-routeSelector = (state) ->
-	routerState: state.routing
-
 module.exports =
 	langPickerSelector: (state) ->
 		return {
@@ -64,7 +61,6 @@ module.exports =
 	menuSelector: menuSelector
 	paramSelector: (state) ->
 		Object.assign {}, state.routing.state
-	routeSelector: routeSelector
 	signupSelector: Reselect.createSelector(
 		[ localeSelector ]
 		(state) ->
