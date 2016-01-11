@@ -34,7 +34,6 @@ getPath = (params) ->
 	path = keys.map (k) ->
 		encodeMaybe params[k]
 	path = path.filter Boolean
-	console.log params
 	if params.userId
 		path = setUserInArray path, params.userId
 	filename = [ path[path.length - 1] ]

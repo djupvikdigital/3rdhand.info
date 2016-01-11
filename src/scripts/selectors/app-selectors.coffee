@@ -11,7 +11,6 @@ localeSelector = (state) ->
 loginSelector = (state) ->
 	params = Immutable.Map(state.routing.state).delete 'view'
 	state = state.loginState.toJS()
-	console.log state
 	if state.user
 		return {
 			isLoggedIn: true
