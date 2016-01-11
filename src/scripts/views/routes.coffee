@@ -28,7 +28,7 @@ Redirect = React.createFactory Router.Redirect
 module.exports = Route(
 	path: '/', component: App
 	IndexRoute component: ArticleContainer
-	Route path: 'login', component: LoginDialog
+	Route path: '(*/)login', component: LoginDialog
 	Route path: 'signup', component: SignupDialog
 	Route path: '/locales/:file', component: App
 	Redirect from: 'users/:userId/logout', to: '/'

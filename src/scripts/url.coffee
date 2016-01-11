@@ -17,9 +17,10 @@ getUserPath = (userId) ->
 setUserInArray = (arr, userId) ->
 	i = arr.indexOf 'users'
 	if i != -1
-		arr[i + 1] = userId
+		arr.splice i, 0, userId
 	else
-		arr = [ 'users', userId ].concat arr.slice 1
+		if !arr[0] then arr.unshift ''
+		arr = [ 'users', userId ].concat arr
 	return arr
 
 addLangToArray = (arr, lang) ->
@@ -33,6 +34,7 @@ getPath = (params) ->
 	path = keys.map (k) ->
 		encodeMaybe params[k]
 	path = path.filter Boolean
+	console.log params
 	if params.userId
 		path = setUserInArray path, params.userId
 	filename = [ path[path.length - 1] ]

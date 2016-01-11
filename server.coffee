@@ -6,7 +6,7 @@ ReactRouter = require 'react-router'
 global.__DEVTOOLS__ = false
 
 API = require './src/scripts/node_modules/api.coffee'
-{ store } = require './src/scripts/store.coffee'
+createStore = require './src/scripts/store.coffee'
 articleSelectors = require './src/scripts/selectors/article-selectors.coffee'
 userRouter = require './routers/user-router.coffee'
 siteRouter = require './routers/site-router.coffee'
@@ -32,7 +32,8 @@ server.get '/index.atom', (req, res) ->
 	res.header 'Content-Type', 'text/plain; charset=utf8'
 	lang = req.acceptsLanguages 'nb', 'en'
 	res.header 'Content-Type', 'application/atom+xml; charset=utf8'
-	init().then ->
+	{ store } = createStore()
+	init(store).then ->
 		articles = articleSelectors.containerSelector(store.getState()).articles
 		updated = if articles.length then articles[0].updated else ''
 		host = req.protocol + '://' + req.get('host')

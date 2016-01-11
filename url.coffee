@@ -36,7 +36,7 @@ getParams = (arg) ->
 	else if arg.splat
 		path = arg.splat
 	else
-		return arg
+		return Object.assign {}, arg
 	obj = splitPath path
 	lang = obj.filename.filter(Lang.isLanguage)[0]
 	parts = obj.path
@@ -58,7 +58,7 @@ getParams = (arg) ->
 		utils.zip(keys, validation).reduce validationReducer, parts
 		utils.filterValues()
 	)
-	params.userId = arg.userId if arg.userId
+	params.userId = arg.id if arg.id
 	params.lang = lang if lang
 	params
 

@@ -9,16 +9,20 @@ localeSelector = (state) ->
 	return state.toJS()
 
 loginSelector = (state) ->
+	params = Immutable.Map(state.routing.state).delete 'view'
 	state = state.loginState.toJS()
+	console.log state
 	if state.user
 		return {
 			isLoggedIn: true
 			user: state.user
 			authenticationTime: state.authenticationTime
+			params: params.delete('userId').toJS()
 		}
 	else
 		return {
 			isLoggedIn: false
+			params: params.toJS()
 		}
 
 titleSelector = Reselect.createSelector [ localeSelector ], (localeState) ->
@@ -26,12 +30,16 @@ titleSelector = Reselect.createSelector [ localeSelector ], (localeState) ->
 		title: localeState.localeStrings.title || ''
 	}
 
+paramSelector = (state) ->
+	Object.assign {}, state.routing.state
+
 menuSelector = Reselect.createSelector(
-	[localeSelector, loginSelector]
-	(localeState, login) ->
+	[ localeSelector, loginSelector, paramSelector ]
+	(localeState, login, params) ->
 		return {
 			login: login
 			localeStrings: localeState.localeStrings.SiteMenu
+			params: params
 		}
 )
 
@@ -43,12 +51,11 @@ module.exports =
 		}
 	linkSelector: (state, props) ->
 		params = Immutable.Map state.routing.state
-			.filter utils.keyIn 'lang'
+			.filter utils.keyIn 'userId', 'lang'
 			.set 'slug', props.slug
 			.update 'lang', (v) ->
 				props.langParam || v
 			.merge props.params
-			.filter Boolean
 			.toJS()
 		return state: params, to: URL.getPath params
 	localeSelector: localeSelector
@@ -59,8 +66,7 @@ module.exports =
 			state
 	)
 	menuSelector: menuSelector
-	paramSelector: (state) ->
-		Object.assign {}, state.routing.state
+	paramSelector: paramSelector
 	signupSelector: Reselect.createSelector(
 		[ localeSelector ]
 		(state) ->

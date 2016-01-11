@@ -18,15 +18,20 @@ actions = require '../actions/user-actions.coffee'
 
 module.exports = React.createClass
 	displayName: 'LoginDialog'
+	getInitialData: ->
+		if @props.user
+			id = @props.user._id
+			username = @props.user.name
+		from = ''
+		if @props.params
+			from = URL.getPath @props.params
+		return { from, id, username }
 	handleLogin: (data) ->
 		@props.dispatch actions.login data
-	handleLogout: ->
-		@props.dispatch actions.logout()
+	handleLogout: (data) ->
+		@props.dispatch actions.logout data
 	render: ->
 		{ loggedInAs, logout, username, password, login } = @props.localeStrings
-		initialData =
-			if @props.user
-				username: @props.user.name
 		DocumentTitle(
 			{ title: 'Admin' }
 			Form(
@@ -34,8 +39,10 @@ module.exports = React.createClass
 					[
 						action: URL.getUserPath(@props.user._id) + '/logout'
 						method: 'GET'
-						initialData: initialData
+						initialData: @getInitialData()
 						onSubmit: @handleLogout
+						input type: 'hidden', name: 'from'
+						input type: 'hidden', name: 'id'
 						Output label: loggedInAs, name: 'username'
 						FormGroup(
 							input className: 'btn', type:"submit", value: logout
@@ -43,7 +50,11 @@ module.exports = React.createClass
 					]
 				else
 					[
-						action: '/users', method: 'POST', onSubmit: @handleLogin
+						action: '/users'
+						method: 'POST'
+						initialData: @getInitialData()
+						onSubmit: @handleLogin
+						input type: 'hidden', name: 'from'
 						TextInput label: username, name: 'username'
 						PasswordInput label: password, name: 'password'
 						FormGroup(

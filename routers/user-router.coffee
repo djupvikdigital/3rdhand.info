@@ -5,7 +5,7 @@ ReactRouter = require 'react-router'
 
 routes = require '../src/scripts/views/routes.coffee'
 renderTemplate = require '../render-template.coffee'
-{ store } = require '../src/scripts/store.coffee'
+createStore = require '../src/scripts/store.coffee'
 userActions = require '../src/scripts/actions/user-actions.coffee'
 articleActions = require '../src/scripts/actions/article-actions.coffee'
 siteRouter = require './site-router.coffee'
@@ -20,10 +20,11 @@ clearUserSession = (req) ->
 router.use session(
 	name: 'session'
 	secret: 'topsecretstring'
-	httpOnly: false
+	httpOnly: true
 )
 
 router.post '/', (req, res) ->
+	{ store } = createStore()
 	store.dispatch userActions.login req.body
 		.payload.promise.then (action) ->
 			{ user, timestamp } = action.payload
@@ -31,7 +32,7 @@ router.post '/', (req, res) ->
 			req.session.timestamp = timestamp
 			res.format
 				html: ->
-					res.redirect 303, URL.getUserPath user._id
+					res.redirect 303, URL.getUserPath user._id + req.body.from
 				json: ->
 					res.send action.payload
 		.catch (err) ->
@@ -45,25 +46,22 @@ router.use (req, res, next) ->
 	if !timestamp || moment.duration(Date.now() - timestamp).asMinutes() > 30
 		# session timed out
 		clearUserSession req
-		store.dispatch userActions.logout()
 		err = new Error('session timeout')
 		next err
 	else
-		timestamp = Date.now()
-		req.session.timestamp = timestamp
-		store.dispatch userActions.setUser req.session.user, timestamp
+		req.session.timestamp = Date.now()
 		next()
 
 router.get '/:id/logout', (req, res) ->
 	clearUserSession req
-	store.dispatch userActions.logout()
 	res.format
 		html: ->
-			res.redirect 303, '/'
+			res.redirect 303, req.body.from || '/'
 		default: ->
 			res.status(204).send ''
 
 router.post '/:id', (req, res) ->
+	{ store } = createStore()
 	store.dispatch articleActions.save req.body, req.session.user._id
 		.then (body) ->
 			res.send body

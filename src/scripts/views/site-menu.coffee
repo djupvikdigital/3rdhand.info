@@ -28,13 +28,14 @@ module.exports = React.createClass
 			slug: 'untitled'
 			view: 'new'
 		}
+		loginParams = Object.assign {}, @props.params, { view: 'login' }
 		ulArgs = [
 			className: 'list-inline'
 			li Link home
 		]
 		if @props.login.isLoggedIn
 			ulArgs.push(
-				li key: 'new-article', Link newParams, newArticle
+				li key: 'new-article', Link params: newParams, newArticle
 				li key: 'logout', Link(
 					slug: 'logout'
 					onClick: @handleLogout
@@ -43,7 +44,7 @@ module.exports = React.createClass
 			)
 		else
 			ulArgs.push(
-				li key: 'login', Link slug: 'login', login
+				li key: 'login', Link params: loginParams, login
 			)
 		nav(
 			{ className: 'site-menu' }

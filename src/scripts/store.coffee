@@ -13,13 +13,11 @@ reducer = Redux.combineReducers
 	loginState: require './reducers/login-reducer.coffee'
 	routing: ReduxRouter.routeReducer
 
-store = Redux.applyMiddleware(
-	promiseMiddleware()
-	thunkMiddleware
-)(Redux.createStore)(reducer)
-
-history = createHistory()
-
-ReduxRouter.syncReduxAndRouter history, store
-
-module.exports = { store, history }
+module.exports = ->
+	store = Redux.applyMiddleware(
+		promiseMiddleware()
+		thunkMiddleware
+	)(Redux.createStore)(reducer)
+	history = createHistory()
+	ReduxRouter.syncReduxAndRouter history, store
+	return { store, history }

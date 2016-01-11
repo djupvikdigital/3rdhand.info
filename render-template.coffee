@@ -6,13 +6,17 @@ init = require './src/scripts/init.coffee'
 createFactory = require './src/scripts/create-factory.coffee'
 Root = createFactory require './src/scripts/views/root.coffee'
 IndexTemplate = createFactory require './views/index.coffee'
-{ store } = require './src/scripts/store.coffee'
+createStore = require './src/scripts/store.coffee'
+userActions = require './src/scripts/actions/user-actions.coffee'
 
 module.exports = (url, params, lang, Template=IndexTemplate) ->
-	init(params, lang).then ->
+	{ store, history } = createStore()
+	if params.userId
+		store.dispatch userActions.setUser 'user/' + params.userId
+	init(store, params, lang).then ->
 		store.dispatch ReduxRouter.replacePath url, params
 		doctype = '<!DOCTYPE html>'
-		app = ReactDOM.renderToString Root()
+		app = ReactDOM.renderToString Root { store, history }
 		title = DocumentTitle.rewind()
 		state = store.getState()
 		html = ReactDOM.renderToStaticMarkup(

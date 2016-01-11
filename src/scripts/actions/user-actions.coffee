@@ -1,5 +1,8 @@
+ReduxRouter = require 'redux-simple-router'
+
 API = require 'api'
 utils = require '../utils.coffee'
+URL = require '../url.coffee'
 appActions = require './app-actions.coffee'
 
 module.exports =
@@ -10,14 +13,17 @@ module.exports =
 		payload:
 			promise: API.login(data).then (body) ->
 				(action, dispatch) ->
-					params = userId: utils.getUserId body.user._id
-					dispatch appActions.mergeParams params
+					userPath = URL.getUserPath body.user._id
+					dispatch ReduxRouter.pushPath userPath + data.from
 					action.payload = body
 					dispatch action
-	logout: (userId) ->
+	logout: (data) ->
 		type: 'LOGOUT'
 		payload:
-			promise: API.logout userId
+			promise: API.logout(data.id).then ->
+				(action, dispatch) ->
+					dispatch ReduxRouter.pushPath data.from
+					dispatch action
 	setUser: (obj, timestamp) ->
 		type: 'SET_LOGGEDIN_USER'
 		payload:
