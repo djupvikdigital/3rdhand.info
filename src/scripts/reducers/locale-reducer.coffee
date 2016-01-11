@@ -2,22 +2,22 @@ Immutable = require 'immutable'
 
 utils = require '../utils.coffee'
 
-initialState = Immutable.fromJS({
+initialState = Immutable.fromJS
 	lang: 'nb'
-	localeStrings: {
-		SiteMenu: {}
-		ArticleEditor: {}
-		LangPicker: {}
-		LoginDialog: {}
-	}
-})
+	localeStrings:
+		nb:
+			SiteMenu: {}
+			ArticleEditor: {}
+			LangPicker: {}
+			LoginDialog: {}
 
 reducers =
 	FETCH_LOCALE_STRINGS_FULFILLED: (state, payload) ->
-		state.merge
-			lang: payload.lang
-			localeStrings: payload.data
-			lastUpdate: new Date()
+		state
+			.mergeIn [ 'localeStrings', payload.lang ], payload.data
+			.merge
+				lang: payload.lang
+				lastUpdate: new Date()
 	INIT: (state, payload) ->
 		state.merge payload.state.localeState
 

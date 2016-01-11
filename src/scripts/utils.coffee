@@ -33,6 +33,13 @@ argArray = (fn) ->
 		else
 			fn arg
 
+get = (prop, fn) ->
+	(obj) ->
+		if typeof fn == 'function'
+			fn obj[prop]
+		else
+			obj[prop]
+
 keyFilter = (fn) ->
 	argArray (k) ->
 		fn(k)
@@ -149,9 +156,17 @@ module.exports =
 			else
 				input
 	argArray: argArray
+	argsToObject: ->
+		keys = arguments
+		reducer = (obj, arg, i) ->
+			obj[keys[i]] = arg
+			return obj
+		->
+			Array.prototype.reduce.call arguments, reducer, {}
 	array: array
 	createFormatMapper: createFormatMapper
 	createPropertyMapper: createPropertyMapper
+	get: get
 	getFieldValueFromFormats: applyFormatters
 	getProps: getProps
 	getUserId: (userId) ->

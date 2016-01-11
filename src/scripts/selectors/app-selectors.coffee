@@ -1,12 +1,15 @@
 Reselect = require 'reselect'
 Immutable = require 'immutable'
+{ compose } = require 'transducers.js'
 
 utils = require '../utils.coffee'
 URL = require '../url.coffee'
 
-localeSelector = (state) ->
-	state = state.localeState
-	return state.toJS()
+{ argsToObject, get } = utils
+
+localeSelector = get 'localeState', (state) ->
+	lang = state.get 'lang'
+	return state.getIn([ 'localeStrings', lang ]).toJS()
 
 loginSelector = (state) ->
 	params = Immutable.Map(state.routing.state).delete 'view'
@@ -24,30 +27,24 @@ loginSelector = (state) ->
 			params: params.toJS()
 		}
 
-titleSelector = Reselect.createSelector [ localeSelector ], (localeState) ->
+titleSelector = Reselect.createSelector [ localeSelector ], (localeStrings) ->
 	return {
-		title: localeState.localeStrings.title || ''
+		title: localeStrings.title || ''
 	}
 
 paramSelector = (state) ->
 	Object.assign {}, state.routing.state
 
 menuSelector = Reselect.createSelector(
-	[ localeSelector, loginSelector, paramSelector ]
-	(localeState, login, params) ->
-		return {
-			login: login
-			localeStrings: localeState.localeStrings.SiteMenu
-			params: params
-		}
+	[ compose(get('SiteMenu'), localeSelector), loginSelector, paramSelector ]
+	argsToObject 'localeStrings', 'login', 'params'
 )
 
 module.exports =
-	langPickerSelector: (state) ->
-		return {
-			params: Object.assign {}, state.routing.state
-			localeStrings: state.localeState.toJS().localeStrings.LangPicker
-		}
+	langPickerSelector: Reselect.createSelector(
+		[ paramSelector, compose(get('LangPicker'), localeSelector) ]
+		argsToObject 'params', 'localeStrings'
+	)
 	linkSelector: (state, props) ->
 		params = Immutable.Map state.routing.state
 			.filter utils.keyIn 'userId', 'lang'
@@ -67,8 +64,7 @@ module.exports =
 	menuSelector: menuSelector
 	paramSelector: paramSelector
 	signupSelector: Reselect.createSelector(
-		[ localeSelector ]
-		(state) ->
-			localeStrings: state.localeStrings.SignupDialog
+		[ compose(get('SignupDialog'), localeSelector) ]
+		argsToObject 'localeStrings'
 	)
 	titleSelector: titleSelector
