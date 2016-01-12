@@ -61,6 +61,14 @@ describe 'utils module', ->
 				bar: 1
 			expect(utils.getProps(input, ['foo', 'bar'])).toEqual test
 
+	describe 'getUserId', ->
+		it 'returns the cuid portion of a user id', ->
+			input = 'user/foo'
+			expect(utils.getUserId input).toBe 'foo'
+		it 'returns the input if the string is not prefixed with "user/"', ->
+			input = 'bar'
+			expect(utils.getUserId input).toBe 'bar'
+
 	describe 'mapObjectRecursively', ->
 		it 'takes mapper functions and goes over the object recursively, applying to objects with provided props', ->
 			input =
