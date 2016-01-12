@@ -136,15 +136,11 @@ createFormatMapper = (formatters) ->
 	else
 		((k, v) -> v)
 
-applyFormatters = shortCircuitScalars (input, formatters) ->
-	mapObjectRecursively input, 'format', 'text', createFormatMapper formatters
-
 maybe = (fn) ->
 	(arg) ->
 		if arg then fn(arg) else null
 
 module.exports =
-	applyFormatters: applyFormatters
 	argsToObject: ->
 		keys = arguments
 		reducer = (obj, arg, i) ->

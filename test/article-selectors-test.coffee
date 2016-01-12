@@ -39,8 +39,8 @@ describe 'articleSelectors', ->
 				]
 			output = selectors.itemSelector(state)
 			{ title } = localeStrings
-			articleTitle = utils.applyFormatters(
-				state.articleState.getIn([ 'articles', 0, 'title', lang ]).toJS()
+			articleTitle = state.articleState.getIn(
+				[ 'articles', 0, 'title', lang, 'text' ]
 			)
 			expect(output.title).toBe(articleTitle + ' - ' + title)
 		it 'returns just the title when a single article without a title is provided', ->
