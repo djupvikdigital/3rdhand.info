@@ -149,6 +149,15 @@ describe 'utils module', ->
 				arg.toUpperCase()
 			expect(t.seq input, utils.mapValues fn).toEqual test
 
+	describe 'maybe', ->
+		it 'applies a function only if argument is truthy, else it returns null', ->
+			input = true
+			fn = utils.maybe ->
+				'success'
+			expect(fn input).toBe 'success'
+			input = false
+			expect(fn input).toBe null
+
 	describe 'prop', ->
 		it 'returns a function when given an object returns the named property', ->
 			input =
