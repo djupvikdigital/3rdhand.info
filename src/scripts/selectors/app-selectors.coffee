@@ -49,9 +49,9 @@ module.exports =
 		params = Immutable.Map state.routing.state
 			.filter utils.keyIn 'userId', 'lang'
 			.set 'slug', props.slug
+			.merge props.params
 			.update 'lang', (v) ->
 				props.langParam || v
-			.merge props.params
 			.toJS()
 		return state: params, to: URL.getPath params
 	localeSelector: localeSelector
