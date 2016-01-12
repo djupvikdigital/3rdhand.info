@@ -7,6 +7,13 @@ formatters = require '../src/scripts/formatters.coffee'
 utils = require '../src/scripts/utils.coffee'
 
 describe 'utils module', ->
+	describe 'argsToObject', ->
+		it 'returns a function that when given args it returns an object with those args mapped to provided property keys', ->
+			test =
+				foo: 'bar'
+				baz: 'quux'
+			expect(utils.argsToObject('foo', 'baz')('bar', 'quux')).toEqual test
+
 	describe 'array', ->
 		it 'converts non-arrays to array', ->
 			test = [ 'item1', 'item2' ]
