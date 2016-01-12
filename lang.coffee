@@ -21,13 +21,8 @@ negotiateLang = utils.maybe (lang) ->
 	if negotiated.defaulted then return ''
 	negotiated.toString()
 
-negotiateLangs = (arg) ->
-	arr = utils.array(arg).filter(Boolean)
-	utils.zip arr, arr.map negotiateLang
-
 module.exports = {
 	isLanguage
 	negotiateLang
-	negotiateLangs
 	supportedLocales
 }
