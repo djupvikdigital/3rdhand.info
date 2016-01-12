@@ -2,6 +2,7 @@ router = require('express').Router()
 session = require 'cookie-session'
 moment = require 'moment'
 ReactRouter = require 'react-router'
+URL = require 'url'
 
 routes = require '../src/scripts/views/routes.coffee'
 renderTemplate = require '../render-template.coffee'
@@ -9,7 +10,7 @@ createStore = require '../src/scripts/store.coffee'
 userActions = require '../src/scripts/actions/user-actions.coffee'
 articleActions = require '../src/scripts/actions/article-actions.coffee'
 siteRouter = require './site-router.coffee'
-URL = require '../src/scripts/url.coffee'
+{ getPath, getUserPath } = require '../src/scripts/url.coffee'
 
 clearUserSession = (req) ->
 	if !req
@@ -32,7 +33,7 @@ router.post '/', (req, res) ->
 			req.session.timestamp = timestamp
 			res.format
 				html: ->
-					res.redirect 303, URL.getUserPath user._id + req.body.from
+					res.redirect 303, getUserPath user._id + req.body.from
 				json: ->
 					res.send action.payload
 		.catch (err) ->
@@ -56,9 +57,21 @@ router.get '/:id/logout', (req, res) ->
 	clearUserSession req
 	res.format
 		html: ->
-			res.redirect 303, req.body.from || '/'
+			path = '/'
+			if req.query.from
+				from = JSON.parse req.query.from
+				delete from.userId
+				path = getPath from
+			else
+				url = null
+				referrer = req.get 'Referer'
+				if referrer
+					url = URL.parse referrer
+				if url && url.hostname == req.hostname
+					path = url.path
+			res.redirect 303, req.protocol + '://' + req.get('Host') + path
 		default: ->
-			res.status(204).send ''
+			res.status(204).end()
 
 router.post '/:id', (req, res) ->
 	{ store } = createStore()

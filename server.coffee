@@ -2,6 +2,7 @@ express = require 'express'
 favicon = require 'serve-favicon'
 bodyParser = require 'body-parser'
 ReactRouter = require 'react-router'
+ReduxRouter = require 'redux-simple-router'
 
 global.__DEVTOOLS__ = false
 
@@ -13,7 +14,9 @@ siteRouter = require './routers/site-router.coffee'
 negotiateLang = require './negotiate-lang.coffee'
 routes = require './src/scripts/views/routes.coffee'
 URL = require './url.coffee'
+createStore = require './src/scripts/store.coffee'
 renderTemplate = require './render-template.coffee'
+userActions = require './src/scripts/actions/user-actions.coffee'
 
 server = express()
 server.use favicon './favicon.ico'
@@ -80,7 +83,11 @@ server.use (err, req, res, next) ->
 						)
 					else if props
 						params = URL.getParams props.params
-						renderTemplate(url, params, lang).then res.send.bind res
+						storeModule = createStore()
+						{ store, history } = storeModule
+						store.dispatch ReduxRouter.replacePath url, params
+						renderTemplate storeModule, params, lang
+							.then res.send.bind res
 			default: ->
 				res.send { error: 'Not Found' }
 	else if err.message == 'no route match'

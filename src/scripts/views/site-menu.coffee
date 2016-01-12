@@ -16,8 +16,12 @@ LangPicker = createFactory ReactRedux.connect(selectors.langPickerSelector)(
 
 module.exports = React.createClass
 	displayName: 'SiteMenu'
-	handleLogout: ->
-		@props.dispatch userActions.logout @props.login.user._id
+	handleLogout: (e) ->
+		e.preventDefault()
+		data =
+			id: @props.login.user._id
+			from: JSON.stringify @props.params
+		@props.dispatch userActions.logout data
 	render: ->
 		{ home, login, newArticle, logout } = @props.localeStrings
 		now = new Date()
