@@ -1,11 +1,14 @@
 Immutable = require 'immutable'
 moment = require 'moment'
 Reselect = require 'reselect'
+{ compose } = require 'transducers.js'
 
 utils = require '../utils.coffee'
 formatters = require '../formatters.coffee'
 API = require 'api'
 appSelectors = require './app-selectors.coffee'
+
+{ prop } = utils
 
 langSelector = (state) ->
 	state.localeState.get 'lang'
@@ -48,10 +51,9 @@ itemSelector = Reselect.createSelector(
 			[ articleSelector, langSelector ]
 			formatSelector
 		)
-		appSelectors.titleSelector
+		compose prop('title'), appSelectors.titleSelector
 	]
-	(state, titleState) ->
-		title = titleState.title
+	(state, title) ->
 		if state.article
 			articleTitle = state.article.title
 			if articleTitle

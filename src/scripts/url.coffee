@@ -1,4 +1,5 @@
 utils = require './utils.coffee'
+padLeft = require 'lodash/string/padLeft'
 
 assemblePath = (obj) ->
 	if !Array.isArray(obj.path) || !Array.isArray(obj.filename)
@@ -30,9 +31,14 @@ addLangToArray = (arr, lang) ->
 encodeMaybe = utils.maybe encodeURIComponent
 
 getPath = (params) ->
-	keys = [ 'year', 'month', 'day', 'slug', 'view' ]
+	dateKeys = [ 'year', 'month', 'day' ]
+	keys = dateKeys.concat [ 'slug', 'view' ]
 	path = keys.map (k) ->
-		encodeMaybe params[k]
+		if params[k] && dateKeys.indexOf(k) != -1
+			param = padLeft params[k], 2, '0'
+		else
+			param = params[k]
+		encodeMaybe param
 	path = path.filter Boolean
 	if params.userId
 		path = setUserInArray path, params.userId
