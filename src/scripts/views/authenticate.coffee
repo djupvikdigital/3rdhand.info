@@ -19,6 +19,6 @@ module.exports = (Component) ->
 			checkTimestamp @props
 		render: ->
 			if @props.isLoggedIn
-				React.createElement Component, {}
+				React.createElement Component, login: @props
 			else
 				LoginDialog @props

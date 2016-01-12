@@ -36,7 +36,7 @@ module.exports =
 		request
 			.get protocol + host + URL.getUserPath(userId) + '/logout'
 			.accept 'application/json'
-	saveArticle: (article) ->
+	saveArticle: (article, userId) ->
 		now = (new Date()).toISOString()
 		article.created = now unless article.created
 		# might add support for drafts/unpublished articles later
@@ -45,8 +45,8 @@ module.exports =
 			article.updated = []
 		article.updated[article.updated.length] = now
 		request
-			.post(server)
-			.accept('application/json')
+			.post protocol + host + URL.getUserPath userId
+			.accept 'application/json'
 			.send article
 	signup: (data) ->
 			request

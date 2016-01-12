@@ -11,6 +11,7 @@ Link = createFactory ReactRedux.connect(linkSelector)(Router.Link)
 { div, header, h1, time } = Elements
 
 module.exports = (props) ->
+	console.log props.article
 	{ urlParams, title, summary, published, publishedFormatted } = props.article
 	div(
 		header(

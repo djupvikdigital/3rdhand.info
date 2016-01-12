@@ -75,11 +75,13 @@ module.exports =
 		[
 			articleSelector
 			itemSelector
+			langSelector
 			appSelectors.localeSelector
 		]
-		(state, item, localeStrings) ->
+		(state, item, lang, localeStrings) ->
 			Object.assign {}, state, {
 				title: item.title
+				lang: lang
 				localeStrings: localeStrings.ArticleEditor
 			}
 	)

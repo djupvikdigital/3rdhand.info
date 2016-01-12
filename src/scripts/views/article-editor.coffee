@@ -30,6 +30,8 @@ keyResolver = (k) ->
 
 module.exports = React.createClass
 	displayName: 'ArticleEditor'
+	propTypes:
+		lang: React.PropTypes.string.isRequired
 	handleSubmit: (data) ->
 		@props.save Immutable.fromJS(data).filterNot(utils.keyIn('lang')).toJS()
 	render: ->

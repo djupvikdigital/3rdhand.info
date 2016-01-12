@@ -38,7 +38,7 @@ getParams = (arg) ->
 	else
 		return Object.assign {}, arg
 	obj = splitPath path
-	lang = obj.filename.filter(Lang.isLanguage)[0]
+	lang = obj.filename.filter(Lang.negotiateLang)[0]
 	parts = obj.path
 	i = parts.length - 1
 	if parts[i] == lang

@@ -22,7 +22,7 @@ module.exports = React.createClass
 	fetch: (params) ->
 		@props.dispatch actions.fetch(params)
 	save: (data) ->
-		@props.dispatch actions.save data
+		@props.dispatch actions.save data, @props.login.user._id
 	componentWillMount: ->
 		@fetch @props.params unless @props.lastUpdate
 	componentWillReceiveProps: (nextProps) ->

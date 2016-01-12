@@ -63,9 +63,10 @@ router.get '/:id/logout', (req, res) ->
 router.post '/:id', (req, res) ->
 	{ store } = createStore()
 	store.dispatch articleActions.save req.body, req.session.user._id
-		.then (body) ->
+		.payload.promise.then (body) ->
 			res.send body
 		.catch (err) ->
+			console.error err.stack
 			res.status(err.status || 500).send err
 
 router.use '/:id', siteRouter
