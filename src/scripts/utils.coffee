@@ -148,7 +148,6 @@ module.exports =
 	array: array
 	createFormatMapper: createFormatMapper
 	createPropertyMapper: createPropertyMapper
-	prop: prop
 	getProps: getProps
 	getUserId: (userId) ->
 		getUserId(userId).cuid || userId
@@ -158,6 +157,7 @@ module.exports =
 	mapObjectRecursively: mapObjectRecursively
 	mapValues: mapValues
 	maybe: maybe
+	prop: prop
 	stripDbFields: (obj) ->
 		gotMap = Immutable.Map.isMap(obj)
 		m = if gotMap then obj else Immutable.Map(obj)
