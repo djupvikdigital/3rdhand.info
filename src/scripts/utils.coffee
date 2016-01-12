@@ -149,12 +149,6 @@ maybe = (fn) ->
 		if arg then fn(arg) else null
 
 module.exports =
-	applyIfString: (fn) ->
-		(input) ->
-			if typeof input == 'string'
-				fn input
-			else
-				input
 	argArray: argArray
 	argsToObject: ->
 		keys = arguments

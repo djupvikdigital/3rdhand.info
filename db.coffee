@@ -22,12 +22,6 @@ getQueryProps = (query) ->
 	props = [ 'key', 'startkey', 'endkey', 'descending' ]
 	utils.getProps query, props
 
-unserializeQueryProps = (query) ->
-	t.seq(
-		getQueryProps query
-		utils.mapValues utils.applyIfString JSON.parse
-	)
-
 getDocFromRow = (row) ->
 	row.doc
 
@@ -68,10 +62,7 @@ allHandler = (query) ->
 
 get = (arg1) ->
 	view = if arguments.length == 2 then arg1 else ''
-	if view
-		query = unserializeQueryProps arguments[arguments.length - 1]
-	else
-		query = getQueryProps arguments[arguments.length - 1]
+	query = getQueryProps arguments[arguments.length - 1]
 	if !view
 		allHandler query
 	else if typeof viewHandlers[view] == 'function'
