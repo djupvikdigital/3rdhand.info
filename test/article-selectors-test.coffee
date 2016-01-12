@@ -39,7 +39,7 @@ describe 'articleSelectors', ->
 				]
 			output = selectors.itemSelector(state)
 			{ title } = localeStrings
-			articleTitle = utils.getFieldValueFromFormats(
+			articleTitle = utils.applyFormatters(
 				state.articleState.getIn([ 'articles', 0, 'title', lang ]).toJS()
 			)
 			expect(output.title).toBe(articleTitle + ' - ' + title)

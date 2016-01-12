@@ -37,37 +37,6 @@ describe 'utils module', ->
 				bar: 1
 			expect(utils.getProps(input, ['foo', 'bar'])).toEqual test
 
-	describe 'localize', ->
-		it 'returns an object with field values set to language subfields', ->
-			input =
-				field:
-					nb: 'felt'
-					en: 'field'
-			test =
-				field: 'felt'
-			expect(utils.localize('nb', input)).toEqual test
-
-		it 'returns a value from an object with toplevel fields having language keys', ->
-			input =
-				nb: 'felt'
-				en: 'field'
-			test = 'felt'
-			expect(utils.localize('nb', input)).toBe 'felt'
-		it 'supports mapping arrays', ->
-			input = [
-				field:
-					nb: 'felt1'
-					en: 'field1'
-				field:
-					nb: 'felt2'
-					en: 'field2'
-			]
-			test = [
-				field: 'felt1'
-				field: 'felt2'
-			]
-			expect(utils.localize('nb', input)).toEqual test
-
 	describe 'mapObjectRecursively', ->
 		it 'takes mapper functions and goes over the object recursively, applying to objects with provided props', ->
 			input =

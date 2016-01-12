@@ -46,8 +46,6 @@ keyFilter = (fn) ->
 
 filterKeys = compose filter, keyFilter
 
-removeKeys = compose remove, keyFilter
-
 filterValues = compose filter, (fn=defaultFilter) ->
 	argArray (k, v) ->
 		fn(v)
@@ -138,9 +136,6 @@ createFormatMapper = (formatters) ->
 	else
 		((k, v) -> v)
 
-localize = (lang, input) ->
-	mapObjectRecursively input, lang, identity
-
 applyFormatters = shortCircuitScalars (input, formatters) ->
 	mapObjectRecursively input, 'format', 'text', createFormatMapper formatters
 
@@ -149,7 +144,7 @@ maybe = (fn) ->
 		if arg then fn(arg) else null
 
 module.exports =
-	argArray: argArray
+	applyFormatters: applyFormatters
 	argsToObject: ->
 		keys = arguments
 		reducer = (obj, arg, i) ->
@@ -161,20 +156,15 @@ module.exports =
 	createFormatMapper: createFormatMapper
 	createPropertyMapper: createPropertyMapper
 	get: get
-	getFieldValueFromFormats: applyFormatters
 	getProps: getProps
 	getUserId: (userId) ->
 		getUserId(userId).cuid || userId
-	filterKeys: filterKeys
 	filterValues: filterValues
-	format: applyFormatters
 	identity: identity
 	keyIn: keyIn
-	localize: localize
 	mapObjectRecursively: mapObjectRecursively
 	mapValues: mapValues
 	maybe: maybe
-	removeKeys: removeKeys
 	stripDbFields: (obj) ->
 		gotMap = Immutable.Map.isMap(obj)
 		m = if gotMap then obj else Immutable.Map(obj)
