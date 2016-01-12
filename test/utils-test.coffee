@@ -135,6 +135,20 @@ describe 'utils module', ->
 			]
 			expect(utils.mapObjectRecursively.apply(null, args)).toEqual test
 
+	describe 'mapValues', ->
+		it 'maps an array of key value pairs by values', ->
+			input = [
+				[ 'foo', 'bar' ]
+				[ 'baz', 'quux' ]
+			]
+			test = [
+				[ 'foo', 'BAR' ]
+				[ 'baz', 'QUUX' ]
+			]
+			fn = (arg) ->
+				arg.toUpperCase()
+			expect(t.seq input, utils.mapValues fn).toEqual test
+
 	describe 'prop', ->
 		it 'returns a function when given an object returns the named property', ->
 			input =
