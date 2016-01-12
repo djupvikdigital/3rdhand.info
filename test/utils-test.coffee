@@ -91,6 +91,11 @@ describe 'utils module', ->
 			input = 'bar'
 			expect(utils.getUserId input).toBe 'bar'
 
+	describe 'identity', ->
+		it 'returns the argument provided', ->
+			input = 'foo'
+			expect(utils.identity input).toBe input
+
 	describe 'mapObjectRecursively', ->
 		it 'takes mapper functions and goes over the object recursively, applying to objects with provided props', ->
 			input =
