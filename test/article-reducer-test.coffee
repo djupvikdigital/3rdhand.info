@@ -3,7 +3,6 @@ expect = require 'expect'
 Immutable = require 'immutable'
 
 utils = require '../src/scripts/utils.coffee'
-articleActions = require '../src/scripts/actions/article-actions.coffee'
 articleReducer = require '../src/scripts/reducers/article-reducer.coffee'
 
 describe 'articleReducer', ->
@@ -13,6 +12,8 @@ describe 'articleReducer', ->
 				{ _id: '_id' }
 			]
 			lang: 'en'
+			error: null
+			refetch: false
 		})
 		newState = Immutable.fromJS({
 			articles: [
@@ -20,7 +21,12 @@ describe 'articleReducer', ->
 				{ _id: '_id' }
 			]
 			lang: 'en'
+			error: null
+			refetch: false
 		})
-		action = articleActions.receiveArticles(newState.toJS().articles)
+		action =
+			type: 'FETCH_ARTICLES_FULFILLED'
+			payload:
+				docs: newState.get('articles').toJS()
 		output = articleReducer(state, action)
 		expect(output.filterNot(utils.keyIn('lastUpdate')).toJS()).toEqual(newState.toJS())

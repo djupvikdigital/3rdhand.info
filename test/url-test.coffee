@@ -1,8 +1,12 @@
 expect = require 'expect'
 
-URL = require '../src/scripts/url.coffee'
+URL = Object.assign(
+	{}
+	require '../src/scripts/url.coffee'
+	require '../url.coffee'
+)
 
-describe 'URL module', ->
+describe 'URL modules', ->
 	describe 'getParams', ->
 		it 'returns a params object from a path', ->
 			input = '/2015/09/29/slug/view'
@@ -51,10 +55,3 @@ describe 'URL module', ->
 			params =
 				lang: 'en'
 			expect(URL.getPath params).toBe path
-	describe 'negotiateLang', ->
-		it 'negotiates macrolanguages', ->
-			lang = 'no'
-			expect(URL.negotiateLang lang).toBe 'nb'
-		it 'returns the empty string if locale doesn\'t resolve to a supported locale', ->
-			lang = 'new'
-			expect(URL.negotiateLang lang).toBe ''
