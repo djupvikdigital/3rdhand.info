@@ -23,7 +23,9 @@ module.exports =
 		payload:
 			promise: API.logout(data.id).then ->
 				(action, dispatch) ->
-					dispatch ReduxRouter.pushPath data.from
+					params = JSON.parse data.from
+					delete params.userId
+					dispatch ReduxRouter.pushPath URL.getPath(params), params
 					dispatch action
 	setUser: (obj, timestamp) ->
 		type: 'SET_LOGGEDIN_USER'
