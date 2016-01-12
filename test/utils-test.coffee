@@ -96,6 +96,19 @@ describe 'utils module', ->
 			input = 'foo'
 			expect(utils.identity input).toBe input
 
+	describe 'keyIn', ->
+		it 'returns a filter function that can filter an Immutable.Map by a set of keys', ->
+			input = Immutable.Map
+				foo: 'bar'
+				bar: 'baz'
+				baz: 'quux'
+			test = Immutable.Map
+				foo: 'bar'
+				bar: 'baz'
+			expect(
+				Immutable.is input.filter(utils.keyIn 'foo', 'bar'), test
+			).toBe true
+
 	describe 'mapObjectRecursively', ->
 		it 'takes mapper functions and goes over the object recursively, applying to objects with provided props', ->
 			input =
