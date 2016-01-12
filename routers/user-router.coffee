@@ -36,7 +36,7 @@ router.post '/', (req, res) ->
 				json: ->
 					res.send action.payload
 		.catch (err) ->
-			console.error err
+			console.error err.stack
 			res.status(err.status || 500).send err
 
 router.use (req, res, next) ->

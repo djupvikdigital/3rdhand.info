@@ -60,8 +60,8 @@ module.exports =
 	localeSelector: localeSelector
 	loginSelector: Reselect.createSelector(
 		[ loginSelector, localeSelector ]
-		(state, localeState) ->
-			state.localeStrings = localeState.localeStrings.LoginDialog
+		(state, localeStrings) ->
+			state.localeStrings = localeStrings.LoginDialog
 			state
 	)
 	menuSelector: menuSelector

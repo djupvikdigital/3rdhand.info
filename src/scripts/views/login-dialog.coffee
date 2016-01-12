@@ -24,7 +24,7 @@ module.exports = React.createClass
 			username = @props.user.name
 		from = ''
 		if @props.params
-			from = URL.getPath @props.params
+			from = JSON.stringify @props.params
 		return { from, id, username }
 	handleLogin: (data) ->
 		@props.dispatch actions.login data

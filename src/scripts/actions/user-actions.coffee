@@ -13,8 +13,9 @@ module.exports =
 		payload:
 			promise: API.login(data).then (body) ->
 				(action, dispatch) ->
-					userPath = URL.getUserPath body.user._id
-					dispatch ReduxRouter.pushPath userPath + data.from
+					params = JSON.parse data.from
+					params.userId = utils.getUserId body.user._id
+					dispatch ReduxRouter.pushPath URL.getPath(params), params
 					action.payload = body
 					dispatch action
 	logout: (data) ->
