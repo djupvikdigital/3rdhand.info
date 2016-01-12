@@ -60,7 +60,8 @@ module.exports = React.createClass
 				)
 				TextInput label: l.slug, name: 'slug'
 				TextInput label: l.title, name: 'title'
-				TextInput label: l.subtitle, name: 'subtitle'
+				TextInput label: l.short_title, name: 'short_title'
+				TextInput label: l.headline, name: 'headline'
 				TextInput label: l.teaser, name: 'teaser', multiline: true
 				TextInput label: l.summary, name: 'summary', multiline: true
 				TextInput label: l.intro, name: 'intro', multiline: true

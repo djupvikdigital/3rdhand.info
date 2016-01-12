@@ -12,7 +12,8 @@ ArticleEditor:
     english: English
     slug: Slug
     title: Title
-    subtitle: Subtitle
+    short_title: Short Title
+    headline: Headline
     teaser: Teaser
     summary: Summary
     intro: Intro

@@ -12,7 +12,8 @@ ArticleEditor:
     english: Engelsk
     slug: Slug
     title: Tittel
-    subtitle: Undertittel
+    short_title: Kort tittel
+    headline: Overskrift
     teaser: Teaser
     summary: Sammendrag
     intro: Intro

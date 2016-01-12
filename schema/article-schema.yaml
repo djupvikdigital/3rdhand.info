@@ -46,11 +46,15 @@ properties:
         type: string
         default: untitled
     title:
-        description: Article title
+        description: Title
         type: object
         properties: *lmdi
-    subtitle:
-        description: Optional subtitle
+    short_title:
+        description: Optional short title
+        type: object
+        properties: *lmdi
+    headline:
+        description: Headline
         type: object
         properties: *lmdi
     teaser:
