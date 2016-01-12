@@ -50,6 +50,28 @@ describe 'utils module', ->
 				'baz'
 			expect(utils.createPropertyMapper('foo', fn).call input).toBe null
 
+	describe 'filterValues', ->
+		it 'filters an array of key/value pairs by values', ->
+			input = [
+				[ 'foo', 'bar' ]
+				[ 'bar', 'baz' ]
+			]
+			test = [
+				[ 'foo', 'bar' ]
+			]
+			fn = (v) ->
+				v == 'bar'
+			expect(t.seq input, utils.filterValues fn).toEqual test
+		it 'filters truthy values if no filter function is provided', ->
+			input = [
+				[ 'foo', 'bar' ]
+				[ 'bar', '' ]
+			]
+			test = [
+				[ 'foo', 'bar' ]
+			]
+			expect(t.seq input, utils.filterValues()).toEqual test
+
 	describe 'getProps', ->
 		it 'returns an object with only the props in the provided array of keys', ->
 			input =
