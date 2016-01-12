@@ -40,6 +40,7 @@ describe 'URL modules', ->
 			test =
 				lang: 'en'
 			expect(URL.getParams input).toEqual test
+
 	describe 'getPath', ->
 		it 'can rebuild a path from params', ->
 			path = '/2015/09/29/slug/view'
@@ -55,3 +56,20 @@ describe 'URL modules', ->
 			params =
 				lang: 'en'
 			expect(URL.getPath params).toBe path
+
+	describe 'splitPath', ->
+		it 'splits a path into an object with path and filename arrays', ->
+			path = '/2015/09/29/slug.no'
+			test =
+				path: [
+					''
+					'2015'
+					'09'
+					'29'
+					'slug'
+				]
+				filename: [
+					'slug'
+					'no'
+				]
+			expect(URL.splitPath path).toEqual test
