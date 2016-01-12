@@ -5,11 +5,14 @@ Immutable = require 'immutable'
 utils = require '../utils.coffee'
 URL = require '../url.coffee'
 
-{ argsToObject, get } = utils
+{ argsToObject, prop } = utils
 
-localeSelector = get 'localeState', (state) ->
-	lang = state.get 'lang'
-	return state.getIn([ 'localeStrings', lang ]).toJS()
+localeSelector = compose(
+	(state) ->
+		lang = state.get 'lang'
+		return state.getIn([ 'localeStrings', lang ]).toJS()
+	prop 'localeState'
+)
 
 loginSelector = (state) ->
 	params = Immutable.Map(state.routing.state).delete 'view'
@@ -36,13 +39,13 @@ paramSelector = (state) ->
 	Object.assign {}, state.routing.state
 
 menuSelector = Reselect.createSelector(
-	[ compose(get('SiteMenu'), localeSelector), loginSelector, paramSelector ]
+	[ compose(prop('SiteMenu'), localeSelector), loginSelector, paramSelector ]
 	argsToObject 'localeStrings', 'login', 'params'
 )
 
 module.exports =
 	langPickerSelector: Reselect.createSelector(
-		[ paramSelector, compose(get('LangPicker'), localeSelector) ]
+		[ paramSelector, compose(prop('LangPicker'), localeSelector) ]
 		argsToObject 'params', 'localeStrings'
 	)
 	linkSelector: (state, props) ->
@@ -64,7 +67,7 @@ module.exports =
 	menuSelector: menuSelector
 	paramSelector: paramSelector
 	signupSelector: Reselect.createSelector(
-		[ compose(get('SignupDialog'), localeSelector) ]
+		[ compose(prop('SignupDialog'), localeSelector) ]
 		argsToObject 'localeStrings'
 	)
 	titleSelector: titleSelector

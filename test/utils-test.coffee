@@ -87,6 +87,12 @@ describe 'utils module', ->
 			]
 			expect(utils.mapObjectRecursively.apply(null, args)).toEqual test
 
+	describe 'prop', ->
+		it 'returns a function when given an object returns the named property', ->
+			input =
+				foo: 'bar'
+			expect(utils.prop('foo')(input)).toBe 'bar'
+
 	describe 'stripDbFields', ->
 		it 'removes fields _id and _rev from an object', ->
 			input =

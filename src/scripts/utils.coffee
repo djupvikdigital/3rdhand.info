@@ -33,12 +33,9 @@ argArray = (fn) ->
 		else
 			fn arg
 
-get = (prop, fn) ->
+prop = (k) ->
 	(obj) ->
-		if typeof fn == 'function'
-			fn obj[prop]
-		else
-			obj[prop]
+		obj[k]
 
 keyFilter = (fn) ->
 	argArray (k) ->
@@ -151,7 +148,7 @@ module.exports =
 	array: array
 	createFormatMapper: createFormatMapper
 	createPropertyMapper: createPropertyMapper
-	get: get
+	prop: prop
 	getProps: getProps
 	getUserId: (userId) ->
 		getUserId(userId).cuid || userId
