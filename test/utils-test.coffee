@@ -33,6 +33,23 @@ describe 'utils module', ->
 			text = 'Markdown *em*.'
 			expect(utils.createFormatMapper()(format, text)).toEqual text
 
+	describe 'createPropertyMapper', ->
+		it 'takes a property key and a function, when applied to an object it sets the object key to the function return value', ->
+			input =
+				foo: 'bar'
+			test =
+				foo: 'bar'
+				baz: 'quux'
+			fn = ->
+				'quux'
+			expect(utils.createPropertyMapper('baz', fn).call input).toEqual test
+		it 'returns null if the property key already exists', ->
+			input =
+				foo: 'bar'
+			fn = ->
+				'baz'
+			expect(utils.createPropertyMapper('foo', fn).call input).toBe null
+
 	describe 'getProps', ->
 		it 'returns an object with only the props in the provided array of keys', ->
 			input =
