@@ -9,10 +9,8 @@ Elements = require '../elements.coffee'
 module.exports = (props) ->
 	if !props.article
 		return div()
-	{ href, title, subtitle, intro, body } = props.article
-	h = h1 innerHtml: title
-	if subtitle
-		h = header h, p innerHtml: subtitle
+	{ title, headline, intro, body } = props.article
+	h = h1 innerHtml: headline || title
 	res = div(
 		h
 		if intro

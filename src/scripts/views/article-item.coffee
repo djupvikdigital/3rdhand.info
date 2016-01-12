@@ -11,13 +11,19 @@ Link = createFactory ReactRedux.connect(linkSelector)(Router.Link)
 { div, header, h1, time } = Elements
 
 module.exports = (props) ->
-	console.log props.article
-	{ urlParams, title, summary, published, publishedFormatted } = props.article
+	{
+		urlParams
+		title
+		headline
+		summary
+		published
+		publishedFormatted
+	} = props.article
 	div(
 		header(
 			h1(
 				{ className: 'article__heading' }
-				Link params: urlParams, innerHtml: title
+				Link params: urlParams, innerHtml: headline || title
 			)
 			time(
 				{ className: 'milli', dateTime: published }
