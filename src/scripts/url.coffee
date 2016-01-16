@@ -1,5 +1,5 @@
 utils = require './utils.coffee'
-padLeft = require 'lodash/string/padLeft'
+padStart = require 'lodash/padStart'
 
 assemblePath = (obj) ->
 	if !Array.isArray(obj.path) || !Array.isArray(obj.filename)
@@ -35,7 +35,7 @@ getPath = (params) ->
 	keys = dateKeys.concat [ 'slug', 'view' ]
 	path = keys.map (k) ->
 		if params[k] && dateKeys.indexOf(k) != -1
-			param = padLeft params[k], 2, '0'
+			param = padStart params[k], 2, '0'
 		else
 			param = params[k]
 		encodeMaybe param

@@ -1,17 +1,25 @@
 ReactRedux = require 'react-redux'
+Router = require 'react-router'
 
 createFactory = require '../create-factory.coffee'
-selector = require('../selectors/app-selectors.coffee').menuSelector
-
+selectors = require '../selectors/app-selectors.coffee'
 Elements = require '../elements.coffee'
+
+logo = require 'logo'
+
+Link = createFactory ReactRedux.connect(selectors.linkSelector)(Router.Link)
 SiteMenu = createFactory(
-	ReactRedux.connect(selector)(require './site-menu.coffee')
+	ReactRedux.connect(selectors.menuSelector)(require './site-menu.coffee')
 )
 
-{ div } = Elements
+{ header, div } = Elements
 
 module.exports = (props) ->
 	div(
+		header(
+			className: 'site-header', role: 'banner'
+			Link className: 'site-header__logo', innerHtml: logo
+		)
 		SiteMenu()
 		div(
 			className: 'wrapper'

@@ -1,18 +1,17 @@
 .site-header {
-	height: 100px;
 	text-align: center;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 10rem;
 	font-weight: 800;
 	font-style: italic;
 	letter-spacing: -0.08em;
-	background-color: $site-header-bg-color;
+	background-color: $color-shadow;
 }
 
 .site-header__logo {
 	float: left;
 	position: relative;
-	width: 10rem;
+	width: 9rem;
 	vertical-align: top;
 }
 
@@ -30,13 +29,14 @@
 	bottom: 0;
 	z-index: 1;
 	overflow: visible;
+	fill: $color-shadow;
 }
 
 .site-header__logo circle {
-	fill: $site-logo-bg-color;
+	fill: $color-secondary;
 	paint-order: stroke;
-	stroke: $site-header-bg-color;
-	stroke-dashoffset: -35%;
+	stroke: $color-shadow;
+	stroke-dashoffset: 20%;
 	stroke-dasharray: 337.72, 337.72;
 	stroke-width: 20px;
 }
@@ -55,7 +55,16 @@
 	bottom: 0;
 }
 
-.site-header__title text,
-.site-header__title use {
-	fill: hsl($site-header-bg-hue, 72%, 53%);
+.site-header__title text {
+	fill: mix($color-highlight, $color-primary, 30%);
+}
+
+.site-title__shadow--large {
+	transform: scale(1.5);
+	fill: mix($color-highlight, $color-primary, 65%);
+}
+
+.site-title__shadow--small {
+	transform: scale(0.3);
+	fill: mix($color-highlight, $color-primary, 86%);
 }

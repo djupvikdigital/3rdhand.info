@@ -1,9 +1,9 @@
 .site-menu {
 	padding-left: 10rem;
 	padding-right: 2em;
-	border-bottom: 10px solid $site-header-bg-color;
+	border-bottom: 10px solid $color-shadow;
 	margin: 0 0 2em;
-	background-color: $site-logo-bg-color;
+	background-color: $color-secondary;
 }
 
 .site-menu__lang-picker {
@@ -21,4 +21,5 @@
 	font-weight: bold;
 	text-decoration: none;
 	text-transform: uppercase;
+	color: $color-shadow;
 }

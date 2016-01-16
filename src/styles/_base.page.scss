@@ -1,6 +1,8 @@
 html {
 	height: 100%;
-	font-family: 'Open Sans', sans-serif;	
+	font-family: 'Open Sans', sans-serif;
+	color: $color-shadow;
+	background-color: $color-highlight;
 }
 
 body {
@@ -10,6 +12,6 @@ body {
 	background-size: 50em auto;
 }
 
-a:link {
-	color: $link-color;
+a:link, a:visited {
+	color: $color-primary;
 }

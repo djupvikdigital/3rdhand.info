@@ -1,3 +1,8 @@
+$color-primary: hsl(269, 100%, 39%); // hsl(216, 100%, 34%);
+$color-secondary: hsl(60, 100%, 50%); // hsl(40, 100%, 74%);
+$color-highlight: hsl(58, 95%, 98%);
+$color-shadow: hsl(319, 15%, 25%);
+
 @import "node_modules/inuit-starter-kit/node_modules/inuit-defaults/settings.defaults";
 
 @import "node_modules/inuit-functions/tools.functions";

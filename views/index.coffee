@@ -1,12 +1,8 @@
 React = require 'react'
 
-utils = require '../utils.coffee'
 Elements = require '../src/scripts/elements.coffee'
 
 { html, head, meta, title, link, body, header, div, script } = Elements
-
-siteHeader = utils.read '/dist/svg/site-header.svg'
-logo = utils.read '/dist/svg/logo.svg'
 
 googleFontsUrl = 'http://fonts.googleapis.com/css?family='
 
@@ -36,17 +32,6 @@ module.exports = React.createClass
 				)
 			)
 			body(
-				header(
-					{ className: "site-header", role: "banner" }
-					div(
-						className: "site-header__logo"
-						innerHtml: logo
-					)
-					div(
-						className: "site-header__title"
-						innerHtml: siteHeader
-					)
-				)
 				div(id: "app", innerHtml: @props.app)
 				script
 					id: 'state', type: 'application/json'
