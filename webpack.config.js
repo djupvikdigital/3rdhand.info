@@ -12,6 +12,9 @@ var svgoConfig = JSON.stringify(
 );
 
 var plugins = [
+	new webpack.DefinePlugin({
+		__SERVER__: 'http://localhost:8080'
+	}),
 	new ExtractTextPlugin('styles/main.css')
 ];
 

@@ -2,6 +2,11 @@ React = require 'react'
 
 Elements = require '../src/scripts/elements.coffee'
 
+production = process.env.NODE_ENV == 'production'
+server = ''
+if !production
+	server = 'http://localhost:8080'
+
 { html, head, meta, title, link, body, header, div, script } = Elements
 
 googleFontsUrl = 'http://fonts.googleapis.com/css?family='
@@ -28,7 +33,7 @@ module.exports = React.createClass
 				)
 				link(
 					rel: "stylesheet"
-					href: "http://localhost:8080/dist/styles/main.css"
+					href: server + '/dist/styles/main.css'
 				)
 			)
 			body(
@@ -36,6 +41,6 @@ module.exports = React.createClass
 				script
 					id: 'state', type: 'application/json'
 					JSON.stringify @props.state
-				script(src: "http://localhost:8080/dist/scripts/main.js")
+				script src: server + '/dist/scripts/main.js'
 			)
 		)
