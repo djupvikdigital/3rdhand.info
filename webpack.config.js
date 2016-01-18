@@ -77,6 +77,6 @@ module.exports = {
 	output: {
 		path: path.resolve(__dirname, 'dist'),
 		filename: production ? 'scripts/[chunkhash].js' : '[name].js',
-		publicPath: 'dist/'
+		publicPath: 'http://localhost:8080/dist/'
 	}
 }
