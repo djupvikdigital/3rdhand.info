@@ -2,12 +2,14 @@ React = require 'react'
 ReactRedux = require 'react-redux'
 Router = require 'react-router'
 
+logo = require 'logo'
+
 createFactory = require '../create-factory.coffee'
 Elements = require '../elements.coffee'
 selectors = require '../selectors/app-selectors.coffee'
 userActions = require '../actions/user-actions.coffee'
 
-{ nav, ul, li } = Elements
+{ header, nav, ul, li } = Elements
 
 Link = createFactory ReactRedux.connect(selectors.linkSelector)(Router.Link)
 LangPicker = createFactory ReactRedux.connect(selectors.langPickerSelector)(
@@ -15,7 +17,7 @@ LangPicker = createFactory ReactRedux.connect(selectors.langPickerSelector)(
 )
 
 module.exports = React.createClass
-	displayName: 'SiteMenu'
+	displayName: 'SiteHeader'
 	handleLogout: (e) ->
 		e.preventDefault()
 		data =
@@ -50,8 +52,12 @@ module.exports = React.createClass
 			ulArgs.push(
 				li key: 'login', Link params: loginParams, login
 			)
-		nav(
-			{ className: 'site-menu' }
-			LangPicker className: 'site-menu__lang-picker'
-			ul ulArgs
+		header(
+			role: 'banner'
+			Link className: 'site-logo', title: home, innerHtml: logo
+			nav(
+				className: 'site-menu'
+				LangPicker className: 'site-menu__lang-picker'
+				ul ulArgs
+			)
 		)

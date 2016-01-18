@@ -38,12 +38,17 @@ titleSelector = Reselect.createSelector [ localeSelector ], (localeStrings) ->
 paramSelector = (state) ->
 	Object.assign {}, state.routing.state
 
-menuSelector = Reselect.createSelector(
-	[ compose(prop('SiteMenu'), localeSelector), loginSelector, paramSelector ]
+headerSelector = Reselect.createSelector(
+	[
+		compose(prop('SiteHeader'), localeSelector)
+		loginSelector
+		paramSelector
+	]
 	argsToObject 'localeStrings', 'login', 'params'
 )
 
 module.exports =
+	headerSelector: headerSelector
 	langPickerSelector: Reselect.createSelector(
 		[ paramSelector, compose(prop('LangPicker'), localeSelector) ]
 		argsToObject 'params', 'localeStrings'
@@ -64,7 +69,6 @@ module.exports =
 			state.localeStrings = localeStrings.LoginDialog
 			state
 	)
-	menuSelector: menuSelector
 	paramSelector: paramSelector
 	signupSelector: Reselect.createSelector(
 		[ compose(prop('SignupDialog'), localeSelector) ]

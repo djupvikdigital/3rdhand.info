@@ -9,7 +9,7 @@ initialState = Immutable.fromJS
 	langMap: {}
 	localeStrings:
 		nb:
-			SiteMenu: {}
+			SiteHeader: {}
 			ArticleEditor: {}
 			LangPicker: {}
 			LoginDialog: {}
