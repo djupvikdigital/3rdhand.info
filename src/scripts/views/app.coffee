@@ -12,6 +12,7 @@ SiteHeader = createFactory(
 
 module.exports = (props) ->
 	div(
+		className: 'u-overflow-hidden'
 		SiteHeader()
 		div(
 			className: 'wrapper'

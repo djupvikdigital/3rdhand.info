@@ -1,5 +1,9 @@
-.site-logo {
+.site-header {
 	float: left;
+}
+
+.site-logo {
+	display: block;
 	position: relative;
 	width: 9rem;
 	vertical-align: top;
@@ -26,7 +30,5 @@
 	fill: $color-secondary;
 	paint-order: stroke;
 	stroke: $color-shadow;
-	stroke-dashoffset: 20%;
-	stroke-dasharray: 337.72, 337.72;
 	stroke-width: 20px;
 }

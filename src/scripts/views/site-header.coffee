@@ -9,7 +9,7 @@ Elements = require '../elements.coffee'
 selectors = require '../selectors/app-selectors.coffee'
 userActions = require '../actions/user-actions.coffee'
 
-{ header, nav, ul, li } = Elements
+{ div, header, nav, ul, li } = Elements
 
 Link = createFactory ReactRedux.connect(selectors.linkSelector)(Router.Link)
 LangPicker = createFactory ReactRedux.connect(selectors.langPickerSelector)(
@@ -36,7 +36,7 @@ module.exports = React.createClass
 		}
 		loginParams = Object.assign {}, @props.params, { view: 'login' }
 		ulArgs = [
-			className: 'list-inline'
+			className: 'list-bare'
 			li Link home
 		]
 		if @props.login.isLoggedIn
@@ -52,12 +52,14 @@ module.exports = React.createClass
 			ulArgs.push(
 				li key: 'login', Link params: loginParams, login
 			)
-		header(
-			role: 'banner'
-			Link className: 'site-logo', title: home, innerHtml: logo
-			nav(
-				className: 'site-menu'
-				LangPicker className: 'site-menu__lang-picker'
-				ul ulArgs
+		div(
+			header(
+				className: 'site-header', role: 'banner'
+				Link className: 'site-logo', title: home, innerHtml: logo
+				nav(
+					className: 'site-menu menu'
+					ul ulArgs
+				)
 			)
+			LangPicker className: 'menu'
 		)

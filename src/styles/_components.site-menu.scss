@@ -1,25 +1,3 @@
 .site-menu {
-	padding-left: 10rem;
-	padding-right: 2em;
-	border-bottom: 10px solid $color-shadow;
-	margin: 0 0 2em;
-	background-color: $color-secondary;
-}
-
-.site-menu__lang-picker {
-	float: right;
-}
-
-.site-menu li:first-child {
-	padding-left: 2em;
-}
-
-.site-menu a {
-	display: block;
-	padding: .5em 1.25em;
-	font-size: 1.2rem;
-	font-weight: bold;
-	text-decoration: none;
-	text-transform: uppercase;
-	color: $color-shadow;
+	margin: 2em 0;
 }
