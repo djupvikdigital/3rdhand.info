@@ -54,12 +54,12 @@ module.exports = React.createClass
 			)
 		div(
 			header(
-				className: 'site-header', role: 'banner'
+				className: 'u-left', role: 'banner'
 				Link className: 'site-logo', title: home, innerHtml: logo
 				nav(
 					className: 'site-menu menu'
 					ul ulArgs
 				)
 			)
-			LangPicker className: 'menu'
+			LangPicker className: 'menu u-right'
 		)
