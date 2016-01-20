@@ -1,11 +1,8 @@
 router = require('express').Router()
 session = require 'cookie-session'
 moment = require 'moment'
-ReactRouter = require 'react-router'
 URL = require 'url'
 
-routes = require '../src/scripts/views/routes.coffee'
-renderTemplate = require '../render-template.coffee'
 createStore = require '../src/scripts/store.coffee'
 userActions = require '../src/scripts/actions/user-actions.coffee'
 articleActions = require '../src/scripts/actions/article-actions.coffee'

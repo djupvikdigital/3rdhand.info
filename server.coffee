@@ -1,8 +1,6 @@
 express = require 'express'
 favicon = require 'serve-favicon'
 bodyParser = require 'body-parser'
-ReactRouter = require 'react-router'
-ReduxRouter = require 'redux-simple-router'
 
 global.__DEVTOOLS__ = false
 
@@ -11,12 +9,8 @@ createStore = require './src/scripts/store.coffee'
 articleSelectors = require './src/scripts/selectors/article-selectors.coffee'
 userRouter = require './routers/user-router.coffee'
 siteRouter = require './routers/site-router.coffee'
-negotiateLang = require './negotiate-lang.coffee'
-routes = require './src/scripts/views/routes.coffee'
-URL = require './url.coffee'
+defaultRouterHandler = require './default-handler.coffee'
 createStore = require './src/scripts/store.coffee'
-renderTemplate = require './render-template.coffee'
-userActions = require './src/scripts/actions/user-actions.coffee'
 
 server = express()
 server.use favicon './favicon.ico'
@@ -52,6 +46,17 @@ server.get '/index.atom', (req, res) ->
 server.get '/locales/:lang', (req, res) ->
 	API.fetchLocaleStrings(req.params.lang).then res.send.bind res
 
+server.get '/signup', (req, res) ->
+	API.isSignupAllowed().then (isAllowed) ->
+		if isAllowed
+			res.format
+				html: ->
+					defaultRouterHandler req, res
+				default: ->
+					res.status(204).end()
+		else
+			res.sendStatus 404
+
 server.post '/signup', (req, res) ->
 	API.signup req.body
 		.then (body) ->
@@ -68,26 +73,7 @@ server.use (err, req, res, next) ->
 		res.status 404
 		res.format
 			html: ->
-				lang = negotiateLang req
-				url = req.originalUrl
-				config =
-					location: url
-					routes: routes
-				ReactRouter.match config, (err, redirectLocation, props) ->
-					if err
-						res.status(500).send err.message
-					else if redirectLocation
-						res.redirect(
-							302
-							redirectLocation.pathname + redirectLocation.search
-						)
-					else if props
-						params = URL.getParams props.params
-						storeModule = createStore()
-						{ store, history } = storeModule
-						store.dispatch ReduxRouter.replacePath url, params
-						renderTemplate storeModule, params, lang
-							.then res.send.bind res
+				defaultRouterHandler req, res
 			default: ->
 				res.send { error: 'Not Found' }
 	else if err.message == 'no route match'

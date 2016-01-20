@@ -78,7 +78,7 @@ put = (userId, doc) ->
 			db.put doc
 		else
 			error = new Error('permission denied')
-			error.status == 403
+			error.status = 403
 			throw error
 
 authenticate = (username, password) ->
@@ -91,17 +91,29 @@ authenticate = (username, password) ->
 			if err.status == 404
 				console.log 'Invalid login attempt'
 				error = new Error('authentication failed')
-				error.status == 401
+				error.status = 401
 				throw error
 			console.error err
 
 getUserId = ->
 	'user/' + cuid()
 
+isSignupAllowed = ->
+	# only one user allowed - TODO: make configurable
+	get startkey: 'user', endkey: 'user\uffff'
+		.then (users) ->
+			!users.length
+
 addUser = (data) ->
 	if !data || data.password != data.repeatPassword
-		return false
-	genSalt 10
+		return Promise.resolve false
+	isSignupAllowed()
+		.then (isAllowed) ->
+			if !isAllowed
+				error = new Error('permission denied')
+				error.status = 403
+				throw error
+			return genSalt 10
 		.then (salt) ->
 			hash data.password, salt
 		.then (hash) ->
@@ -131,5 +143,6 @@ module.exports = {
 	authenticate
 	db
 	get
+	isSignupAllowed
 	put
 }
