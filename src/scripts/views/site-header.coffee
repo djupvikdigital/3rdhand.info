@@ -25,7 +25,7 @@ module.exports = React.createClass
 			from: JSON.stringify @props.params
 		@props.dispatch userActions.logout data
 	render: ->
-		{ home, login, newArticle, logout } = @props.localeStrings
+		{ home, newArticle, logout } = @props.localeStrings
 		now = new Date()
 		newParams = {
 			year: now.getFullYear()

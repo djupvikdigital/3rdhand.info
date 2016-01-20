@@ -1,7 +1,6 @@
 title: 3rdhand.info
 SiteHeader:
     home: Home
-    login: Log in
     newArticle: New Article
     logout: Log out
 LangPicker:
