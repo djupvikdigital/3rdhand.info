@@ -21,7 +21,7 @@ module.exports = React.createClass
 	render: ->
 		{
 			title
-			username
+			email
 			password
 			repeatPassword
 			signup
@@ -30,7 +30,7 @@ module.exports = React.createClass
 			title: title
 			Form(
 				onSubmit: @handleSignup
-				TextInput label: username, name: 'user'
+				TextInput label: email, name: 'email'
 				PasswordInput label: password, name: 'password'
 				PasswordInput label: repeatPassword, name: 'repeatPassword'
 				FormGroup(

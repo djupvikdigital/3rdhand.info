@@ -29,9 +29,9 @@ defaultTransform = (body) ->
 	return t.map body.rows, getDocFromRow
 
 viewHandlers =
-	by_name: (query) ->
+	by_email: (query) ->
 		query.include_docs = true
-		db.query 'app/by_name', query
+		db.query 'app/by_email', query
 			.then (body) ->
 				if body.rows.length
 					getDocFromRow body.rows[0]
@@ -81,8 +81,8 @@ put = (userId, doc) ->
 			error.status = 403
 			throw error
 
-authenticate = (username, password) ->
-	viewHandlers.by_name key: [ 'user', username ]
+authenticate = (email, password) ->
+	viewHandlers.by_email key: [ 'user', email ]
 		.then (user) ->
 			compare(password, user.password_hash).then (passwordMatch) ->
 				if passwordMatch then return user
@@ -120,7 +120,7 @@ addUser = (data) ->
 			doc =
 				_id: getUserId()
 				type: 'user'
-				name: data.user
+				email: data.email
 				password_hash: hash
 				roles: [ 'write' ]
 			db.put doc

@@ -21,17 +21,17 @@ module.exports = React.createClass
 	getInitialData: ->
 		if @props.user
 			id = @props.user._id
-			username = @props.user.name
+			email = @props.user.email
 		from = ''
 		if @props.params
 			from = JSON.stringify @props.params
-		return { from, id, username }
+		return { from, id, email }
 	handleLogin: (data) ->
 		@props.dispatch actions.login data
 	handleLogout: (data) ->
 		@props.dispatch actions.logout data
 	render: ->
-		{ loggedInAs, logout, username, password, login } = @props.localeStrings
+		{ loggedInAs, logout, email, password, login } = @props.localeStrings
 		DocumentTitle(
 			{ title: 'Admin' }
 			Form(
@@ -43,7 +43,7 @@ module.exports = React.createClass
 						onSubmit: @handleLogout
 						input type: 'hidden', name: 'from'
 						input type: 'hidden', name: 'id'
-						Output label: loggedInAs, name: 'username'
+						Output label: loggedInAs, name: 'email'
 						FormGroup(
 							input className: 'btn', type:"submit", value: logout
 						)
@@ -55,7 +55,7 @@ module.exports = React.createClass
 						initialData: @getInitialData()
 						onSubmit: @handleLogin
 						input type: 'hidden', name: 'from'
-						TextInput label: username, name: 'username'
+						TextInput label: email, name: 'email'
 						PasswordInput label: password, name: 'password'
 						FormGroup(
 							input className: 'btn', type: "submit", value: login

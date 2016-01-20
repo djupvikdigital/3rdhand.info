@@ -22,12 +22,12 @@ ArticleEditor:
 LoginDialog:
     loggedInAs: Innlogget som
     logout: Logg ut
-    username: Brukernavn
+    email: E-post
     password: Passord
     login: Logg inn
 SignupDialog:
     title: Registrer deg
-    username: Brukernavn
+    email: E-post
     password: Passord
     repeatPassword: Gjenta passord
     signup: Registrer deg

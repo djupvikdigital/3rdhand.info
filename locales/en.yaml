@@ -22,12 +22,12 @@ ArticleEditor:
 LoginDialog:
     loggedInAs: Logged in as
     logout: Log out
-    username: Username
+    email: E-mail
     password: Password
     login: Log in
 SignupDialog:
     title: Sign Up
-    username: Username
+    email: E-mail
     password: Password
     repeatPassword: Repeat password
     signup: Sign up
