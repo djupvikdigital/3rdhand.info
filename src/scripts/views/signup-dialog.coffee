@@ -12,7 +12,7 @@ PasswordInput = createFactory require './password-input.coffee'
 
 actions = require '../actions/user-actions.coffee'
 
-{ input } = Elements
+{ h1, input } = Elements
 
 module.exports = React.createClass
 	displayName: 'SignupDialog'
@@ -30,6 +30,7 @@ module.exports = React.createClass
 			title: title
 			Form(
 				onSubmit: @handleSignup
+				h1 title
 				TextInput label: email, name: 'email'
 				PasswordInput label: password, name: 'password'
 				PasswordInput label: repeatPassword, name: 'repeatPassword'

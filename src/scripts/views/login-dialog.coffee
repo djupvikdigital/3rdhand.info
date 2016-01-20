@@ -14,36 +14,39 @@ PasswordInput = createFactory require './password-input.coffee'
 
 actions = require '../actions/user-actions.coffee'
 
-{ form, label, input } = Elements
+{ h1, form, label, input } = Elements
 
 module.exports = React.createClass
 	displayName: 'LoginDialog'
 	getInitialData: ->
 		if @props.user
 			id = @props.user._id
-			email = @props.user.email
+			name = @props.user.name || id
 		from = ''
 		if @props.params
 			from = JSON.stringify @props.params
-		return { from, id, email }
+		return { from, id, name }
 	handleLogin: (data) ->
 		@props.dispatch actions.login data
 	handleLogout: (data) ->
 		@props.dispatch actions.logout data
 	render: ->
 		{ loggedInAs, logout, email, password, login } = @props.localeStrings
+		isLoggedIn = @props.isLoggedIn
+		title = if isLoggedIn then logout else login
 		DocumentTitle(
-			{ title: 'Admin' }
+			title: title
 			Form(
-				if @props.isLoggedIn
+				if isLoggedIn
 					[
 						action: URL.getUserPath(@props.user._id) + '/logout'
 						method: 'GET'
 						initialData: @getInitialData()
 						onSubmit: @handleLogout
+						h1 title
 						input type: 'hidden', name: 'from'
 						input type: 'hidden', name: 'id'
-						Output label: loggedInAs, name: 'email'
+						Output label: loggedInAs, name: 'name'
 						FormGroup(
 							input className: 'btn', type:"submit", value: logout
 						)
@@ -54,6 +57,7 @@ module.exports = React.createClass
 						method: 'POST'
 						initialData: @getInitialData()
 						onSubmit: @handleLogin
+						h1 title
 						input type: 'hidden', name: 'from'
 						TextInput label: email, name: 'email'
 						PasswordInput label: password, name: 'password'
