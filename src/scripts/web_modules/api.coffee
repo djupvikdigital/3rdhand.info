@@ -35,6 +35,13 @@ module.exports =
 		request
 			.get __SERVER__ + URL.getUserPath(userId) + '/logout'
 			.accept 'application/json'
+	resetPassword: (email) ->
+		if !email
+			throw new Error('no email provided')
+		request
+			.get __SERVER__ + + '/users'
+			.accept 'application/json'
+			.send { email }
 	saveArticle: (article, userId) ->
 		now = (new Date()).toISOString()
 		article.created = now unless article.created

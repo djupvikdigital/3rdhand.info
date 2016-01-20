@@ -24,6 +24,7 @@ LoginDialog:
     email: E-post
     password: Passord
     login: Logg inn
+    forgotten_password: Glemt passord
 SignupDialog:
     title: Registrer deg
     email: E-post

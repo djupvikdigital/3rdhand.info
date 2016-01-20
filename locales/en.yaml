@@ -24,6 +24,7 @@ LoginDialog:
     email: E-mail
     password: Password
     login: Log in
+    forgotten_password: Forgotten Password
 SignupDialog:
     title: Sign Up
     email: E-mail

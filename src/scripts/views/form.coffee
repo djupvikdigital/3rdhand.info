@@ -15,6 +15,8 @@ module.exports = React.createClass
 		}
 	getDefaultProps: ->
 		return {
+			action: ''
+			method: 'GET'
 			placeholders: {}
 			initialData: {}
 		}
@@ -34,28 +36,38 @@ module.exports = React.createClass
 	componentWillReceiveProps: (nextProps) ->
 		@setState @propsToState nextProps
 	handleChange: (e) ->
+		console.log 'change'
 		@setValue e.target.name, e.target.value
 	handleSubmit: (e) ->
-		e.preventDefault()
 		if typeof @props.onSubmit == 'function'
+			e.preventDefault()
 			@props.onSubmit @state.data.toJS()
-	renderChildren: ->
-		React.Children.map(
-			@props.children
-			((child) ->
-				if child.props.name
-					props =
-						onChange: @handleChange
-					unless child.type == PasswordInput
-						props.value = @getValue(child.props.name)
-					placeholder = @getPlaceholder child.props.name
-					if placeholder
-						props.placeholder = placeholder
-					React.cloneElement child, props
-				else
-					child
-			)
-			this
-		)
+	renderChild: (child) ->
+		if !child.props
+			return child
+		children = null
+		if child.props.children
+			children = React.Children.map child.props.children, @renderChild, this
+		if child.props.name
+			props =
+				onChange: @handleChange
+			unless child.type == PasswordInput
+				props.value = @getValue(child.props.name)
+			placeholder = @getPlaceholder child.props.name
+			if placeholder
+				props.placeholder = placeholder
+			if children
+				React.cloneElement child, props, children
+			else
+				React.cloneElement child, props
+		else if children
+			React.cloneElement child, {}, children
+		else
+			child
 	render: ->
-		form({ onSubmit: @handleSubmit }, @renderChildren())
+		form(
+			action: @props.action
+			method: @props.method
+			onSubmit: @handleSubmit
+			React.Children.map @props.children, @renderChild, this
+		)

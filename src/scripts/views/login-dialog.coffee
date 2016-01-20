@@ -11,10 +11,11 @@ Output = createFactory require './output.coffee'
 FormGroup = createFactory require './form-group.coffee'
 TextInput = createFactory require './text-input.coffee'
 PasswordInput = createFactory require './password-input.coffee'
+SubmitButton = createFactory require './submit-button.coffee'
 
 actions = require '../actions/user-actions.coffee'
 
-{ h1, form, label, input } = Elements
+{ h1, form, label, input, button } = Elements
 
 module.exports = React.createClass
 	displayName: 'LoginDialog'
@@ -30,8 +31,17 @@ module.exports = React.createClass
 		@props.dispatch actions.login data
 	handleLogout: (data) ->
 		@props.dispatch actions.logout data
+	handleClick: ->
+		console.log 'foo'
 	render: ->
-		{ loggedInAs, logout, email, password, login } = @props.localeStrings
+		{
+			loggedInAs,
+			logout,
+			email,
+			password,
+			login,
+			forgotten_password
+		} = @props.localeStrings
 		isLoggedIn = @props.isLoggedIn
 		title = if isLoggedIn then logout else login
 		DocumentTitle(
@@ -62,7 +72,9 @@ module.exports = React.createClass
 						TextInput label: email, name: 'email'
 						PasswordInput label: password, name: 'password'
 						FormGroup(
-							input className: 'btn', type: "submit", value: login
+							SubmitButton name: 'login', login
+							' '
+							SubmitButton name: 'resetpwd', forgotten_password
 						)
 					]
 			)

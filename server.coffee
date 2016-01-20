@@ -16,6 +16,7 @@ server = express()
 server.use favicon './favicon.ico'
 server.use(express.static(__dirname))
 server.use(bodyParser.json())
+server.use bodyParser.urlencoded extended: true
 
 server.use (req, res, next) ->
 	res.header 'Access-Control-Allow-Origin', '*'
@@ -76,6 +77,8 @@ server.use (err, req, res, next) ->
 				defaultRouterHandler req, res
 			default: ->
 				res.send { error: 'Not Found' }
+	else if err.message == 'invalid login'
+		res.sendStatus 400
 	else if err.message == 'no route match'
 		res.sendStatus 404
 	else

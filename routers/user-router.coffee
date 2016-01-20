@@ -3,6 +3,7 @@ session = require 'cookie-session'
 moment = require 'moment'
 URL = require 'url'
 
+API = require '../src/scripts/node_modules/api.coffee'
 createStore = require '../src/scripts/store.coffee'
 userActions = require '../src/scripts/actions/user-actions.coffee'
 articleActions = require '../src/scripts/actions/article-actions.coffee'
@@ -22,20 +23,28 @@ router.use session(
 )
 
 router.post '/', (req, res) ->
-	{ store } = createStore()
-	store.dispatch userActions.login req.body
-		.payload.promise.then (action) ->
-			{ user, timestamp } = action.payload
-			req.session.user = user
-			req.session.timestamp = timestamp
-			res.format
-				html: ->
-					res.redirect 303, getUserPath user._id + req.body.from
-				json: ->
-					res.send action.payload
-		.catch (err) ->
-			console.error err.stack
-			res.status(err.status || 500).send err
+	data = req.body
+	if data.resetpwd
+		if !data.email
+			throw new Error('please provide an email address')
+		API.resetPassword data.email
+	else
+		if !data.email || !data.password
+			throw new Error('invalid login')
+		{ store } = createStore()
+		store.dispatch userActions.login data
+			.payload.promise.then (action) ->
+				{ user, timestamp } = action.payload
+				req.session.user = user
+				req.session.timestamp = timestamp
+				res.format
+					html: ->
+						res.redirect 303, getUserPath user._id + data.from
+					json: ->
+						res.send action.payload
+			.catch (err) ->
+				console.error err.stack
+				res.status(err.status || 500).send err
 
 router.use (req, res, next) ->
 	timestamp = 0

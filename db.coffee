@@ -82,6 +82,9 @@ put = (userId, doc) ->
 			throw error
 
 authenticate = (email, password) ->
+	if !email || !password
+		error = new Error('authentication failed')
+		return Promise.reject error
 	viewHandlers.by_email key: [ 'user', email ]
 		.then (user) ->
 			compare(password, user.password_hash).then (passwordMatch) ->
