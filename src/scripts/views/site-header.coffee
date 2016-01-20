@@ -34,32 +34,26 @@ module.exports = React.createClass
 			slug: 'untitled'
 			view: 'new'
 		}
-		loginParams = Object.assign {}, @props.params, { view: 'login' }
-		ulArgs = [
-			className: 'list-bare'
-			li Link home
-		]
-		if @props.login.isLoggedIn
-			ulArgs.push(
-				li key: 'new-article', Link params: newParams, newArticle
-				li key: 'logout', Link(
-					slug: 'logout'
-					onClick: @handleLogout
-					logout
-				)
-			)
-		else
-			ulArgs.push(
-				li key: 'login', Link params: loginParams, login
-			)
 		div(
 			header(
 				className: 'u-left', role: 'banner'
 				Link className: 'site-logo', title: home, innerHtml: logo
-				nav(
-					className: 'site-menu menu'
-					ul ulArgs
-				)
+				if @props.login.isLoggedIn
+					nav(
+						className: 'site-menu menu'
+						ul(
+							className: 'list-bare'
+							li(
+								key: 'new-article'
+								Link params: newParams, newArticle
+							)
+							li key: 'logout', Link(
+								slug: 'logout'
+								onClick: @handleLogout
+								logout
+							)
+						)
+					)
 			)
 			LangPicker className: 'menu u-right'
 		)
