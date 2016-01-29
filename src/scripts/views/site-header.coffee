@@ -21,7 +21,7 @@ module.exports = React.createClass
 	handleLogout: (e) ->
 		e.preventDefault()
 		data =
-			id: @props.login.user._id
+			userId: @props.login.user._id
 			from: JSON.stringify @props.params
 		@props.dispatch userActions.logout data
 	render: ->

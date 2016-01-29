@@ -25,12 +25,12 @@ module.exports = React.createClass
 		if @props.login
 			{ user, params } = @props.login
 		if user
-			id = user._id
-			name = user.name || id
+			userId = user._id
+			name = user.name || userId
 		from = ''
 		if params
 			from = JSON.stringify params
-		return { from, id, name }
+		return { from, userId, name }
 	handleSubmit: (data) ->
 		if data.resetPassword
 			@props.dispatch actions.requestPasswordReset data
@@ -60,7 +60,7 @@ module.exports = React.createClass
 						onSubmit: @handleLogout
 						h1 title
 						input type: 'hidden', name: 'from'
-						input type: 'hidden', name: 'id'
+						input type: 'hidden', name: 'userId'
 						Output label: loggedInAs, name: 'name'
 						FormGroup(
 							input className: 'btn', type:"submit", value: logout

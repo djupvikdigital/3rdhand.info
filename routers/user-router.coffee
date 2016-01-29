@@ -53,7 +53,7 @@ router.post '/', (req, res) ->
 				console.error err.stack
 				res.status(err.status || 500).send err
 
-router.use '/:id', (req, res, next) ->
+router.use '/:userId', (req, res, next) ->
 	data = Object.assign {}, req.query, req.body, req.params
 	if data.token && data.timestamp
 		data = Object.assign {}, data, { path: req.baseUrl + req.path }
@@ -76,7 +76,7 @@ router.use '/:id', (req, res, next) ->
 			req.session.timestamp = Date.now()
 			next()
 
-router.get '/:id/logout', (req, res) ->
+router.get '/:userId/logout', (req, res) ->
 	clearUserSession req
 	res.format
 		html: ->
@@ -96,10 +96,10 @@ router.get '/:id/logout', (req, res) ->
 		default: ->
 			res.status(204).end()
 
-router.post '/:id', (req, res) ->
+router.post '/:userId', (req, res) ->
 	data = req.body
 	if data.changePassword
-		API.changePassword req.params.id, data
+		API.changePassword req.params.userId, data
 			.then res.send.bind res
 			.catch (err) ->
 				console.error err.stack
@@ -113,6 +113,6 @@ router.post '/:id', (req, res) ->
 				console.error err.stack
 				res.status(err.status || 500).send err
 
-router.use '/:id', siteRouter
+router.use '/:userId', siteRouter
 
 module.exports = router

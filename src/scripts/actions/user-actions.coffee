@@ -21,7 +21,7 @@ module.exports =
 	logout: (data) ->
 		type: 'LOGOUT'
 		payload:
-			promise: API.logout(data.id).then ->
+			promise: API.logout(data.userId).then ->
 				(action, dispatch) ->
 					params = if data.from then JSON.parse data.from else {}
 					delete params.userId

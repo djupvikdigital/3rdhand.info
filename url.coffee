@@ -58,7 +58,7 @@ getParams = (arg) ->
 		utils.zip(keys, validation).reduce validationReducer, parts
 		utils.filterValues()
 	)
-	params.userId = arg.id if arg.id
+	params.userId = arg.userId if arg.userId
 	params.lang = lang if lang
 	params
 

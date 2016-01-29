@@ -102,8 +102,8 @@ authenticateByToken = (userPromise, data) ->
 authenticate = (data) ->
 	if data.email
 		userPromise = viewHandlers.by_email key: [ 'user', data.email ]
-	else if data.id
-		userPromise = allHandler(key: 'user/' + data.id).then utils.prop 0
+	else if data.userId
+		userPromise = allHandler(key: 'user/' + data.userId).then utils.prop 0
 	else
 		return Promise.reject new Error('required fields missing')
 	if data.password
@@ -151,7 +151,7 @@ addUser = (data) ->
 			db.put doc
 
 changePassword = (data) ->
-	if !data.newPassword || !data.id
+	if !data.newPassword || !data.userId
 		throw new Error('required fields missing')
 	if data.newPassword != data.repeatPassword
 		throw new Error('repeat password mismatch')
