@@ -62,4 +62,7 @@ getParams = (arg) ->
 	params.lang = lang if lang
 	params
 
-module.exports = { getParams, splitPath }
+getServerUrl = (req) ->
+	req.protocol + '://' + req.get('Host')
+
+module.exports = { getParams, getServerUrl, splitPath }

@@ -25,7 +25,10 @@ router.get '*', createHandler (req, res, props) ->
 		html: ->
 			storeModule = createStore()
 			{ store, history } = storeModule
-			setUser req.session, params.userId, store.dispatch
+			if req.user
+				store.dispatch userActions.setUser req.user._id
+			else
+				setUser req.session, params.userId, store.dispatch
 			url = req.originalUrl
 			store.dispatch ReduxRouter.replacePath url, params
 			renderTemplate storeModule, params, negotiateLang req

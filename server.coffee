@@ -5,8 +5,10 @@ bodyParser = require 'body-parser'
 global.__DEVTOOLS__ = false
 
 API = require './src/scripts/node_modules/api.coffee'
+{ getServerUrl } = require './url.coffee'
 createStore = require './src/scripts/store.coffee'
 articleSelectors = require './src/scripts/selectors/article-selectors.coffee'
+DB = require './db.coffee'
 userRouter = require './routers/user-router.coffee'
 siteRouter = require './routers/site-router.coffee'
 defaultRouterHandler = require './default-handler.coffee'
@@ -34,7 +36,7 @@ server.get '/index.atom', (req, res) ->
 	init(store).then ->
 		articles = articleSelectors.containerSelector(store.getState()).articles
 		updated = if articles.length then articles[0].updated else ''
-		host = req.protocol + '://' + req.get('host')
+		host = getServerUrl req
 		res.render(
 			'feed'
 			host: host
@@ -47,8 +49,16 @@ server.get '/index.atom', (req, res) ->
 server.get '/locales/:lang', (req, res) ->
 	API.fetchLocaleStrings(req.params.lang).then res.send.bind res
 
+server.get '/reset-password', (req, res) ->
+	DB.resetPassword req.body, getServerUrl req
+		.then (user) ->
+			res.redirect 307, '/users'
+		.catch (err) ->
+			console.error err.stack
+			res.sendStatus 500
+
 server.get '/signup', (req, res) ->
-	API.isSignupAllowed().then (isAllowed) ->
+	DB.isSignupAllowed().then (isAllowed) ->
 		if isAllowed
 			res.format
 				html: ->
@@ -70,7 +80,7 @@ server.use '/users', userRouter
 server.use '/', siteRouter
 
 server.use (err, req, res, next) ->
-	if err.message == 'session timeout'
+	if err.message == 'session timeout' || err.message = 'token expired'
 		res.status 404
 		res.format
 			html: ->

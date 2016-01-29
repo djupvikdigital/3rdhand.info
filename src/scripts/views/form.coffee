@@ -36,7 +36,6 @@ module.exports = React.createClass
 	componentWillReceiveProps: (nextProps) ->
 		@setState @propsToState nextProps
 	handleChange: (e) ->
-		console.log 'change'
 		@setValue e.target.name, e.target.value
 	handleSubmit: (e) ->
 		if typeof @props.onSubmit == 'function'

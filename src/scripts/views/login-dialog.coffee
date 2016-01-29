@@ -20,19 +20,24 @@ actions = require '../actions/user-actions.coffee'
 module.exports = React.createClass
 	displayName: 'LoginDialog'
 	getInitialData: ->
-		if @props.user
-			id = @props.user._id
-			name = @props.user.name || id
+		user = null
+		params = null
+		if @props.login
+			{ user, params } = @props.login
+		if user
+			id = user._id
+			name = user.name || id
 		from = ''
-		if @props.params
-			from = JSON.stringify @props.params
+		if params
+			from = JSON.stringify params
 		return { from, id, name }
-	handleLogin: (data) ->
-		@props.dispatch actions.login data
+	handleSubmit: (data) ->
+		if data.resetPassword
+			@props.dispatch actions.requestPasswordReset data
+		else
+			@props.dispatch actions.login data
 	handleLogout: (data) ->
 		@props.dispatch actions.logout data
-	handleClick: ->
-		console.log 'foo'
 	render: ->
 		{
 			loggedInAs,
@@ -40,9 +45,9 @@ module.exports = React.createClass
 			email,
 			password,
 			login,
-			forgotten_password
+			forgotPassword
 		} = @props.localeStrings
-		isLoggedIn = @props.isLoggedIn
+		isLoggedIn = @props.login.isLoggedIn
 		title = if isLoggedIn then logout else login
 		DocumentTitle(
 			title: title
@@ -66,15 +71,13 @@ module.exports = React.createClass
 						action: '/users'
 						method: 'POST'
 						initialData: @getInitialData()
-						onSubmit: @handleLogin
+						onSubmit: @handleSubmit
 						h1 title
 						input type: 'hidden', name: 'from'
 						TextInput label: email, name: 'email'
 						PasswordInput label: password, name: 'password'
 						FormGroup(
-							SubmitButton name: 'login', login
-							' '
-							SubmitButton name: 'resetpwd', forgotten_password
+							SubmitButton login
 						)
 					]
 			)

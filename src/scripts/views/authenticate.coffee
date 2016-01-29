@@ -6,8 +6,9 @@ LoginDialog = createFactory require './login-dialog.coffee'
 actions = require '../actions/user-actions.coffee'
 
 checkTimestamp = (props) ->
-	if props.isLoggedIn
-		timestamp = props.authenticationTime
+	login = props.login
+	if login.isLoggedIn
+		timestamp = login.authenticationTime
 		if moment.duration(Date.now() - timestamp).asMinutes() > 30
 			props.dispatch actions.sessionTimeout()
 
@@ -18,7 +19,7 @@ module.exports = (Component) ->
 		componentDidUpdate: ->
 			checkTimestamp @props
 		render: ->
-			if @props.isLoggedIn
-				React.createElement Component, login: @props
+			if @props.login.isLoggedIn
+				React.createElement Component, @props
 			else
 				LoginDialog @props

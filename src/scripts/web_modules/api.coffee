@@ -14,6 +14,11 @@ getBody = (res) ->
 	res.body
 
 module.exports =
+	changePassword: (userId, data) ->
+		request
+			.post __SERVER__ + URL.getUserPath userId
+			.accept 'application/json'
+			.send data
 	fetchArticles: (params) ->
 		request
 			.get __SERVER__ + URL.getPath params
@@ -35,13 +40,13 @@ module.exports =
 		request
 			.get __SERVER__ + URL.getUserPath(userId) + '/logout'
 			.accept 'application/json'
-	resetPassword: (email) ->
-		if !email
+	requestPasswordReset: (data) ->
+		if !data.email
 			throw new Error('no email provided')
 		request
-			.get __SERVER__ + + '/users'
+			.post __SERVER__ + '/users'
 			.accept 'application/json'
-			.send { email }
+			.send data
 	saveArticle: (article, userId) ->
 		now = (new Date()).toISOString()
 		article.created = now unless article.created

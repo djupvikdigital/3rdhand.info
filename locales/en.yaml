@@ -1,7 +1,14 @@
 title: 3rdhand.info
+ChangePasswordDialog:
+    title: Change Password
+    oldPassword: Gammelt passord
+    newPassword: New Password
+    repeatPassword: Repeat New Password
+    changePassword: Change Password
 SiteHeader:
     home: Home
     newArticle: New Article
+    changePassword: Change Password
     logout: Log out
 LangPicker:
     norwegian: no
@@ -24,7 +31,7 @@ LoginDialog:
     email: E-mail
     password: Password
     login: Log in
-    forgotten_password: Forgotten Password
+    forgotPassword: Forgot Password
 SignupDialog:
     title: Sign Up
     email: E-mail

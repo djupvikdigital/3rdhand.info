@@ -25,7 +25,7 @@ module.exports = React.createClass
 			from: JSON.stringify @props.params
 		@props.dispatch userActions.logout data
 	render: ->
-		{ home, newArticle, logout } = @props.localeStrings
+		{ home, newArticle, changePassword, logout } = @props.localeStrings
 		now = new Date()
 		newParams = {
 			year: now.getFullYear()
@@ -43,11 +43,9 @@ module.exports = React.createClass
 						className: 'site-menu menu'
 						ul(
 							className: 'list-bare'
-							li(
-								key: 'new-article'
-								Link params: newParams, newArticle
-							)
-							li key: 'logout', Link(
+							li Link params: newParams, newArticle
+							li Link slug: 'change-password', changePassword
+							li Link(
 								slug: 'logout'
 								onClick: @handleLogout
 								logout

@@ -3,11 +3,14 @@ session = require 'cookie-session'
 moment = require 'moment'
 URL = require 'url'
 
+Crypto = require '../crypto.coffee'
 API = require '../src/scripts/node_modules/api.coffee'
+DB = require '../db.coffee'
 createStore = require '../src/scripts/store.coffee'
 userActions = require '../src/scripts/actions/user-actions.coffee'
 articleActions = require '../src/scripts/actions/article-actions.coffee'
 siteRouter = require './site-router.coffee'
+{ getServerUrl } = require '../url.coffee'
 { getPath, getUserPath } = require '../src/scripts/url.coffee'
 
 clearUserSession = (req) ->
@@ -18,23 +21,27 @@ clearUserSession = (req) ->
 
 router.use session(
 	name: 'session'
-	secret: 'topsecretstring'
+	secret: Crypto.serverSecret
 	httpOnly: true
 )
 
 router.post '/', (req, res) ->
 	data = req.body
-	if data.resetpwd
+	if data.resetPassword
 		if !data.email
-			throw new Error('please provide an email address')
-		API.resetPassword data.email
+			throw new Error('no email provided')
+		API.requestPasswordReset data, getServerUrl req
+			.then res.send.bind res
+			.catch (err) ->
+				console.error err.stack
+				res.sendStatus 500
 	else
-		if !data.email || !data.password
-			throw new Error('invalid login')
 		{ store } = createStore()
 		store.dispatch userActions.login data
 			.payload.promise.then (action) ->
 				{ user, timestamp } = action.payload
+				if action.error
+					throw action.payload
 				req.session.user = user
 				req.session.timestamp = timestamp
 				res.format
@@ -46,18 +53,28 @@ router.post '/', (req, res) ->
 				console.error err.stack
 				res.status(err.status || 500).send err
 
-router.use (req, res, next) ->
-	timestamp = 0
-	if req.session && req.session.timestamp
-		timestamp = req.session.timestamp
-	if !timestamp || moment.duration(Date.now() - timestamp).asMinutes() > 30
-		# session timed out
-		clearUserSession req
-		err = new Error('session timeout')
-		next err
+router.use '/:id', (req, res, next) ->
+	data = Object.assign {}, req.query, req.body, req.params
+	if data.token && data.timestamp
+		data = Object.assign {}, data, { path: req.baseUrl + req.path }
+		DB.authenticate data
+			.then (user) ->
+				req.user = user
+				next()
+			.catch next
 	else
-		req.session.timestamp = Date.now()
-		next()
+		timestamp = 0
+		if req.session && req.session.timestamp
+			timestamp = req.session.timestamp
+			duration = moment.duration(Date.now() - timestamp)
+		if !timestamp || duration.asMinutes() > 30
+			# session timed out
+			clearUserSession req
+			err = new Error('session timeout')
+			next err
+		else
+			req.session.timestamp = Date.now()
+			next()
 
 router.get '/:id/logout', (req, res) ->
 	clearUserSession req
@@ -75,18 +92,26 @@ router.get '/:id/logout', (req, res) ->
 					url = URL.parse referrer
 				if url && url.hostname == req.hostname
 					path = url.path
-			res.redirect 303, req.protocol + '://' + req.get('Host') + path
+			res.redirect 303, getServerUrl(req) + path
 		default: ->
 			res.status(204).end()
 
 router.post '/:id', (req, res) ->
-	{ store } = createStore()
-	store.dispatch articleActions.save req.body, req.session.user._id
-		.payload.promise.then (body) ->
-			res.send body
-		.catch (err) ->
-			console.error err.stack
-			res.status(err.status || 500).send err
+	data = req.body
+	if data.changePassword
+		API.changePassword req.params.id, data
+			.then res.send.bind res
+			.catch (err) ->
+				console.error err.stack
+				res.status(500).send err.message
+	else
+		{ store } = createStore()
+		store.dispatch articleActions.save data, req.session.user._id
+			.payload.promise.then (body) ->
+				res.send body
+			.catch (err) ->
+				console.error err.stack
+				res.status(err.status || 500).send err
 
 router.use '/:id', siteRouter
 
