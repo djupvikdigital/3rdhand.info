@@ -14,6 +14,7 @@ LangPicker:
     norwegian: no
     english: en
 ArticleEditor:
+    untitled: Untitled
     norwegian: Norwegian
     english: English
     slug: Slug

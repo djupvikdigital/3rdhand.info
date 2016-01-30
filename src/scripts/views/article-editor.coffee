@@ -15,7 +15,7 @@ TextInput = createFactory require './text-input.coffee'
 
 utils = require '../utils.coffee'
 
-{ form, label, input, textarea, div } = Elements
+{ h1, form, label, input, textarea, div } = Elements
 
 keyResolver = (k) ->
 	v = @state.data.getIn k
@@ -51,10 +51,12 @@ module.exports = React.createClass
 		data.lang = @props.lang
 		props.initialData = data
 		l = @props.localeStrings
+		title = @props.title
 		DocumentTitle(
-			{ title: @props.title }
+			{ title }
 			Form(
 				props
+				h1 title
 				RadioGroup(
 					{ name: 'lang' }
 					RadioOption(label: l.norwegian, value: 'nb')

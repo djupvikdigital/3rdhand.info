@@ -81,9 +81,7 @@ module.exports =
 			appSelectors.localeSelector
 		]
 		(state, item, lang, localeStrings) ->
-			Object.assign {}, state, {
-				title: item.title
-				lang: lang
-				localeStrings: localeStrings.ArticleEditor
-			}
+			localeStrings = localeStrings.ArticleEditor
+			title = item.article.title || localeStrings.untitled
+			Object.assign {}, state, { title, lang, localeStrings }
 	)
