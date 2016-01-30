@@ -20,9 +20,11 @@ module.exports = React.createClass
 	displayName: 'SiteHeader'
 	handleLogout: (e) ->
 		e.preventDefault()
+		params = Object.assign {}, @props.params
+		delete params.view
 		data =
 			userId: @props.login.user._id
-			from: JSON.stringify @props.params
+			from: JSON.stringify params
 		@props.dispatch userActions.logout data
 	render: ->
 		{ home, newArticle, changePassword, logout } = @props.localeStrings

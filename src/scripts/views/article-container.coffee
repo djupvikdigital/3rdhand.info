@@ -5,15 +5,19 @@ Immutable = require 'immutable'
 createFactory = require '../create-factory.coffee'
 
 actions = require '../actions/article-actions.coffee'
+{ loginSelector } = require '../selectors/app-selectors.coffee'
 selectors = require '../selectors/article-selectors.coffee'
+authenticate = require './authenticate.coffee'
 
 ArticleList = createFactory require './article-list.coffee'
 ArticleFull = createFactory(
 	ReactRedux.connect(selectors.itemSelector)(require './article-full.coffee')
 )
 ArticleEditor = createFactory(
-	ReactRedux.connect(selectors.editorSelector)(
-		require './article-editor.coffee'
+	ReactRedux.connect(loginSelector)(
+		authenticate ReactRedux.connect(selectors.editorSelector)(
+			require './article-editor.coffee'
+		)
 	)
 )
 
