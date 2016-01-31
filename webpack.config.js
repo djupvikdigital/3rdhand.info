@@ -5,7 +5,8 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CleanPlugin = require('clean-webpack-plugin');
 
-var production = process.env.NODE_ENV === 'production'
+var production = process.env.NODE_ENV === 'production';
+var server = !production ? 'http://localhost:8080' : '';
 
 var svgoConfig = JSON.stringify(
   YAML.safeLoad(fs.readFileSync(path.resolve(__dirname, 'svgo.yaml')))
@@ -13,7 +14,7 @@ var svgoConfig = JSON.stringify(
 
 var plugins = [
   new webpack.DefinePlugin({
-    __SERVER__: 'http://localhost:8080'
+    __SERVER__: server
   }),
   new ExtractTextPlugin('styles/main.css')
 ];
@@ -49,7 +50,7 @@ module.exports = {
         loader: ExtractTextPlugin.extract(
           'css?sourceMap!' +
           'sass?sourceMap&includePaths[]=' +
-          path.resolve(__dirname, 'src', 'styles')
+            path.resolve(__dirname, 'src', 'styles')
         )
       },
       {
@@ -63,7 +64,15 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: [ '', '.webpack.js', '.web.js', '.js', '.json', '.coffee', '.yaml' ],
+    extensions: [
+      '',
+      '.webpack.js',
+      '.web.js',
+      '.js',
+      '.json',
+      '.coffee',
+      '.yaml'
+    ],
     alias: {
       'history/lib/createMemoryHistory': 'history/lib/createBrowserHistory',
       'logo': path.resolve(__dirname, 'src', 'svg', 'logo.svg')
@@ -77,6 +86,6 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: production ? 'scripts/[chunkhash].js' : '[name].js',
-    publicPath: 'http://localhost:8080/dist/'
+    publicPath: server + '/dist/'
   }
 }

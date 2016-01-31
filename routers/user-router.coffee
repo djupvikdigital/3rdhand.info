@@ -3,6 +3,7 @@ session = require 'cookie-session'
 moment = require 'moment'
 URL = require 'url'
 
+logger = require '../log.coffee'
 Crypto = require '../crypto.coffee'
 API = require '../src/scripts/node_modules/api.coffee'
 DB = require '../db.coffee'
@@ -28,12 +29,17 @@ router.use session(
 router.post '/', (req, res) ->
   data = req.body
   if data.resetPassword
-    if !data.email
-      throw new Error('no email provided')
     API.requestPasswordReset data, getServerUrl req
       .then res.send.bind res
       .catch (err) ->
-        console.error err.stack
+        msg = err.message
+        if msg == 'no email provided'
+          res.status(400).send error: msg
+        else if msg == 'no user match'
+          logger.warn msg
+          res.status(400).send error: 'invalid email or password'
+        else
+        logger.error msg
         res.sendStatus 500
   else
     { store } = createStore()
@@ -41,7 +47,7 @@ router.post '/', (req, res) ->
       .payload.promise.then (action) ->
         { user, timestamp } = action.payload
         if action.error
-          throw action.payload
+          return Promis.reject action.payload
         req.session.user = user
         req.session.timestamp = timestamp
         res.format
@@ -50,8 +56,13 @@ router.post '/', (req, res) ->
           json: ->
             res.send action.payload
       .catch (err) ->
-        console.error err.stack
-        res.status(err.status || 500).send err
+        msg = err.message
+        if msg == 'no user match' || msg == 'authentication failed'
+          logger.warn msg
+          res.status(400).send error: 'invalid email or password'
+        else
+          logger.error msg
+          res.sendStatus 500
 
 router.use '/:userId', (req, res, next) ->
   data = Object.assign {}, req.query, req.body, req.params
@@ -102,16 +113,28 @@ router.post '/:userId', (req, res) ->
     API.changePassword req.params.userId, data
       .then res.send.bind res
       .catch (err) ->
-        console.error err.stack
-        res.status(500).send err.message
+        msg = err.message
+        if msg == 'required fields missing' || msg == 'repeat password mismatch'
+          logger.warn msg
+          res.status(400).send error: msg
+        else
+          logger.error msg
+          res.sendStatus 500
   else
     { store } = createStore()
     store.dispatch articleActions.save data, req.session.user._id
-      .payload.promise.then (body) ->
-        res.send body
+      .payload.promise.then res.send.bind res
       .catch (err) ->
-        console.error err.stack
-        res.status(err.status || 500).send err
+        msg = err.message
+        if msg == 'login required'
+          logger.warn msg
+          res.sendStatus 404
+        else if msg == 'permission denied'
+          logger.warn msg
+          res.sendStatus 403
+        else
+          logger.error msg
+          res.sendStatus 500
 
 router.use '/:userId', siteRouter
 

@@ -1,5 +1,5 @@
 ReactRouter = require 'react-router'
-ReduxRouter = require 'redux-simple-router'
+ReduxRouter = require 'react-router-redux'
 
 routes = require './src/scripts/views/routes.coffee'
 URL = require './url.coffee'

@@ -1,6 +1,7 @@
 router = require('express').Router()
-ReduxRouter = require 'redux-simple-router'
+ReduxRouter = require 'react-router-redux'
 
+logger = require '../log.coffee'
 API = require '../src/scripts/node_modules/api.coffee'
 renderTemplate = require '../render-template.coffee'
 negotiateLang = require '../negotiate-lang.coffee'
@@ -30,14 +31,16 @@ router.get '*', createHandler (req, res, props) ->
       else
         setUser req.session, params.userId, store.dispatch
       url = req.originalUrl
-      store.dispatch ReduxRouter.replacePath url, params
+      store.dispatch(
+        ReduxRouter.routeActions.replace pathname: url, state: params
+      )
       renderTemplate storeModule, params, negotiateLang req
         .then res.send.bind res
     default: ->
       API.fetchArticles params
         .then res.send.bind res
         .catch (err) ->
-          console.error err.stack
-          res.status(500).send err
+          logger.error err.message
+          res.sendStatus 500
 
 module.exports = router

@@ -42,7 +42,7 @@ module.exports =
       .accept 'application/json'
   requestPasswordReset: (data) ->
     if !data.email
-      throw new Error('no email provided')
+      return Promise.reject new Error('no email provided')
     request
       .post __SERVER__ + '/users'
       .accept 'application/json'

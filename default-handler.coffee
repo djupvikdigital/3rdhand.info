@@ -1,4 +1,4 @@
-ReduxRouter = require 'redux-simple-router'
+ReduxRouter = require 'react-router-redux'
 
 createHandler = require './create-router-handler.coffee'
 URL = require './url.coffee'
@@ -12,6 +12,6 @@ module.exports = createHandler (req, res, props) ->
     storeModule = createStore()
     { store, history } = storeModule
     url = req.originalUrl
-    store.dispatch ReduxRouter.replacePath url, params
+    store.dispatch ReduxRouter.routeActions.replace pathname: url, state: params
     renderTemplate storeModule, params, negotiateLang req
       .then res.send.bind res

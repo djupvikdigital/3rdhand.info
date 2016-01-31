@@ -1,4 +1,4 @@
-ReduxRouter = require 'redux-simple-router'
+ReduxRouter = require 'react-router-redux'
 
 URL = require '../url.coffee'
 
@@ -9,4 +9,6 @@ module.exports =
   mergeParams: (_params) ->
     (dispatch, getState) ->
       params = Object.assign {}, getState().routing.state, _params
-      dispatch ReduxRouter.pushPath URL.getPath(params), params
+      dispatch ReduxRouter.routeActions.push(
+        pathname: URL.getPath(params), state: params
+      )

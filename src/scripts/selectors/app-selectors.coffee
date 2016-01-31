@@ -69,7 +69,9 @@ module.exports =
       .update 'lang', (v) ->
         props.langParam || v
       .toJS()
-    return state: params, to: URL.getPath params
+    to:
+      pathname: URL.getPath params
+      state: params
   localeSelector: localeSelector
   loginSelector: Reselect.createSelector(
     [ loginSelector, compose(prop('LoginDialog'), localeSelector) ]

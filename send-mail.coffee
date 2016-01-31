@@ -1,5 +1,7 @@
 Promise = require 'bluebird'
 
+logger = require './log.coffee'
+
 sendMail = (settings) ->
   Promise.resolve
     response: settings
@@ -10,5 +12,5 @@ defaults =
 module.exports = (options) ->
   settings = Object.assign {}, defaults, options
   sendMail(settings).then (info) ->
-    console.log 'Message sent:', info.response
+    logger.log 'info', 'Message sent: %j', info.response
     return info

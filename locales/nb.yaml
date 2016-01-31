@@ -5,6 +5,10 @@ ChangePasswordDialog:
     newPassword: Nytt passord
     repeatPassword: Gjenta nytt passord
     changePassword: Endre passord
+    required fields missing: Alle feltene må være utfylt.
+    repeat password mismatch:
+        Passordet er ikke gjentatt korrekt. Vennligst forsikre deg om at det er
+        stavet slik du mente.
 SiteHeader:
     home: Hjem
     newArticle: Ny artikkel
@@ -33,9 +37,14 @@ LoginDialog:
     password: Passord
     login: Logg inn
     forgotPassword: Glemt passord
+    no email provided: Vennligst skriv inn en e-postadresse.
+    invalid email or password: Feil e-post eller passord.
 SignupDialog:
     title: Registrer deg
     email: E-post
     password: Passord
     repeatPassword: Gjenta passord
     signup: Registrer deg
+    repeat password mismatch:
+        Passordet er ikke gjentatt korrekt. Vennligst forsikre deg om at det er
+        stavet slik du mente.

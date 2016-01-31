@@ -5,6 +5,10 @@ ChangePasswordDialog:
     newPassword: New Password
     repeatPassword: Repeat New Password
     changePassword: Change Password
+    required fields missing: All fields must be filled out.
+    repeat password mismatch:
+        The password is not repeated correctly. Please ensure it is spelled as
+        you intended.
 SiteHeader:
     home: Home
     newArticle: New Article
@@ -33,9 +37,14 @@ LoginDialog:
     password: Password
     login: Log in
     forgotPassword: Forgot Password
+    no email provided: Please add an email address.
+    invalid email or password: Invalid email or password.
 SignupDialog:
     title: Sign Up
     email: E-mail
     password: Password
     repeatPassword: Repeat password
     signup: Sign up
+    repeat password mismatch:
+        The password is not repeated correctly. Please ensure it is spelled as
+        you intended.

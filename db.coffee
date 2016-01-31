@@ -6,6 +6,7 @@ moment = require 'moment'
 
 t = require 'transducers.js'
 
+logger = require './log.coffee'
 Crypto = require './crypto.coffee'
 utils = require './src/scripts/utils.coffee'
 URL = require './src/scripts/url.coffee'
@@ -34,9 +35,7 @@ viewHandlers =
         if body.rows.length
           getDocFromRow body.rows[0]
         else
-          error = new Error('no username match')
-          error.status = 404
-          throw error
+          Promise.reject new Error('no user match')
   by_updated: (query) ->
     query.include_docs = true
     query.reduce = false
@@ -70,19 +69,17 @@ get = (arg1) ->
 
 put = (userId, doc) ->
   if !userId
-    throw new Error('login required')
+    return Promise.reject new Error('login required')
   db.get(userId).then (user) ->
     if user.roles.indexOf('write') != -1
       db.put doc
     else
-      error = new Error('permission denied')
-      error.status = 403
-      throw error
+      Promise.reject new Error('permission denied')
 
 onAuthenticate = (user) -> 
   (success) ->
     if !success
-      throw new Error('authentication failed')
+      return Promise.reject new Error('authentication failed')
     return user
 
 authenticateByPassword = (userPromise, data) ->
@@ -115,7 +112,7 @@ authenticate = (data) ->
   fn userPromise, data
     .catch (err) ->
       if err.status == 404
-        console.log 'Invalid login attempt'
+        logger.warn 'Invalid login attempt'
         err = new Error('authentication failed')
         err.status = 401
       throw err
@@ -131,7 +128,7 @@ isSignupAllowed = ->
 
 addUser = (data) ->
   if !data || data.password != data.repeatPassword
-    return Promise.resolve false
+    throw new Error('repeat password mismatch')
   isSignupAllowed()
     .then (isAllowed) ->
       if !isAllowed
@@ -152,9 +149,9 @@ addUser = (data) ->
 
 changePassword = (data) ->
   if !data.newPassword || !data.userId
-    throw new Error('required fields missing')
+    return Promise.reject new Error('required fields missing')
   if data.newPassword != data.repeatPassword
-    throw new Error('repeat password mismatch')
+    return Promise.reject new Error('repeat password mismatch')
   authenticate data
     .then (user) ->
       Crypto.hash(data.newPassword).then (hash) ->

@@ -1,5 +1,5 @@
 Immutable = require 'immutable'
-{ UPDATE_PATH } = require 'redux-simple-router'
+{ UPDATE_PATH } = require 'react-router-redux'
 
 utils = require '../utils.coffee'
 

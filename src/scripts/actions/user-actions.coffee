@@ -1,4 +1,4 @@
-ReduxRouter = require 'redux-simple-router'
+ReduxRouter = require 'react-router-redux'
 
 API = require 'api'
 utils = require '../utils.coffee'
@@ -15,7 +15,9 @@ module.exports =
         (action, dispatch) ->
           params = if data.from then JSON.parse(data.from) else {}
           params.userId = utils.getUserId body.user._id
-          dispatch ReduxRouter.pushPath URL.getPath(params), params
+          dispatch ReduxRouter.routeActions.push(
+            pathname: URL.getPath(params), state: params
+          )
           action.payload = body
           dispatch action
   logout: (data) ->
@@ -25,7 +27,9 @@ module.exports =
         (action, dispatch) ->
           params = if data.from then JSON.parse data.from else {}
           delete params.userId
-          dispatch ReduxRouter.pushPath URL.getPath(params), params
+          dispatch ReduxRouter.routeActions.push(
+            pathname: URL.getPath(params), state: params
+          )
           dispatch action
   changePassword: (userId, data) ->
     type: 'CHANGE_PASSWORD'
