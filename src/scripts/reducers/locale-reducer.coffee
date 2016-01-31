@@ -1,5 +1,5 @@
 Immutable = require 'immutable'
-{ UPDATE_PATH } = require 'react-router-redux'
+{ UPDATE_LOCATION } = require 'react-router-redux'
 
 utils = require '../utils.coffee'
 
@@ -31,8 +31,9 @@ reducers =
   INIT: (state, payload) ->
     state.merge payload.state.localeState
 
-reducers[UPDATE_PATH] = (state, payload) ->
-  lang = payload.state.lang
+reducers[UPDATE_LOCATION] = (state, payload) ->
+  location = payload.state || {}
+  lang = location.lang
   if !lang
     return state.set 'lang', initialState.get 'lang'
   if state.get('langMap').has lang

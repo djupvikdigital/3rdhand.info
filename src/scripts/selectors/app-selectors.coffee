@@ -62,7 +62,7 @@ module.exports =
     argsToObject 'params', 'localeStrings'
   )
   linkSelector: (state, props) ->
-    params = Immutable.Map state.routing.state
+    params = Immutable.Map state.routing.location.state
       .filter utils.keyIn 'userId', 'lang'
       .set 'slug', props.slug
       .merge props.params
