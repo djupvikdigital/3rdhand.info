@@ -15,7 +15,7 @@ localeSelector = compose(
 )
 
 loginSelector = (state) ->
-  params = Immutable.Map(state.routing.state).delete 'view'
+  params = Immutable.Map(state.routing.location.state).delete 'view'
   state = state.loginState.toJS()
   if state.user
     return {
@@ -36,7 +36,7 @@ titleSelector = Reselect.createSelector [ localeSelector ], (localeStrings) ->
   }
 
 paramSelector = (state) ->
-  Object.assign {}, state.routing.state
+  Object.assign {}, state.routing.location.state
 
 headerSelector = Reselect.createSelector(
   [
