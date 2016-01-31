@@ -1,20 +1,20 @@
 label {
-	display: block;
+  display: block;
 
-	& > input:not([type]),
-	& > input[type=text],
-	& > input[type=password],
-	& > textarea,
-	& > output {
-		box-sizing: border-box;
-		margin-bottom: $inuit-base-spacing-unit--small;
-	}
+  & > input:not([type]),
+  & > input[type=text],
+  & > input[type=password],
+  & > textarea,
+  & > output {
+    box-sizing: border-box;
+    margin-bottom: $inuit-base-spacing-unit--small;
+  }
 
-	& > textarea {
-		vertical-align: top;
-	}
+  & > textarea {
+    vertical-align: top;
+  }
 
-	& > output {
-		display: inline-block,
-	}
+  & > output {
+    display: inline-block,
+  }
 }

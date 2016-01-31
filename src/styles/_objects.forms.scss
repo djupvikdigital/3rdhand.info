@@ -1,17 +1,17 @@
 .form-group {
-	display: block;
-	text-align: right;
+  display: block;
+  text-align: right;
 
-	& > input:not([type]),
-	& > input[type=text],
-	& > input[type=password],
-	& > textarea,
-	& > output {
-		width: 75%;
-		text-align: left;
-	}
+  & > input:not([type]),
+  & > input[type=text],
+  & > input[type=password],
+  & > textarea,
+  & > output {
+    width: 75%;
+    text-align: left;
+  }
 }
 
 .form-group--unlabeled {
-	padding-left: 25%;
+  padding-left: 25%;
 }

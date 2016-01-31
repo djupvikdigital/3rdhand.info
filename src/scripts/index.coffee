@@ -25,7 +25,7 @@ state = store.getState()
 store.dispatch ReduxRouter.replacePath state.routing.path, params
 
 init store, params, document.documentElement.lang
-	.then ->
-		ReactDOM.render Root({ store, history }), document.getElementById 'app'
-	.catch (err) ->
-		console.error err.stack
+  .then ->
+    ReactDOM.render Root({ store, history }), document.getElementById 'app'
+  .catch (err) ->
+    console.error err.stack

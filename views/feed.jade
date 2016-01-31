@@ -1,23 +1,23 @@
 doctype xml
 feed(xmlns="http://www.w3.org/2005/Atom")
-	title 3rdhand.info
-	id= root
-	link(rel="self" href=url type="application/atom+xml")/
-	link(rel="alternate" href=root type="text/html")/
-	updated= updated
-	author
-		name Reidar Djupvik
-		email mail@3rdhand.info
-		uri= root
-	each article in articles
-		entry
-			title= article.title
-			id= host + article.href
-			link(rel="alternate" href=(host + article.href) type="text/html")/
-			updated= article.updated
-			content(type="xhtml")
-				div(xmlns="http://www.w3.org/1999/xhtml")
-					if article.intro
-						p
-							b!= article.intro
-					div!= article.body
+  title 3rdhand.info
+  id= root
+  link(rel="self" href=url type="application/atom+xml")/
+  link(rel="alternate" href=root type="text/html")/
+  updated= updated
+  author
+    name Reidar Djupvik
+    email mail@3rdhand.info
+    uri= root
+  each article in articles
+    entry
+      title= article.title
+      id= host + article.href
+      link(rel="alternate" href=(host + article.href) type="text/html")/
+      updated= article.updated
+      content(type="xhtml")
+        div(xmlns="http://www.w3.org/1999/xhtml")
+          if article.intro
+            p
+              b!= article.intro
+          div!= article.body

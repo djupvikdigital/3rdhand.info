@@ -7,22 +7,22 @@ supportedLocales = [ 'nb', 'en' ]
 supportedLocalesObject = new locale.Locales supportedLocales.join ','
 
 isLanguage = (lang) ->
-	typeof lang == 'string' && !!tags.language(lang)
+  typeof lang == 'string' && !!tags.language(lang)
 
 isMacrolanguage = (lang) ->
-	isLanguage(lang) && tags.language(lang).scope() == 'macrolanguage'
+  isLanguage(lang) && tags.language(lang).scope() == 'macrolanguage'
 
 negotiateLang = utils.maybe (lang) ->
-	if isMacrolanguage lang
-		lang = tags.languages(lang)
-	if Array.isArray lang
-		lang = lang.join ','
-	negotiated = (new locale.Locales(lang)).best(supportedLocalesObject)
-	if negotiated.defaulted then return ''
-	negotiated.toString()
+  if isMacrolanguage lang
+    lang = tags.languages(lang)
+  if Array.isArray lang
+    lang = lang.join ','
+  negotiated = (new locale.Locales(lang)).best(supportedLocalesObject)
+  if negotiated.defaulted then return ''
+  negotiated.toString()
 
 module.exports = {
-	isLanguage
-	negotiateLang
-	supportedLocales
+  isLanguage
+  negotiateLang
+  supportedLocales
 }

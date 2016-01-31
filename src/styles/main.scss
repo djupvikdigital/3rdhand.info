@@ -31,7 +31,7 @@ $inuit-heading-size-6: 16px;
 @import "trumps.headings";
 
 .milli {
-	@include inuit-font-size(14px);
+  @include inuit-font-size(14px);
 }
 
 @import "node_modules/inuit-list-bare/objects.list-bare";

@@ -12,25 +12,25 @@ Elements = require '../elements.coffee'
 Link = createFactory ReactRedux.connect(selector)(Router.Link)
 
 propFactory = (props, langParam) ->
-	params = props.params
-	onClick = ->
-		props.dispatch actions.fetchStrings langParam
-	return { params, langParam, onClick }
+  params = props.params
+  onClick = ->
+    props.dispatch actions.fetchStrings langParam
+  return { params, langParam, onClick }
 
 module.exports = (props) ->
-	classes = [
-		'lang-picker'
-	]
-	if props.className
-		classes[classes.length] = props.className
-	{ norwegian, english } = props.localeStrings
-	nav(
-		className: classes.join ' '
-		ul(
-			className: 'list-inline'
-			li Link propFactory(props, 'no'), norwegian
-			li Link propFactory(props, 'en'), english
-		)
-	)
+  classes = [
+    'lang-picker'
+  ]
+  if props.className
+    classes[classes.length] = props.className
+  { norwegian, english } = props.localeStrings
+  nav(
+    className: classes.join ' '
+    ul(
+      className: 'list-inline'
+      li Link propFactory(props, 'no'), norwegian
+      li Link propFactory(props, 'en'), english
+    )
+  )
 
 module.exports.displayName = 'LangPicker'

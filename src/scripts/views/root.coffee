@@ -11,20 +11,20 @@ Provider = createFactory ReactRedux.Provider
 { div } = Elements
 
 DocumentTitle = createFactory(
-	ReactRedux.connect(selectors.titleSelector)(require 'react-document-title')
+  ReactRedux.connect(selectors.titleSelector)(require 'react-document-title')
 )
 
 Router = createFactory ReactRouter.Router
 
 module.exports = (props) ->
-	{ store, history } = props
-	router = Router { history }, routes
-	div(
-		Provider(
-			{ store }
-			DocumentTitle(
-				title: ''
-				router
-			)
-		)
-	)
+  { store, history } = props
+  router = Router { history }, routes
+  div(
+    Provider(
+      { store }
+      DocumentTitle(
+        title: ''
+        router
+      )
+    )
+  )

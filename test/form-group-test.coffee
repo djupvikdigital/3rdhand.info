@@ -10,10 +10,10 @@ FormGroup = React.createFactory require '../src/scripts/views/form-group.coffee'
 { input } = Elements
 
 describe 'FormGroup', ->
-	it 'can render', ->
-		component = FormGroup(
-			'Test'
-			input type: 'text'
-		)
-		$ = cheerio.load ReactDOM.renderToStaticMarkup component
-		expect($('input').length).toBe 1
+  it 'can render', ->
+    component = FormGroup(
+      'Test'
+      input type: 'text'
+    )
+    $ = cheerio.load ReactDOM.renderToStaticMarkup component
+    expect($('input').length).toBe 1
