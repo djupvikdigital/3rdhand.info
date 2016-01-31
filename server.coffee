@@ -4,6 +4,9 @@ bodyParser = require 'body-parser'
 
 global.__DEVTOOLS__ = false
 
+negotiateLang = require './negotiate-lang.coffee'
+URL = require './src/scripts/url.coffee'
+init = require './src/scripts/init.coffee'
 API = require './src/scripts/node_modules/api.coffee'
 { getServerUrl } = require './url.coffee'
 createStore = require './src/scripts/store.coffee'
@@ -29,12 +32,13 @@ server.set 'views', './views'
 server.set 'view engine', 'jade'
 
 server.get '/index.atom', (req, res) ->
-	res.header 'Content-Type', 'text/plain; charset=utf8'
-	lang = req.acceptsLanguages 'nb', 'en'
+	lang = negotiateLang req
 	res.header 'Content-Type', 'application/atom+xml; charset=utf8'
 	{ store } = createStore()
-	init(store).then ->
+	init(store, {}, lang).then ->
 		articles = articleSelectors.containerSelector(store.getState()).articles
+		articles.forEach (article) ->
+			article.href = URL.getPath article.urlParams
 		updated = if articles.length then articles[0].updated else ''
 		host = getServerUrl req
 		res.render(
