@@ -4,6 +4,7 @@
   "description": "Reidar Djupvik's personal website",
   "main": "index.html",
   "scripts": {
+    "clean": "rm -r dist/*",
     "test": "mocha --compilers coffee:coffee-script/register",
     "start": "coffee server.coffee",
     "svgo": "svgo --config=./svgo.yaml -f ./src/svg -o ./dist/svg",
