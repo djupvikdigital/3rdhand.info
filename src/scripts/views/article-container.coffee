@@ -23,17 +23,16 @@ ArticleEditor = createFactory(
 
 module.exports = React.createClass
   displayName: 'ArticleContainer'
-  fetch: (params) ->
-    @props.dispatch actions.fetch(params)
+  fetch: (params, force = false) ->
+    prevParams = Immutable.Map @props.prevParams
+    if force || !Immutable.is prevParams, Immutable.Map params
+      @props.dispatch actions.fetch(params)
   save: (data) ->
     @props.dispatch actions.save data, @props.login.user._id
   componentWillMount: ->
-    @fetch @props.params unless @props.lastUpdate
+    @fetch @props.params
   componentWillReceiveProps: (nextProps) ->
-    nextParams = Immutable.Map nextProps.params
-    params = Immutable.Map @props.params
-    if nextProps.refetch || !Immutable.is nextParams, params 
-      @fetch nextProps.params
+    @fetch nextProps.params, nextProps.refetch
   render: ->
     params = @props.params || {}
     articles = @props.articles

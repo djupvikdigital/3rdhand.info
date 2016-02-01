@@ -1,13 +1,18 @@
 React = require 'react'
+ReactRedux = require 'react-redux'
 Immutable = require 'immutable'
 
 API = require 'api'
 Elements = require '../elements.coffee'
 createFactory = require '../create-factory.coffee'
+selectors = require '../selectors/app-selectors.coffee'
 
 DocumentTitle = createFactory require 'react-document-title'
 
 Form = createFactory require './form.coffee'
+FormMessage = createFactory ReactRedux.connect(selectors.formMessageSelector)(
+  require './form-message.coffee'
+)
 FormGroup = createFactory require './form-group.coffee'
 RadioGroup = createFactory require './radio-group.coffee'
 RadioOption = createFactory require './radio-option.coffee'
@@ -57,6 +62,7 @@ module.exports = React.createClass
       Form(
         props
         h1 title
+        FormMessage type: 'error', name: 'error'
         RadioGroup(
           { name: 'lang' }
           RadioOption(label: l.norwegian, value: 'nb')

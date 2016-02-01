@@ -1,12 +1,18 @@
+Immutable = require 'immutable'
 React = require 'react'
+ReactRedux = require 'react-redux'
 
 createFactory = require '../create-factory.coffee'
+selectors = require '../selectors/app-selectors.coffee'
 URL = require '../url.coffee'
 
 DocumentTitle = createFactory require 'react-document-title'
 
 Elements = require '../elements.coffee'
 Form = createFactory require './form.coffee'
+FormMessage = createFactory ReactRedux.connect(selectors.formMessageSelector)(
+  require './form-message.coffee'
+)
 Output = createFactory require './output.coffee'
 FormGroup = createFactory require './form-group.coffee'
 TextInput = createFactory require './text-input.coffee'
@@ -22,6 +28,7 @@ module.exports = React.createClass
   getInitialData: ->
     user = null
     params = null
+    error = ''
     if @props.login
       { user, params } = @props.login
     if user
@@ -30,23 +37,27 @@ module.exports = React.createClass
     from = ''
     if params
       from = JSON.stringify params
-    return { from, userId, name }
+    return { from, userId, name, error }
   handleSubmit: (data) ->
     if data.resetPassword
-      @props.dispatch actions.requestPasswordReset data
+      action = @props.dispatch actions.requestPasswordReset data
     else
-      @props.dispatch actions.login data
+      action = @props.dispatch actions.login data
+    action.payload.promise.then (action) =>
+      method = if action.error then 'reject' else 'resolve'
+      Promise[method](action.payload.response.body)
   handleLogout: (data) ->
     @props.dispatch actions.logout data
   render: ->
+    l = @props.localeStrings
     {
-      loggedInAs,
-      logout,
-      email,
-      password,
-      login,
+      loggedInAs
+      logout
+      email
+      password
+      login
       forgotPassword
-    } = @props.localeStrings
+    } = l
     isLoggedIn = @props.login.isLoggedIn
     title = if isLoggedIn then logout else login
     DocumentTitle(
@@ -73,6 +84,7 @@ module.exports = React.createClass
             initialData: @getInitialData()
             onSubmit: @handleSubmit
             h1 title
+            FormMessage type: 'error', name: 'error'
             input type: 'hidden', name: 'from'
             TextInput label: email, name: 'email'
             PasswordInput label: password, name: 'password'

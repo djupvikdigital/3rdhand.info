@@ -40,7 +40,7 @@ router.get '*', createHandler (req, res, props) ->
       API.fetchArticles params
         .then res.send.bind res
         .catch (err) ->
-          logger.error err.message
+          logger.error err
           res.sendStatus 500
 
 module.exports = router

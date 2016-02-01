@@ -5,11 +5,14 @@ createFactory = require '../create-factory.coffee'
 URL = require '../url.coffee'
 Elements = require '../elements.coffee'
 actions = require '../actions/user-actions.coffee'
-{ loginSelector } = require '../selectors/app-selectors.coffee'
+selectors = require '../selectors/app-selectors.coffee'
 
 DocumentTitle = createFactory require 'react-document-title'
 
 Form = createFactory require './form.coffee'
+FormMessage = createFactory ReactRedux.connect(selectors.formMessageSelector)(
+  require './form-message.coffee'
+)
 FormGroup = createFactory require './form-group.coffee'
 TextInput = createFactory require './text-input.coffee'
 PasswordInput = createFactory require './password-input.coffee'
@@ -21,6 +24,9 @@ module.exports = React.createClass
   displayName: 'ChangePasswordDialog'
   handleReset: (data) ->
     @props.dispatch actions.changePassword @props.params.userId, data
+      .payload.promise.then (action) =>
+        method = if action.error then 'reject' else 'resolve'
+        Promise[method](action.payload.response.body)
   render: ->
     location = @props.location
     data = {}
@@ -53,6 +59,7 @@ module.exports = React.createClass
     args = [
       props
       h1 title
+      FormMessage type: 'error', name: 'error'
       input type: 'hidden', name: 'id'
     ].concat inputs, [
       PasswordInput label: newPassword, name: 'newPassword'

@@ -6,10 +6,13 @@ initialState = Immutable.fromJS({
     en: '3rdhand.info'
   articles: []
   error: null
+  prevParams: {}
   refetch: false
 })
 
 reducers =
+  FETCH_ARTICLES_PENDING: (state, payload) ->
+    state.set 'prevParams', payload.params
   FETCH_ARTICLES_FULFILLED: (state, payload) ->
     state.merge
       articles: payload.docs
@@ -21,6 +24,7 @@ reducers =
       articles: Immutable.List()
       error: payload
       lastUpdate: null
+      refetch: false
   LOGIN_FULFILLED: (state) ->
     err = state.get 'error'
     if err?.status == 404

@@ -56,6 +56,9 @@ module.exports =
       )
       return { params, login, localeStrings }
   )
+  formMessageSelector: compose(
+    argsToObject('localeStrings'), prop('FormMessage'), localeSelector
+  )
   headerSelector: headerSelector
   langPickerSelector: Reselect.createSelector(
     [ paramSelector, compose(prop('LangPicker'), localeSelector) ]

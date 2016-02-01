@@ -34,12 +34,12 @@ router.post '/', (req, res) ->
       .catch (err) ->
         msg = err.message
         if msg == 'no email provided'
-          res.status(400).send error: msg
+          res.status(400).send message: msg
         else if msg == 'no user match'
           logger.warn msg
-          res.status(400).send error: 'invalid email or password'
+          res.status(400).send message: 'invalid email or password'
         else
-        logger.error msg
+        logger.error err
         res.sendStatus 500
   else
     { store } = createStore()
@@ -47,7 +47,7 @@ router.post '/', (req, res) ->
       .payload.promise.then (action) ->
         { user, timestamp } = action.payload
         if action.error
-          return Promis.reject action.payload
+          return Promise.reject action.payload
         req.session.user = user
         req.session.timestamp = timestamp
         res.format
@@ -59,9 +59,9 @@ router.post '/', (req, res) ->
         msg = err.message
         if msg == 'no user match' || msg == 'authentication failed'
           logger.warn msg
-          res.status(400).send error: 'invalid email or password'
+          res.status(400).send message: 'invalid email or password'
         else
-          logger.error msg
+          logger.error err
           res.sendStatus 500
 
 router.use '/:userId', (req, res, next) ->
@@ -116,9 +116,9 @@ router.post '/:userId', (req, res) ->
         msg = err.message
         if msg == 'required fields missing' || msg == 'repeat password mismatch'
           logger.warn msg
-          res.status(400).send error: msg
+          res.status(400).send message: msg
         else
-          logger.error msg
+          logger.error err
           res.sendStatus 500
   else
     { store } = createStore()
@@ -133,7 +133,7 @@ router.post '/:userId', (req, res) ->
           logger.warn msg
           res.sendStatus 403
         else
-          logger.error msg
+          logger.error err
           res.sendStatus 500
 
 router.use '/:userId', siteRouter

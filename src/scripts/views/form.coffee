@@ -19,6 +19,7 @@ module.exports = React.createClass
       method: 'GET'
       placeholders: {}
       initialData: {}
+      error: ''
     }
   getInitialState: ->
     @propsToState @props
@@ -32,7 +33,8 @@ module.exports = React.createClass
   getValue: (k) ->
     @state.data.getIn @keyResolver(k)
   setValue: (k, v) ->
-    @setState data: @state.data.setIn(@keyResolver(k), v)
+    if @isMounted()
+      @setState data: @state.data.setIn @keyResolver(k), v
   componentWillReceiveProps: (nextProps) ->
     @setState @propsToState nextProps
   handleChange: (e) ->
@@ -40,7 +42,11 @@ module.exports = React.createClass
   handleSubmit: (e) ->
     if typeof @props.onSubmit == 'function'
       e.preventDefault()
-      @props.onSubmit @state.data.toJS()
+      Promise.resolve @props.onSubmit @state.data.toJS()
+        .then ->
+          @setValue 'error', ''
+        .catch (err) =>
+          @setValue 'error', err.message
   renderChild: (child) ->
     if !child.props
       return child

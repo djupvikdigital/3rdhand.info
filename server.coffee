@@ -84,7 +84,7 @@ server.post '/signup', (req, res) ->
         logger.warn msg
         res.sendStatus 404
       else if msg == 'repeat password mismatch'
-        res.status(400).send error: msg
+        res.status(400).send message: msg
 
 server.use '/users', userRouter
 server.use '/', siteRouter
@@ -105,7 +105,7 @@ server.use (err, req, res, next) ->
   else if err.message == 'no route match'
     res.sendStatus 404
   else
-    logger.error err.message
+    logger.error err
     res.sendStatus 500
 
 server.listen 8081, ->
