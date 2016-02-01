@@ -57,7 +57,7 @@ module.exports =
       .accept 'application/json'
       .send article
   signup: (data) ->
-      request
-        .post '/signup'
-        .accept 'application/json'
-        .send data
+    request
+      .post '/signup'
+      .accept 'application/json'
+      .send data

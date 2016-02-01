@@ -43,7 +43,7 @@ module.exports = React.createClass
       action = @props.dispatch actions.requestPasswordReset data
     else
       action = @props.dispatch actions.login data
-    action.payload.promise.then (action) =>
+    action.payload.promise.then (action) ->
       method = if action.error then 'reject' else 'resolve'
       Promise[method](action.payload.response.body)
   handleLogout: (data) ->
@@ -74,7 +74,7 @@ module.exports = React.createClass
             input type: 'hidden', name: 'userId'
             Output label: loggedInAs, name: 'name'
             FormGroup(
-              input className: 'btn', type:"submit", value: logout
+              input className: 'btn', type: 'submit', value: logout
             )
           ]
         else

@@ -43,7 +43,7 @@ keyFilter = (fn) ->
 
 filterKeys = compose filter, keyFilter
 
-filterValues = compose filter, (fn=defaultFilter) ->
+filterValues = compose filter, (fn = defaultFilter) ->
   argArray (k, v) ->
     fn(v)
 

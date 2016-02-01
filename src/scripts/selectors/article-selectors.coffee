@@ -19,7 +19,7 @@ formatSelector = (state, lang) ->
     state
     [ lang, utils.identity ]
     [ 'format', 'text', utils.createFormatMapper(formatters) ]
-    [ 
+    [
       'published'
       utils.createPropertyMapper 'publishedFormatted', (published) ->
         moment(published).format('LLL')

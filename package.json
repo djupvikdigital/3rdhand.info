@@ -5,7 +5,9 @@
   "main": "index.html",
   "scripts": {
     "clean": "rm -r dist/*",
+    "lint": "coffeelint lib/ src/",
     "test": "mocha --compilers coffee:coffee-script/register",
+    "posttest": "npm run lint",
     "start": "coffee server.coffee",
     "svgo": "svgo --config=./svgo.yaml -f ./src/svg -o ./dist/svg",
     "server": "webpack-dev-server --inline --hot"

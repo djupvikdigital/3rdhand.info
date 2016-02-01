@@ -24,7 +24,7 @@ module.exports = React.createClass
   displayName: 'ChangePasswordDialog'
   handleReset: (data) ->
     @props.dispatch actions.changePassword @props.params.userId, data
-      .payload.promise.then (action) =>
+      .payload.promise.then (action) ->
         method = if action.error then 'reject' else 'resolve'
         Promise[method](action.payload.response.body)
   render: ->

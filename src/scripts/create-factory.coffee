@@ -1,7 +1,8 @@
 React = require 'react'
 
 isProps = (obj) ->
-  !React.isValidElement(obj) && obj.constructor == Object && !('_reactFragment' of obj)
+  isReactElement = React.isValidElement obj
+  !isReactElement && obj.constructor == Object && !('_reactFragment' of obj)
 
 transformProps = (props) ->
   res = {}

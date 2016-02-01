@@ -6,7 +6,7 @@ createFactory = require '../src/scripts/create-factory.coffee'
 Root = createFactory require '../src/scripts/views/root.coffee'
 IndexTemplate = createFactory require '../views/index.coffee'
 
-module.exports = (storeModule, params, lang, Template=IndexTemplate) ->
+module.exports = (storeModule, params, lang, Template = IndexTemplate) ->
   { store } = storeModule
   init(store, params, lang).then ->
     doctype = '<!DOCTYPE html>'

@@ -76,7 +76,7 @@ put = (userId, doc) ->
     else
       Promise.reject new Error('permission denied')
 
-onAuthenticate = (user) -> 
+onAuthenticate = (user) ->
   (success) ->
     if !success
       return Promise.reject new Error('authentication failed')
