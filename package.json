@@ -8,6 +8,7 @@
     "insert-ddoc": "bin/insert-ddoc.js"
   },
   "scripts": {
+    "build": "npm run svgo && NODE_ENV=production webpack",
     "clean": "rm -r dist/*",
     "drop-db": "drop-db",
     "insert-ddoc": "insert-ddoc",
