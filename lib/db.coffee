@@ -10,7 +10,7 @@ logger = require './log.coffee'
 Crypto = require './crypto.coffee'
 utils = require '../src/scripts/utils.coffee'
 URL = require '../src/scripts/url.coffee'
-ddoc = require './ddoc.coffee'
+ddoc = require './ddoc.js'
 
 diff = ->
   ddoc
@@ -158,24 +158,10 @@ changePassword = (data) ->
         user.password_hash = hash
         db.put user
 
-if !true
-  db.upsert ddoc._id, diff
-    .then (res) ->
-      if res.updated
-        console.log 'Design document inserted:'
-        console.log res
-    .catch (err) ->
-      console.log 'Error inserting design document:'
-      console.log err
-
-if !true
-  db.destroy()
-
 module.exports = {
   addUser
   authenticate
   changePassword
-  db
   get
   isSignupAllowed
   put

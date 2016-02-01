@@ -3,8 +3,14 @@
   "version": "0.0.0",
   "description": "Reidar Djupvik's personal website",
   "main": "index.html",
+  "bin": {
+    "drop-db": "bin/drop-db.js",
+    "insert-ddoc": "bin/insert-ddoc.js"
+  },
   "scripts": {
     "clean": "rm -r dist/*",
+    "drop-db": "drop-db",
+    "insert-ddoc": "insert-ddoc",
     "lint": "coffeelint lib/ src/",
     "test": "mocha --compilers coffee:coffee-script/register",
     "posttest": "npm run lint",
