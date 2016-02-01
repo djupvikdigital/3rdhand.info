@@ -8,8 +8,8 @@ t = require 'transducers.js'
 
 logger = require './log.coffee'
 Crypto = require './crypto.coffee'
-utils = require './src/scripts/utils.coffee'
-URL = require './src/scripts/url.coffee'
+utils = require '../src/scripts/utils.coffee'
+URL = require '../src/scripts/url.coffee'
 ddoc = require './ddoc.coffee'
 
 diff = ->

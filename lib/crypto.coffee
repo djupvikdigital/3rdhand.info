@@ -2,7 +2,7 @@ Promise = require 'bluebird'
 bcrypt = Promise.promisifyAll require 'bcrypt'
 t = require 'transducers.js'
 
-{ array } = require './src/scripts/utils.coffee'
+{ array } = require '../src/scripts/utils.coffee'
 
 serverSecret = 'topsecretstring'
 

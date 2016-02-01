@@ -1,10 +1,10 @@
 ReactDOM = require 'react-dom/server'
 DocumentTitle = require 'react-document-title'
 
-init = require './src/scripts/init.coffee'
-createFactory = require './src/scripts/create-factory.coffee'
-Root = createFactory require './src/scripts/views/root.coffee'
-IndexTemplate = createFactory require './views/index.coffee'
+init = require '../src/scripts/init.coffee'
+createFactory = require '../src/scripts/create-factory.coffee'
+Root = createFactory require '../src/scripts/views/root.coffee'
+IndexTemplate = createFactory require '../views/index.coffee'
 
 module.exports = (storeModule, params, lang, Template=IndexTemplate) ->
   { store } = storeModule

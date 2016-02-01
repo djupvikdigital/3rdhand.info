@@ -1,7 +1,7 @@
 t = require 'transducers.js'
 
 Lang = require './lang.coffee'
-utils = require './src/scripts/utils.coffee'
+utils = require '../src/scripts/utils.coffee'
 
 splitPath = (path) ->
   parts = path.split '/'

@@ -3,5 +3,5 @@
 *.log
 /node_modules
 .sass-cache
-dist/styles
+/dist
 db

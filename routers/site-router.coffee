@@ -1,14 +1,14 @@
 router = require('express').Router()
 ReduxRouter = require 'react-router-redux'
 
-logger = require '../log.coffee'
-API = require '../src/scripts/node_modules/api.coffee'
-renderTemplate = require '../render-template.coffee'
-negotiateLang = require '../negotiate-lang.coffee'
+logger = require '../lib/log.coffee'
+API = require '../src/node_modules/api.coffee'
+renderTemplate = require '../lib/render-template.coffee'
+negotiateLang = require '../lib/negotiate-lang.coffee'
 createStore = require '../src/scripts/store.coffee'
 userActions = require '../src/scripts/actions/user-actions.coffee'
-createHandler = require '../create-router-handler.coffee'
-URL = require '../url.coffee'
+createHandler = require '../lib/create-router-handler.coffee'
+URL = require '../lib/url.coffee'
 
 setUser = (session, userId, dispatch) ->
   if !userId then return false

@@ -1,7 +1,7 @@
 locale = require 'locale'
 tags = require 'language-tags'
 
-utils = require './src/scripts/utils.coffee'
+utils = require '../src/scripts/utils.coffee'
 
 supportedLocales = [ 'nb', 'en' ]
 supportedLocalesObject = new locale.Locales supportedLocales.join ','
