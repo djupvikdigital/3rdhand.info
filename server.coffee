@@ -1,3 +1,4 @@
+path = require 'path'
 express = require 'express'
 favicon = require 'serve-favicon'
 bodyParser = require 'body-parser'
@@ -21,7 +22,6 @@ createStore = require './src/scripts/store.coffee'
 
 server = express()
 server.use favicon './favicon.ico'
-server.use(express.static(__dirname))
 server.use(bodyParser.json())
 server.use bodyParser.urlencoded extended: true
 
@@ -34,6 +34,7 @@ if DEV
     )
     next()
 
+server.use express.static path.resolve __dirname, 'dist'
 server.set 'views', './views'
 server.set 'view engine', 'jade'
 

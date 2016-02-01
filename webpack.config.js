@@ -2,6 +2,7 @@ var YAML = require('js-yaml');
 var fs = require('fs');
 var path = require('path');
 var webpack = require('webpack');
+var AssetsPlugin = require('assets-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CleanPlugin = require('clean-webpack-plugin');
 
@@ -14,21 +15,26 @@ var svgoConfig = JSON.stringify(
 
 var plugins = [
   new webpack.DefinePlugin({
-    __SERVER__: server
+    'process.env.NODE_ENV': '"development"',
   }),
-  new ExtractTextPlugin('styles/main.css')
+  new ExtractTextPlugin('styles.css')
 ];
 
 if (production) {
   plugins = [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': '"production"',
+    }),
     new CleanPlugin(['dist/styles', 'dist/scripts']),
+    new AssetsPlugin({ path: path.resolve(__dirname, 'dist') }),
     new ExtractTextPlugin('styles/[contenthash].css'),
     new webpack.optimize.UglifyJsPlugin({
       mangle: true,
       compress: {
         warnings: false
       }
-    })
+    }),
+    new webpack.optimize.OccurenceOrderPlugin()
   ];
 }
 
@@ -79,13 +85,13 @@ module.exports = {
     }
   },
   entry: {
-    'scripts/main': './src/scripts/index.coffee',
-    'styles/main': './src/styles/main.scss'
+    'scripts': './src/scripts/main.coffee',
+    'styles': './src/styles/main.scss'
   },
   plugins: plugins,
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: production ? 'scripts/[chunkhash].js' : '[name].js',
-    publicPath: server + '/dist/'
+    publicPath: server + '/'
   }
 }
