@@ -1,6 +1,6 @@
 expect = require 'expect'
 
-Lang = require '../lang.coffee'
+Lang = require '../lib/lang.coffee'
 
 describe 'Lang module', ->
   describe 'isLanguage', ->

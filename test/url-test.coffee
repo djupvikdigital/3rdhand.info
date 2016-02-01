@@ -3,7 +3,7 @@ expect = require 'expect'
 URL = Object.assign(
   {}
   require '../src/scripts/url.coffee'
-  require '../url.coffee'
+  require '../lib/url.coffee'
 )
 
 describe 'URL modules', ->
