@@ -113,12 +113,11 @@ server.use (err, req, res, next) ->
     logger.error err
     res.sendStatus 500
 
-credentials =
-  key: fs.readFileSync path.join certsPath, 'privkey.pem'
-  cert: fs.readFileSync path.join certsPath, 'fullchain.pem'
-  ca: fs.readFileSync path.join certsPath, 'chain.pem'
-
 if PROD
+  credentials =
+    key: fs.readFileSync path.join certsPath, 'privkey.pem'
+    cert: fs.readFileSync path.join certsPath, 'fullchain.pem'
+    ca: fs.readFileSync path.join certsPath, 'chain.pem'
   https.createServer(credentials, server).listen 8443, ->
     logger.info 'HTTPS server listening on port 8443...'
 
