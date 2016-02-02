@@ -1,4 +1,5 @@
 path = require 'path'
+https = require 'https'
 express = require 'express'
 favicon = require 'serve-favicon'
 bodyParser = require 'body-parser'
@@ -20,13 +21,15 @@ siteRouter = require './routers/site-router.coffee'
 defaultRouterHandler = require './lib/default-handler.coffee'
 createStore = require './src/scripts/store.coffee'
 
-server = express()
-server.use favicon './favicon.ico'
-server.use(bodyParser.json())
-server.use bodyParser.urlencoded extended: true
+certsPath = path.resolve '/etc/letsencrypt/live/3rdhand.info'
+
+app = express()
+app.use favicon './favicon.ico'
+app.use(bodyParser.json())
+app.use bodyParser.urlencoded extended: true
 
 if DEV
-  server.use (req, res, next) ->
+  app.use (req, res, next) ->
     res.header 'Access-Control-Allow-Origin', '*'
     res.header(
       'Access-Control-Allow-Headers'
@@ -34,11 +37,11 @@ if DEV
     )
     next()
 
-server.use express.static path.resolve __dirname, 'dist'
-server.set 'views', './views'
-server.set 'view engine', 'jade'
+app.use express.static path.resolve __dirname, 'dist'
+app.set 'views', './views'
+app.set 'view engine', 'jade'
 
-server.get '/index.atom', (req, res) ->
+app.get '/index.atom', (req, res) ->
   lang = negotiateLang req
   res.header 'Content-Type', 'application/atom+xml; charset=utf8'
   { store } = createStore()
@@ -57,10 +60,10 @@ server.get '/index.atom', (req, res) ->
       articles: articles
     )
 
-server.get '/locales/:lang', (req, res) ->
+app.get '/locales/:lang', (req, res) ->
   API.fetchLocaleStrings(req.params.lang).then res.send.bind res
 
-server.get '/signup', (req, res) ->
+app.get '/signup', (req, res) ->
   DB.isSignupAllowed().then (isAllowed) ->
     if isAllowed
       res.format
@@ -71,7 +74,7 @@ server.get '/signup', (req, res) ->
     else
       res.sendStatus 404
 
-server.post '/signup', (req, res) ->
+app.post '/signup', (req, res) ->
   API.signup req.body
     .then (body) ->
       res.format
@@ -87,10 +90,10 @@ server.post '/signup', (req, res) ->
       else if msg == 'repeat password mismatch'
         res.status(400).send message: msg
 
-server.use '/users', userRouter
-server.use '/', siteRouter
+app.use '/users', userRouter
+app.use '/', siteRouter
 
-server.use (err, req, res, next) ->
+app.use (err, req, res, next) ->
   msg = err.message
   if msg == 'session timeout' || msg = 'token expired'
     logger.warn msg
@@ -108,6 +111,16 @@ server.use (err, req, res, next) ->
   else
     logger.error err
     res.sendStatus 500
+
+credentials =
+  key: fs.readFileSync path.join certsPath, 'privkey.pem'
+  cert: fs.readFileSync path.join certsPath, 'fullchain.pem'
+  ca: fs.readFileSync path.join certsPath, 'chain.pem'
+
+if PROD
+  server = https.createServer credentials, app
+else
+  server = app
 
 server.listen 8081, ->
   logger.info 'Express web server listening on port 8081...'
