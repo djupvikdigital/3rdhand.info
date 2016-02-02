@@ -23,13 +23,13 @@ createStore = require './src/scripts/store.coffee'
 
 certsPath = path.resolve '/etc/letsencrypt/live/3rdhand.info'
 
-app = express()
-app.use favicon './favicon.ico'
-app.use(bodyParser.json())
-app.use bodyParser.urlencoded extended: true
+server = express()
+server.use favicon './favicon.ico'
+server.use(bodyParser.json())
+server.use bodyParser.urlencoded extended: true
 
 if DEV
-  app.use (req, res, next) ->
+  server.use (req, res, next) ->
     res.header 'Access-Control-Allow-Origin', '*'
     res.header(
       'Access-Control-Allow-Headers'
@@ -37,13 +37,13 @@ if DEV
     )
     next()
 
-app.use express.static path.resolve __dirname, 'dist'
-app.set 'views', './views'
-app.set 'view engine', 'jade'
+server.use express.static path.resolve __dirname, 'dist'
+server.set 'views', './views'
+server.set 'view engine', 'jade'
 
-app.get '/index.atom', (req, res) ->
+server.get '/index.atom', (req, res) ->
   lang = negotiateLang req
-  res.header 'Content-Type', 'application/atom+xml; charset=utf8'
+  res.header 'Content-Type', 'serverlication/atom+xml; charset=utf8'
   { store } = createStore()
   init(store, {}, lang).then ->
     articles = articleSelectors.containerSelector(store.getState()).articles
@@ -60,10 +60,10 @@ app.get '/index.atom', (req, res) ->
       articles: articles
     )
 
-app.get '/locales/:lang', (req, res) ->
+server.get '/locales/:lang', (req, res) ->
   API.fetchLocaleStrings(req.params.lang).then res.send.bind res
 
-app.get '/signup', (req, res) ->
+server.get '/signup', (req, res) ->
   DB.isSignupAllowed().then (isAllowed) ->
     if isAllowed
       res.format
@@ -74,7 +74,7 @@ app.get '/signup', (req, res) ->
     else
       res.sendStatus 404
 
-app.post '/signup', (req, res) ->
+server.post '/signup', (req, res) ->
   API.signup req.body
     .then (body) ->
       res.format
@@ -90,10 +90,10 @@ app.post '/signup', (req, res) ->
       else if msg == 'repeat password mismatch'
         res.status(400).send message: msg
 
-app.use '/users', userRouter
-app.use '/', siteRouter
+server.use '/users', userRouter
+server.use '/', siteRouter
 
-app.use (err, req, res, next) ->
+server.use (err, req, res, next) ->
   msg = err.message
   if msg == 'session timeout' || msg = 'token expired'
     logger.warn msg
@@ -118,9 +118,8 @@ credentials =
   ca: fs.readFileSync path.join certsPath, 'chain.pem'
 
 if PROD
-  server = https.createServer credentials, app
-else
-  server = app
+  https.createServer(credentials, server).listen 8443, ->
+    logger.info 'HTTPS server listening on port 8443...'
 
 server.listen 8081, ->
   logger.info 'Express web server listening on port 8081...'
