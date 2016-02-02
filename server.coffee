@@ -1,3 +1,4 @@
+fs = require 'fs'
 path = require 'path'
 https = require 'https'
 express = require 'express'
