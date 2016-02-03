@@ -15,7 +15,7 @@ ddoc = require './ddoc.js'
 diff = ->
   ddoc
 
-db = new PouchDB('./db/thirdhandinfo')
+db = new PouchDB('../db/thirdhandinfo')
 
 getQueryProps = (query) ->
   props = [ 'key', 'startkey', 'endkey', 'descending' ]
