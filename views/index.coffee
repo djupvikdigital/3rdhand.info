@@ -8,12 +8,12 @@ conf = YAML.safeLoad read './config.yaml'
 
 server = ''
 if conf.assetServer
-  server = 'http://' + conf.assetServer.hostname + ':' + conf.assetServer.port
+  server = '//' + conf.assetServer.hostname + ':' + conf.assetServer.port
 assetPaths = conf.assetPaths || require '../dist/webpack-assets.json'
 
 { html, head, meta, title, link, body, header, div, script } = Elements
 
-googleFontsUrl = 'http://fonts.googleapis.com/css?family='
+googleFontsUrl = '//fonts.googleapis.com/css?family='
 stylesheets = [
   googleFontsUrl + 'Open+Sans:400,400italic,700,700italic,800italic'
   googleFontsUrl + 'Rokkitt:400,700'
