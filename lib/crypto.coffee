@@ -1,10 +1,12 @@
+YAML = require 'js-yaml'
 Promise = require 'bluebird'
 bcrypt = Promise.promisifyAll require 'bcrypt'
 t = require 'transducers.js'
 
 { array } = require '../src/scripts/utils.coffee'
+{ read } = require './utils.coffee'
 
-serverSecret = 'topsecretstring'
+{ serverSecret } = YAML.safeLoad read './config.yaml'
 
 stringify = (input) ->
   JSON.stringify array input, serverSecret

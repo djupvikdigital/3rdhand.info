@@ -1,19 +1,15 @@
+YAML = require 'js-yaml'
 React = require 'react'
 
+{ read } = require '../lib/utils.coffee'
 Elements = require '../src/scripts/elements.coffee'
 
-production = process.env.NODE_ENV == 'production'
+conf = YAML.safeLoad read './config.yaml'
 
-assetPaths =
-  scripts:
-    js: '/scripts.js'
-  styles:
-    css: '/styles.css'
 server = ''
-if production
-  assetPaths = require '../dist/webpack-assets.json'
-else
-  server = 'http://localhost:8080'
+if conf.assetServer
+  server = 'http://' + conf.assetServer.hostname + ':' + conf.assetServer.port
+assetPaths = conf.assetPaths || require '../dist/webpack-assets.json'
 
 { html, head, meta, title, link, body, header, div, script } = Elements
 

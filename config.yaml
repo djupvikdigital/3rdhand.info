@@ -1,0 +1,9 @@
+assetPaths:
+  scripts:
+    js: '/scripts.js'
+  styles:
+    css: '/styles.css'
+assetServer:
+  hostname: localhost
+  port: 8080
+serverSecret: topsecretstring

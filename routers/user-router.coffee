@@ -1,10 +1,11 @@
+YAML = require 'js-yaml'
 router = require('express').Router()
 session = require 'cookie-session'
 moment = require 'moment'
 URL = require 'url'
 
 logger = require '../lib/log.coffee'
-Crypto = require '../lib/crypto.coffee'
+utils = require '../lib/utils.coffee'
 API = require '../src/node_modules/api.coffee'
 DB = require '../lib/db.coffee'
 createStore = require '../src/scripts/store.coffee'
@@ -14,6 +15,8 @@ siteRouter = require './site-router.coffee'
 { getServerUrl } = require '../lib/url.coffee'
 { getPath, getUserPath } = require '../src/scripts/url.coffee'
 
+conf = YAML.safeLoad utils.read './config.yaml'
+
 clearUserSession = (req) ->
   if !req
     throw new Error('missing required argument')
@@ -22,7 +25,7 @@ clearUserSession = (req) ->
 
 router.use session(
   name: 'session'
-  secret: Crypto.serverSecret
+  secret: conf.serverSecret
   httpOnly: true
 )
 
