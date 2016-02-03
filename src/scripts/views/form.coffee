@@ -43,7 +43,7 @@ module.exports = React.createClass
     if typeof @props.onSubmit == 'function'
       e.preventDefault()
       Promise.resolve @props.onSubmit @state.data.toJS()
-        .then ->
+        .then =>
           @setValue 'error', ''
         .catch (err) =>
           @setValue 'error', err.message
