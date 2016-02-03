@@ -6,6 +6,10 @@ logger = new winston.Logger(transports: [
 
 module.exports = Object.assign {}, logger, {
   error: (err) ->
+    if !err
+      return console.trace()
     logger.error err.message
     logger.debug err.stack
+    if !err.stack
+      console.trace()
 }
