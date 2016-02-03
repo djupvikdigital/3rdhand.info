@@ -1,3 +1,4 @@
+path = require 'path'
 PouchDB = require 'pouchdb'
 PouchDB.plugin require 'pouchdb-upsert'
 Promise = require 'bluebird'
@@ -15,7 +16,7 @@ ddoc = require './ddoc.js'
 diff = ->
   ddoc
 
-db = new PouchDB('../db/thirdhandinfo')
+db = new PouchDB(path.resolve __dirname, '../db/thirdhandinfo')
 
 getQueryProps = (query) ->
   props = [ 'key', 'startkey', 'endkey', 'descending' ]
