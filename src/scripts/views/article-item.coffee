@@ -26,7 +26,7 @@ module.exports = (props) ->
         Link params: urlParams, innerHtml: headline || title
       )
       time(
-        { className: 'milli', dateTime: published }
+        { className: 'milli', dateTime: published.utc }
         publishedFormatted
       )
     )

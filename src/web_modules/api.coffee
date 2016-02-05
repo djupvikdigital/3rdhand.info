@@ -1,3 +1,4 @@
+moment = require 'moment-timezone'
 request = require 'superagent'
 require('superagent-as-promised')(request, Promise)
 defaults = require 'json-schema-defaults'
@@ -6,6 +7,10 @@ articleSchema = require '../../schema/article-schema.yaml'
 URL = require '../scripts/url.coffee'
 
 articleDefaults = defaults articleSchema
+
+createDatetimeStruct = (date) ->
+  utc: moment.utc(date).toISOString()
+  timezone: moment.tz.guess()
 
 getBody = (res) ->
   res.body
@@ -45,7 +50,7 @@ module.exports =
       .accept 'application/json'
       .send data
   saveArticle: (article, userId) ->
-    now = (new Date()).toISOString()
+    now = createDatetimeStruct new Date()
     article.created = now unless article.created
     # might add support for drafts/unpublished articles later
     article.published = now unless article.published

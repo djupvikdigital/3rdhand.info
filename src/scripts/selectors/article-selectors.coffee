@@ -1,5 +1,5 @@
 Immutable = require 'immutable'
-moment = require 'moment'
+moment = require 'moment-timezone'
 Reselect = require 'reselect'
 { compose } = require 'transducers.js'
 
@@ -22,7 +22,7 @@ formatSelector = (state, lang) ->
     [
       'published'
       utils.createPropertyMapper 'publishedFormatted', (published) ->
-        moment(published).format('LLL')
+        moment.tz(published.utc, published.timezone).format('LLL z')
     ]
   )
 
