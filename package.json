@@ -68,6 +68,7 @@
     "lodash": "^4.1.0",
     "markdown-it": "^5.1.0",
     "moment": "^2.11.1",
+    "moment-timezone": "^0.5.0",
     "node-sass": "^3.4.2",
     "object-assign": "^4.0.1",
     "pouchdb": "^5.2.1",
