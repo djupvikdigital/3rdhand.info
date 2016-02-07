@@ -9,12 +9,13 @@ createStore = require '../src/scripts/store.coffee'
 userActions = require '../src/scripts/actions/user-actions.coffee'
 createHandler = require '../lib/create-router-handler.coffee'
 URL = require '../lib/url.coffee'
+utils = require '../src/scripts/utils.coffee'
 
 setUser = (session, userId, dispatch) ->
   if !userId then return false
   id = 'user/' + userId
   if session && session.user._id == id
-    dispatch userActions.setUser session.user._id
+    dispatch userActions.setUser utils.getUserProps session.user
     return true
   return false
 
@@ -27,7 +28,7 @@ router.get '*', createHandler (req, res, props) ->
       storeModule = createStore()
       { store, history } = storeModule
       if req.user
-        store.dispatch userActions.setUser req.user._id
+        store.dispatch userActions.setUser utils.getUserProps req.user
       else
         setUser req.session, params.userId, store.dispatch
       url = req.originalUrl

@@ -151,6 +151,8 @@ module.exports =
   getProps: getProps
   getUserId: (userId) ->
     getUserId(userId).cuid || userId
+  getUserProps: (user) ->
+    getProps user, [ '_id', 'name' ]
   filterValues: filterValues
   identity: identity
   keyIn: keyIn
