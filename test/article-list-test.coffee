@@ -17,8 +17,14 @@ describe 'ArticleList', ->
   it 'renders a list of articles', ->
     { store } = createStore()
     articles = [
-      { _id: '_id1' }
-      { _id: '_id2' }   
+      {
+        _id: '_id1'
+        published: { utc: '2016-02-07T19:54:00Z', timezone: 'UTC' }
+      }
+      {
+        _id: '_id2'
+        published: { utc: '2016-02-07T19:55:00Z', timezone: 'UTC' }
+      }   
     ]
     store.dispatch
       type: 'FETCH_ARTICLES_FULFILLED'
