@@ -2230,6 +2230,11 @@
       "from": "markdown-it@>=5.1.0 <6.0.0",
       "resolved": "https://registry.npmjs.org/markdown-it/-/markdown-it-5.1.0.tgz"
     },
+    "markdown-it-deflist": {
+      "version": "2.0.0",
+      "from": "markdown-it-deflist@*",
+      "resolved": "https://registry.npmjs.org/markdown-it-deflist/-/markdown-it-deflist-2.0.0.tgz"
+    },
     "mdurl": {
       "version": "1.0.1",
       "from": "mdurl@>=1.0.1 <1.1.0",
