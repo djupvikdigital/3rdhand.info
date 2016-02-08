@@ -7,11 +7,11 @@ createFactory = require '../src/scripts/create-factory.coffee'
 Root = createFactory require '../src/scripts/views/root.coffee'
 IndexTemplate = require '../views/index.coffee'
 
-module.exports = (storeModule, params, lang, Template = IndexTemplate) ->
+fn = (storeModule, serverUrl, params, lang, Template = IndexTemplate) ->
   { store } = storeModule
   init(store, params, lang).then ->
     doctype = '<!DOCTYPE html>'
-    app = ReactDOM.renderToString Root storeModule
+    app = ReactDOM.renderToString Root Object.assign { serverUrl }, storeModule
     h = Helmet.rewind()
     title = h.title.toComponent()[0]
     meta = h.meta.toComponent()
@@ -21,3 +21,5 @@ module.exports = (storeModule, params, lang, Template = IndexTemplate) ->
       React.createElement Template, { siteTitle, title, meta, app, lang, state }
     )
     return doctype + html
+
+module.exports = fn

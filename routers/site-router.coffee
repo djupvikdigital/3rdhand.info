@@ -35,7 +35,8 @@ router.get '*', createHandler (req, res, props) ->
       store.dispatch(
         ReduxRouter.routeActions.replace pathname: url, state: params
       )
-      renderTemplate storeModule, params, negotiateLang req
+      serverUrl = URL.getServerUrl req
+      renderTemplate storeModule, serverUrl, params, negotiateLang req
         .then res.send.bind res
     default: ->
       API.fetchArticles params

@@ -1,3 +1,4 @@
+React = require 'react'
 ReactRedux = require 'react-redux'
 ReactRouter = require 'react-router'
 
@@ -17,8 +18,8 @@ Helmet = createFactory(
 Router = createFactory ReactRouter.Router
 
 module.exports = (props) ->
-  { store, history } = props
-  router = Router { history }, routes
+  { store, history, serverUrl } = props
+  router = Router { history }, React.cloneElement routes, { serverUrl }
   Provider(
     { store }
     div(
@@ -26,3 +27,5 @@ module.exports = (props) ->
       router
     )
   )
+
+module.exports.displayName = 'Root'

@@ -1,3 +1,4 @@
+React = require 'react'
 ReactRedux = require 'react-redux'
 
 createFactory = require '../create-factory.coffee'
@@ -11,12 +12,13 @@ SiteHeader = createFactory(
 { div } = Elements
 
 module.exports = (props) ->
+  { serverUrl } = props.route
   div(
     className: 'u-overflow-hidden'
     SiteHeader()
     div(
       className: 'wrapper'
-      props.children
+      React.cloneElement props.children, { serverUrl }
     )
   )
 

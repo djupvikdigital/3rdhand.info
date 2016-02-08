@@ -41,4 +41,4 @@ module.exports = React.createClass
     else if params.view
       ArticleEditor save: @save, params: params
     else
-      ArticleFull()
+      ArticleFull serverUrl: @props.serverUrl

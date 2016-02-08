@@ -11,6 +11,7 @@ routes = require './views/routes.coffee'
 createFactory = require './create-factory.coffee'
 Root = createFactory require './views/root.coffee'
 appActions = require './actions/app-actions.coffee'
+URL = require 'url-helpers'
 
 Object.assign || (Object.assign = assign)
 
@@ -25,9 +26,13 @@ state = store.getState()
 store.dispatch ReduxRouter.routeActions.replace(
   pathname: state.routing.location.pathname, state: params
 )
+serverUrl = URL.getServerUrl()
 
 init store, params, document.documentElement.lang
   .then ->
-    ReactDOM.render Root({ store, history }), document.getElementById 'app'
+    ReactDOM.render(
+      Root { store, history, serverUrl }
+      document.getElementById 'app'
+    )
   .catch (err) ->
     console.error err.stack || err
