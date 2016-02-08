@@ -7,28 +7,28 @@ RadioOption = require './radio-option.coffee'
 
 { div, fieldset } = Elements
 
-module.exports = (props) ->
-  renderChildren = ->
-    value = props.value
-    props = Immutable.Map {
-      name: props.name
-      onChange: props.onChange
-    }
-    React.Children.map props.children, (child) ->
-      if child.type == RadioOption
-        React.cloneElement(
-          child
-          props.set('checked', child.props.value == value).toJS()
-        )
-      else
+renderChildren = (_props) ->
+  value = _props.value
+  props = Immutable.Map
+    name: _props.name
+    onChange: _props.onChange
+  React.Children.map _props.children, (child) ->
+    if child.type == RadioOption
+      React.cloneElement(
         child
+        props.set('checked', child.props.value == value).toJS()
+        child.props.children
+      )
+    else
+      child
 
+module.exports = (props) ->
   if props.label
     fieldset(
       legend(props.label)
-      renderChildren()
+      renderChildren props
     )
   else
-    div(renderChildren())
+    div renderChildren props
 
 module.exports.displayName = 'RadioGroup'
