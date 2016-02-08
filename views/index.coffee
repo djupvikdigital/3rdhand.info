@@ -26,6 +26,11 @@ module.exports = React.createClass
       meta charSet: 'utf-8'
       meta name: 'viewport', content: 'width=device-width, initial-scale=1'
       title(@props.title)
+      link
+        rel: 'alternate'
+        type: 'application/atom+xml'
+        title: @props.title
+        href: '/index.atom'
     ].concat stylesheets.map (href) ->
         link rel: 'stylesheet', href: href
     html(
