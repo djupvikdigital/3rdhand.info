@@ -1,5 +1,5 @@
 React = require 'react'
-DocumentTitle = React.createFactory require 'react-document-title'
+Helmet = React.createFactory require 'react-helmet'
 
 createFactory = require '../create-factory.coffee'
 Elements = require '../elements.coffee'
@@ -9,17 +9,17 @@ Elements = require '../elements.coffee'
 module.exports = (props) ->
   if !props.article
     return div()
-  { title, headline, intro, body } = props.article
-  h = h1 innerHtml: headline || title
-  res = div(
-    h
+  { title, headline, summary, intro, body } = props.article
+  div(
+    Helmet
+      title: props.title || title
+      meta: [
+        name: 'description', content: summary
+      ]
+    h1 innerHtml: headline || title
     if intro
       p b className: 'intro', innerHtml: intro
     div innerHtml: body
   )
-  if props.title
-    DocumentTitle { title: props.title }, res
-  else
-    res
 
 module.exports.displayName = 'ArticleFull'

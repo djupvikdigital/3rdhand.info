@@ -1,5 +1,5 @@
 ReactDOM = require 'react-dom/server'
-DocumentTitle = require 'react-document-title'
+Helmet = require 'react-helmet'
 
 init = require '../src/scripts/init.coffee'
 createFactory = require '../src/scripts/create-factory.coffee'
@@ -11,9 +11,11 @@ module.exports = (storeModule, params, lang, Template = IndexTemplate) ->
   init(store, params, lang).then ->
     doctype = '<!DOCTYPE html>'
     app = ReactDOM.renderToString Root storeModule
-    title = DocumentTitle.rewind()
+    h = Helmet.rewind()
+    title = h.title.toComponent()[0]
+    meta = h.meta.toComponent()
     state = store.getState()
     html = ReactDOM.renderToStaticMarkup(
-      Template { title, app, lang, state }
+      Template { title, meta, app, lang, state }
     )
     return doctype + html

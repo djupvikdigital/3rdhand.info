@@ -1,5 +1,4 @@
 YAML = require 'js-yaml'
-React = require 'react'
 
 { read } = require '../lib/utils.coffee'
 Elements = require '../src/scripts/elements.coffee'
@@ -20,27 +19,26 @@ stylesheets = [
   server + assetPaths.styles.css
 ]
 
-module.exports = React.createClass
-  render: ->
-    metadata = [
-      meta charSet: 'utf-8'
-      meta name: 'viewport', content: 'width=device-width, initial-scale=1'
-      title(@props.title)
-      link
-        rel: 'alternate'
-        type: 'application/atom+xml'
-        title: @props.title
-        href: '/index.atom'
-    ].concat stylesheets.map (href) ->
-        link rel: 'stylesheet', href: href
-    html(
-      { lang: @props.lang }
-      head metadata
-      body(
-        div id: 'app', innerHtml: @props.app
-        script
-          id: 'state', type: 'application/json'
-          JSON.stringify @props.state
-        script src: server + assetPaths.scripts.js
-      )
+module.exports = (props) ->
+  metadata = [
+    meta charSet: 'utf-8'
+    meta name: 'viewport', content: 'width=device-width, initial-scale=1'
+    props.title
+    link
+      rel: 'alternate'
+      type: 'application/atom+xml'
+      title: props.title.props.children
+      href: '/index.atom'
+  ].concat props.meta, stylesheets.map (href) ->
+      link rel: 'stylesheet', href: href
+  html(
+    lang: props.lang
+    head metadata
+    body(
+      div id: 'app', innerHtml: props.app
+      script
+        id: 'state', type: 'application/json'
+        JSON.stringify props.state
+      script src: server + assetPaths.scripts.js
     )
+  )

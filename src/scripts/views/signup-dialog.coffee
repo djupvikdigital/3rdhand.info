@@ -4,7 +4,7 @@ ReactRedux = require 'react-redux'
 createFactory = require '../create-factory.coffee'
 selectors = require '../selectors/app-selectors.coffee'
 
-DocumentTitle = createFactory require 'react-document-title'
+Helmet = createFactory require 'react-helmet'
 
 Elements = require '../elements.coffee'
 Form = createFactory require './form.coffee'
@@ -31,17 +31,15 @@ module.exports = React.createClass
       repeatPassword
       signup
     } = @props.localeStrings
-    DocumentTitle(
-      title: title
-      Form(
-        onSubmit: @handleSignup
-        h1 title
-        FormMessage type: 'error', name: 'error'
-        TextInput label: email, name: 'email'
-        PasswordInput label: password, name: 'password'
-        PasswordInput label: repeatPassword, name: 'repeatPassword'
-        FormGroup(
-          input className: 'btn', type: 'submit', value: signup
-        )
+    Helmet { title }
+    Form(
+      onSubmit: @handleSignup
+      h1 title
+      FormMessage type: 'error', name: 'error'
+      TextInput label: email, name: 'email'
+      PasswordInput label: password, name: 'password'
+      PasswordInput label: repeatPassword, name: 'repeatPassword'
+      FormGroup(
+        input className: 'btn', type: 'submit', value: signup
       )
     )

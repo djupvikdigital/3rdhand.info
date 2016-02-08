@@ -6,7 +6,7 @@ createFactory = require '../create-factory.coffee'
 selectors = require '../selectors/app-selectors.coffee'
 URL = require '../url.coffee'
 
-DocumentTitle = createFactory require 'react-document-title'
+Helmet = createFactory require 'react-helmet'
 
 Elements = require '../elements.coffee'
 Form = createFactory require './form.coffee'
@@ -60,37 +60,35 @@ module.exports = React.createClass
     } = l
     isLoggedIn = @props.login.isLoggedIn
     title = if isLoggedIn then logout else login
-    DocumentTitle(
-      title: title
-      Form(
-        if isLoggedIn
-          [
-            action: URL.getUserPath(@props.user._id) + '/logout'
-            method: 'GET'
-            initialData: @getInitialData()
-            onSubmit: @handleLogout
-            h1 title
-            input type: 'hidden', name: 'from'
-            input type: 'hidden', name: 'userId'
-            Output label: loggedInAs, name: 'name'
-            FormGroup(
-              input className: 'btn', type: 'submit', value: logout
-            )
-          ]
-        else
-          [
-            action: '/users'
-            method: 'POST'
-            initialData: @getInitialData()
-            onSubmit: @handleSubmit
-            h1 title
-            FormMessage type: 'error', name: 'error'
-            input type: 'hidden', name: 'from'
-            TextInput label: email, name: 'email'
-            PasswordInput label: password, name: 'password'
-            FormGroup(
-              SubmitButton login
-            )
-          ]
-      )
+    Helmet { title }
+    Form(
+      if isLoggedIn
+        [
+          action: URL.getUserPath(@props.user._id) + '/logout'
+          method: 'GET'
+          initialData: @getInitialData()
+          onSubmit: @handleLogout
+          h1 title
+          input type: 'hidden', name: 'from'
+          input type: 'hidden', name: 'userId'
+          Output label: loggedInAs, name: 'name'
+          FormGroup(
+            input className: 'btn', type: 'submit', value: logout
+          )
+        ]
+      else
+        [
+          action: '/users'
+          method: 'POST'
+          initialData: @getInitialData()
+          onSubmit: @handleSubmit
+          h1 title
+          FormMessage type: 'error', name: 'error'
+          input type: 'hidden', name: 'from'
+          TextInput label: email, name: 'email'
+          PasswordInput label: password, name: 'password'
+          FormGroup(
+            SubmitButton login
+          )
+        ]
     )

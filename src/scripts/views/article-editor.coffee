@@ -7,7 +7,7 @@ Elements = require '../elements.coffee'
 createFactory = require '../create-factory.coffee'
 selectors = require '../selectors/app-selectors.coffee'
 
-DocumentTitle = createFactory require 'react-document-title'
+Helmet = createFactory require 'react-helmet'
 
 Form = createFactory require './form.coffee'
 FormMessage = createFactory ReactRedux.connect(selectors.formMessageSelector)(
@@ -57,27 +57,25 @@ module.exports = React.createClass
     props.initialData = data
     l = @props.localeStrings
     title = @props.title
-    DocumentTitle(
-      { title }
-      Form(
-        props
-        h1 title
-        FormMessage type: 'error', name: 'error'
-        RadioGroup(
-          { name: 'lang' }
-          RadioOption(label: l.norwegian, value: 'nb')
-          RadioOption(label: l.english, value: 'en')
-        )
-        TextInput label: l.slug, name: 'slug'
-        TextInput label: l.title, name: 'title'
-        TextInput label: l.short_title, name: 'short_title'
-        TextInput label: l.headline, name: 'headline'
-        TextInput label: l.teaser, name: 'teaser', multiline: true
-        TextInput label: l.summary, name: 'summary', multiline: true
-        TextInput label: l.intro, name: 'intro', multiline: true
-        TextInput label: l.body, name: 'body', multiline: true
-        FormGroup(
-          input(className: 'btn', type: "submit", value: l.save)
-        )
+    Helmet { title }
+    Form(
+      props
+      h1 title
+      FormMessage type: 'error', name: 'error'
+      RadioGroup(
+        name: 'lang'
+        RadioOption(label: l.norwegian, value: 'nb')
+        RadioOption(label: l.english, value: 'en')
+      )
+      TextInput label: l.slug, name: 'slug'
+      TextInput label: l.title, name: 'title'
+      TextInput label: l.short_title, name: 'short_title'
+      TextInput label: l.headline, name: 'headline'
+      TextInput label: l.teaser, name: 'teaser', multiline: true
+      TextInput label: l.summary, name: 'summary', multiline: true
+      TextInput label: l.intro, name: 'intro', multiline: true
+      TextInput label: l.body, name: 'body', multiline: true
+      FormGroup(
+        input(className: 'btn', type: 'submit', value: l.save)
       )
     )

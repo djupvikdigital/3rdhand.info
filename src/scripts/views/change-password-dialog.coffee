@@ -7,7 +7,7 @@ Elements = require '../elements.coffee'
 actions = require '../actions/user-actions.coffee'
 selectors = require '../selectors/app-selectors.coffee'
 
-DocumentTitle = createFactory require 'react-document-title'
+Helmet = createFactory require 'react-helmet'
 
 Form = createFactory require './form.coffee'
 FormMessage = createFactory ReactRedux.connect(selectors.formMessageSelector)(
@@ -66,7 +66,5 @@ module.exports = React.createClass
       PasswordInput label: repeatPassword, name: 'repeatPassword'
       FormGroup SubmitButton name: 'changePassword', changePassword
     ]
-    DocumentTitle(
-      title: title
-      Form args
-    )
+    Helmet { title }
+    Form args
