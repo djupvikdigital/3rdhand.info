@@ -13,10 +13,12 @@ module.exports = (storeModule, params, lang, Template = IndexTemplate) ->
     doctype = '<!DOCTYPE html>'
     app = ReactDOM.renderToString Root storeModule
     h = Helmet.rewind()
+    siteTitle = ''
+    siteTitle = store.getState().localeState.toJS().localeStrings[lang].title
     title = h.title.toComponent()[0]
     meta = h.meta.toComponent()
     state = store.getState()
     html = ReactDOM.renderToStaticMarkup(
-      React.createElement Template, { title, meta, app, lang, state }
+      React.createElement Template, { siteTitle, title, meta, app, lang, state }
     )
     return doctype + html

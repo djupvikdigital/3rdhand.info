@@ -27,7 +27,7 @@ module.exports = (props) ->
     link
       rel: 'alternate'
       type: 'application/atom+xml'
-      title: props.title.props.children
+      title: props.siteTitle
       href: '/index.atom'
   ].concat props.meta, stylesheets.map (href) ->
       link rel: 'stylesheet', href: href
