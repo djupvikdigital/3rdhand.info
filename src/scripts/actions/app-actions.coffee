@@ -1,6 +1,6 @@
 ReduxRouter = require 'react-router-redux'
 
-URL = require '../url.coffee'
+URL = require 'url-helpers'
 
 module.exports =
   init: (state) ->

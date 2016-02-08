@@ -12,8 +12,11 @@ createStore = require '../src/scripts/store.coffee'
 userActions = require '../src/scripts/actions/user-actions.coffee'
 articleActions = require '../src/scripts/actions/article-actions.coffee'
 siteRouter = require './site-router.coffee'
-{ getServerUrl } = require '../lib/url.coffee'
-{ getPath, getUserPath } = require '../src/scripts/url.coffee'
+{
+  getPath
+  getUserPath
+  getServerUrl
+} = require '../src/node_modules/url-helpers.coffee'
 
 conf = YAML.safeLoad utils.read './config.yaml'
 

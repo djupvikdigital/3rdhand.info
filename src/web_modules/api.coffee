@@ -4,7 +4,7 @@ require('superagent-as-promised')(request, Promise)
 defaults = require 'json-schema-defaults'
 
 articleSchema = require '../../schema/article-schema.yaml'
-URL = require '../scripts/url.coffee'
+URL = require './url-helpers.coffee'
 
 articleDefaults = defaults articleSchema
 

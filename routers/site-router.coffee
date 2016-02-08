@@ -8,7 +8,7 @@ negotiateLang = require '../lib/negotiate-lang.coffee'
 createStore = require '../src/scripts/store.coffee'
 userActions = require '../src/scripts/actions/user-actions.coffee'
 createHandler = require '../lib/create-router-handler.coffee'
-URL = require '../lib/url.coffee'
+URL = require '../src/node_modules/url-helpers.coffee'
 utils = require '../src/scripts/utils.coffee'
 
 setUser = (session, userId, dispatch) ->

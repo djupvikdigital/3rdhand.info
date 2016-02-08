@@ -10,7 +10,7 @@ t = require 'transducers.js'
 logger = require './log.coffee'
 Crypto = require './crypto.coffee'
 utils = require '../src/scripts/utils.coffee'
-URL = require '../src/scripts/url.coffee'
+URL = require '../src/web_modules/url-helpers.coffee'
 ddoc = require './ddoc.js'
 
 diff = ->

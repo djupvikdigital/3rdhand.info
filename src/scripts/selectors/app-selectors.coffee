@@ -3,7 +3,7 @@ Immutable = require 'immutable'
 { compose } = require 'transducers.js'
 
 utils = require '../utils.coffee'
-URL = require '../url.coffee'
+URL = require 'url-helpers'
 
 { argsToObject, prop } = utils
 

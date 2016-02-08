@@ -1,10 +1,6 @@
 expect = require 'expect'
 
-URL = Object.assign(
-  {}
-  require '../src/scripts/url.coffee'
-  require '../lib/url.coffee'
-)
+URL = require '../src/node_modules/url-helpers.coffee'
 
 describe 'URL modules', ->
   describe 'getParams', ->

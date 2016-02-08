@@ -10,10 +10,9 @@ DEV = !PROD
 
 logger = require './lib/log.coffee'
 negotiateLang = require './lib/negotiate-lang.coffee'
-URL = require './src/scripts/url.coffee'
+URL = require './src/node_modules/url-helpers.coffee'
 init = require './src/scripts/init.coffee'
 API = require './src/node_modules/api.coffee'
-{ getServerUrl } = require './lib/url.coffee'
 createStore = require './src/scripts/store.coffee'
 articleSelectors = require './src/scripts/selectors/article-selectors.coffee'
 DB = require './lib/db.coffee'
@@ -51,7 +50,7 @@ server.get '/index.atom', (req, res) ->
     articles.forEach (article) ->
       article.href = URL.getPath article.urlParams
     updated = if articles.length then articles[0].updated else ''
-    host = getServerUrl req
+    host = URL.getServerUrl req
     res.render(
       'feed'
       host: host

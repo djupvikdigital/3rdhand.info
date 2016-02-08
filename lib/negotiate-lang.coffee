@@ -1,5 +1,5 @@
 Lang = require './lang.coffee'
-URL = require './url.coffee'
+URL = require '../src/node_modules/url-helpers.coffee'
 
 module.exports = (req) ->
   l = Lang.supportedLocales

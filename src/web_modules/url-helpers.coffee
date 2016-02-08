@@ -1,4 +1,4 @@
-utils = require './utils.coffee'
+utils = require '../scripts/utils.coffee'
 padStart = require 'lodash/padStart'
 
 assemblePath = (obj) ->
@@ -46,4 +46,7 @@ getPath = (params) ->
   addLangToArray filename, params.lang
   assemblePath path: path, filename: filename
 
-module.exports = { getPath, getUserPath }
+getServerUrl = ->
+  location.protocol + '//' + location.host
+
+module.exports = { getPath, getServerUrl, getUserPath }

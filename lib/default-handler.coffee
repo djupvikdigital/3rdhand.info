@@ -1,7 +1,7 @@
 ReduxRouter = require 'react-router-redux'
 
 createHandler = require './create-router-handler.coffee'
-URL = require './url.coffee'
+URL = require '../src/node_modules/url-helpers.coffee'
 renderTemplate = require './render-template.coffee'
 negotiateLang = require './negotiate-lang.coffee'
 createStore = require '../src/scripts/store.coffee'
