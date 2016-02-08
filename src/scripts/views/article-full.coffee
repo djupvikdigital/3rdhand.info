@@ -9,9 +9,9 @@ URL = require 'url-helpers'
 { div, h1, header, p, b } = Elements
 
 module.exports = (props) ->
-  if !props.article
-    return div()
   lang = props.lang
+  if !props.article || !props.article.title[lang].text
+    return div()
   article = formatSelector props.article, lang
   { title, headline, summary, intro, body } = article
   pageTitle = props.title || title
