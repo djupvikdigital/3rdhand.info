@@ -54,7 +54,7 @@ itemSelector = Reselect.createSelector(
   (state, lang, title) ->
     if state.article
       articleTitle = state.article.title
-      if articleTitle
+      if articleTitle && articleTitle[lang].text
         title = articleTitle[lang].text + ' - ' + title
     state.lang = lang
     state.title = title
