@@ -47,17 +47,16 @@ articleSelector = (state) ->
 
 itemSelector = Reselect.createSelector(
   [
-    Reselect.createSelector(
-      [ articleSelector, langSelector ]
-      formatSelector
-    )
+    articleSelector
+    langSelector
     compose prop('title'), appSelectors.titleSelector
   ]
-  (state, title) ->
+  (state, lang, title) ->
     if state.article
       articleTitle = state.article.title
       if articleTitle
-        title = articleTitle + ' - ' + title
+        title = articleTitle[lang].text + ' - ' + title
+    state.lang = lang
     state.title = title
     state
 )
@@ -72,16 +71,20 @@ module.exports =
       state.params = params
       state
   )
+  formatSelector: formatSelector
   itemSelector: itemSelector
   editorSelector: Reselect.createSelector(
     [
       articleSelector
-      itemSelector
       langSelector
       appSelectors.localeSelector
     ]
-    (state, item, lang, localeStrings) ->
+    (state, lang, localeStrings) ->
       localeStrings = localeStrings.ArticleEditor
-      title = item.article.title || localeStrings.untitled
+      articleTitle = state.article.title
+      if articleTitle
+        title = articleTitle[lang].text
+      else
+        title = localeStrings.untitled
       Object.assign {}, state, { title, lang, localeStrings }
   )

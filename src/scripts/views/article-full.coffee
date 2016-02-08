@@ -1,6 +1,7 @@
 React = require 'react'
 Helmet = React.createFactory require 'react-helmet'
 
+{ formatSelector } = require '../selectors/article-selectors.coffee'
 createFactory = require '../create-factory.coffee'
 Elements = require '../elements.coffee'
 
@@ -9,12 +10,14 @@ Elements = require '../elements.coffee'
 module.exports = (props) ->
   if !props.article
     return div()
-  { title, headline, summary, intro, body } = props.article
+  lang = props.lang
+  article = formatSelector props.article, lang
+  { title, headline, summary, intro, body } = article
   div(
     Helmet
       title: props.title || title
       meta: [
-        name: 'description', content: summary
+        name: 'description', content: props.article.summary[lang].text
       ]
     h1 innerHtml: headline || title
     if intro
