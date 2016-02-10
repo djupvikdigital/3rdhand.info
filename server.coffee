@@ -4,6 +4,7 @@ https = require 'https'
 express = require 'express'
 favicon = require 'serve-favicon'
 bodyParser = require 'body-parser'
+_ = require 'lodash'
 
 PROD = process.env.NODE_ENV == 'production'
 DEV = !PROD
@@ -43,13 +44,13 @@ server.set 'view engine', 'jade'
 
 server.get '/index.atom', (req, res) ->
   lang = negotiateLang req
-  res.header 'Content-Type', 'serverlication/atom+xml; charset=utf8'
+  res.header 'Content-Type', 'application/atom+xml; charset=utf8'
   { store } = createStore()
   init(store, {}, lang).then ->
     articles = articleSelectors.containerSelector(store.getState()).articles
     articles.forEach (article) ->
       article.href = URL.getPath article.urlParams
-    updated = if articles.length then articles[0].updated else ''
+    updated = if articles.length then _.last(articles[0].updated).utc else ''
     host = URL.getServerUrl req
     res.render(
       'feed'
