@@ -3,6 +3,7 @@ expect = require 'expect'
 React = require 'react'
 ReactDOM = require 'react-dom/server'
 ReactRedux = require 'react-redux'
+{ createMemoryHistory } = require 'react-router'
 cheerio = require 'cheerio'
 
 createFactory = require '../src/scripts/create-factory.coffee'
@@ -15,7 +16,7 @@ Provider = createFactory ReactRedux.Provider
 
 describe 'ArticleList', ->
   it 'renders a list of articles', ->
-    { store } = createStore()
+    { store } = createStore createMemoryHistory()
     articles = [
       {
         _id: '_id1'
@@ -24,11 +25,11 @@ describe 'ArticleList', ->
       {
         _id: '_id2'
         published: { utc: '2016-02-07T19:55:00Z', timezone: 'UTC' }
-      }   
+      }
     ]
     store.dispatch
       type: 'FETCH_ARTICLES_FULFILLED'
-      payload: 
+      payload:
         docs: articles
     props = selectors.containerSelector(store.getState())
     component = Provider(

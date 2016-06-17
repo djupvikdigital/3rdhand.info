@@ -1,6 +1,7 @@
 expect = require 'expect'
 
 Immutable = require 'immutable'
+{ createMemoryHistory } = require 'react-router'
 YAML = require 'js-yaml'
 
 createStore = require '../src/scripts/store.coffee'
@@ -11,7 +12,7 @@ selectors = require '../src/scripts/selectors/article-selectors.coffee'
 describe 'articleSelectors', ->
   describe 'containerSelector', ->
     it 'returns articles from state', ->
-      { store } = createStore()
+      { store } = createStore createMemoryHistory()
       state = store.getState()
       state.articleState = state.articleState.merge
         articles: [
@@ -23,7 +24,7 @@ describe 'articleSelectors', ->
       expect(output.articles).toEqual(state.get('articles').toJS())
   describe 'itemSelector', ->
     it 'returns the article title merged with the title when a single article with a title is provided', ->
-      { store } = createStore()
+      { store } = createStore createMemoryHistory()
       state = store.getState()
       lang = state.localeState.get('lang')
       localeStrings = YAML.safeLoad read 'locales/' + lang + '.yaml'
@@ -44,7 +45,7 @@ describe 'articleSelectors', ->
       )
       expect(output.title).toBe(articleTitle + ' - ' + title)
     it 'returns just the title when a single article without a title is provided', ->
-      { store } = createStore()
+      { store } = createStore createMemoryHistory()
       state = store.getState()
       lang = state.localeState.get('lang')
       localeStrings = YAML.safeLoad read 'locales/' + lang + '.yaml'
