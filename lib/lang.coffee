@@ -3,7 +3,7 @@ tags = require 'language-tags'
 
 utils = require '../src/scripts/utils.coffee'
 
-supportedLocales = [ 'nb', 'en' ]
+supportedLocales = [ 'en', 'nb' ]
 supportedLocalesObject = new locale.Locales supportedLocales.join ','
 
 isLanguage = (lang) ->
