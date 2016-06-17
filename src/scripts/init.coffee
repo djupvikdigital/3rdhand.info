@@ -3,7 +3,7 @@ articleActions = require './actions/article-actions.coffee'
 
 module.exports = (store, params, lang) ->
   Promise.all([
-    store.dispatch(fetchStrings lang).payload.promise
-    store.dispatch(articleActions.fetch params).payload.promise
+    store.dispatch fetchStrings lang
+    store.dispatch articleActions.fetch params
   ]).catch (err) ->
     console.error err.stack || err

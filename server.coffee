@@ -96,7 +96,7 @@ server.use '/', siteRouter
 
 server.use (err, req, res, next) ->
   msg = err.message
-  if msg == 'session timeout' || msg = 'token expired'
+  if msg == 'session timeout' # || msg = 'token expired'
     logger.warn msg
     res.format
       html: ->

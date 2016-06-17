@@ -12,10 +12,9 @@ Elements = require '../elements.coffee'
 Link = createFactory ReactRedux.connect(selector)(Router.Link)
 
 propFactory = (props, langParam) ->
-  params = props.params
   onClick = ->
     props.dispatch actions.fetchStrings langParam
-  return { params, langParam, onClick }
+  return { langParam, onClick }
 
 module.exports = (props) ->
   classes = [

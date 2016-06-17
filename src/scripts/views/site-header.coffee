@@ -28,27 +28,23 @@ module.exports = React.createClass
     @props.dispatch userActions.logout data
   render: ->
     { home, newArticle, changePassword, logout } = @props.localeStrings
-    now = new Date()
-    newParams = {
-      year: now.getFullYear()
-      month: now.getMonth() + 1
-      day: now.getDate()
-      slug: 'untitled'
-      view: 'new'
-    }
     div(
       header(
         className: 'u-left', role: 'banner'
-        Link className: 'site-logo', title: home, innerHtml: logo
+        Link
+          className: 'site-logo'
+          title: home
+          innerHtml: logo
+          page: 'home'
         if @props.login.isLoggedIn
           nav(
             className: 'site-menu menu'
             ul(
               className: 'list-bare'
-              li Link params: newParams, newArticle
-              li Link slug: 'change-password', changePassword
+              li Link page: 'newArticle', newArticle
+              li Link page: 'changePassword', changePassword
               li Link(
-                slug: 'logout'
+                page: 'logout'
                 onClick: @handleLogout
                 logout
               )

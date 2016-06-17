@@ -1,3 +1,4 @@
+createHistory = require('react-router').createMemoryHistory
 YAML = require 'js-yaml'
 router = require('express').Router()
 session = require 'cookie-session'
@@ -48,19 +49,19 @@ router.post '/', (req, res) ->
         logger.error err
         res.sendStatus 500
   else
-    { store } = createStore()
+    { store } = createStore createHistory()
     store.dispatch userActions.login data
-      .payload.promise.then (action) ->
-        { user, timestamp } = action.payload
+      .then ({ action, value }) ->
+        { user, timestamp } = value
         if action.error
-          return Promise.reject action.payload
+          return Promise.reject value
         req.session.user = user
         req.session.timestamp = timestamp
         res.format
           html: ->
             res.redirect 303, getUserPath user._id + data.from
           json: ->
-            res.send action.payload
+            res.send value
       .catch (err) ->
         msg = err.message
         if msg == 'no user match' || msg == 'authentication failed'
@@ -127,9 +128,9 @@ router.post '/:userId', (req, res) ->
           logger.error err
           res.sendStatus 500
   else
-    { store } = createStore()
+    { store } = createStore createHistory()
     store.dispatch articleActions.save data, req.session.user._id
-      .payload.promise.then res.send.bind res
+      .then res.send.bind res
       .catch (err) ->
         msg = err.message
         if msg == 'login required'

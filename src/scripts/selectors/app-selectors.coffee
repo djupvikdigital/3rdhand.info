@@ -1,5 +1,6 @@
 Reselect = require 'reselect'
 Immutable = require 'immutable'
+omit = require 'lodash/omit'
 { compose } = require 'transducers.js'
 
 utils = require '../utils.coffee'
@@ -15,19 +16,19 @@ localeSelector = compose(
 )
 
 loginSelector = (state) ->
-  params = Immutable.Map(state.routing.location.state).delete 'view'
+  params = omit state.appState.toJS().currentParams, 'view'
   state = state.loginState.toJS()
   if state.user
     return {
       isLoggedIn: true
       user: state.user
       authenticationTime: state.authenticationTime
-      params: params.delete('userId').toJS()
+      params: omit params, 'userId'
     }
   else
     return {
       isLoggedIn: false
-      params: params.toJS()
+      params: params
     }
 
 titleSelector = Reselect.createSelector [ localeSelector ], (localeStrings) ->
@@ -36,7 +37,7 @@ titleSelector = Reselect.createSelector [ localeSelector ], (localeStrings) ->
   }
 
 paramSelector = (state) ->
-  Object.assign {}, state.routing.location.state
+  return state.appState.toJS().currentParams
 
 headerSelector = Reselect.createSelector(
   [
@@ -61,20 +62,18 @@ module.exports =
   )
   headerSelector: headerSelector
   langPickerSelector: Reselect.createSelector(
-    [ paramSelector, compose(prop('LangPicker'), localeSelector) ]
-    argsToObject 'params', 'localeStrings'
+    [ compose(prop('LangPicker'), localeSelector) ]
+    argsToObject 'localeStrings'
   )
   linkSelector: (state, props) ->
-    params = Immutable.Map state.routing.location.state
-      .filter utils.keyIn 'userId', 'lang'
-      .set 'slug', props.slug
-      .merge props.params
-      .update 'lang', (v) ->
-        props.langParam || v
-      .toJS()
-    to:
-      pathname: URL.getPath params
-      state: params
+    state = state.appState.toJS()
+    { currentParams } = state
+    params: state.params[props.page]
+    params = URL.getNextParams Object.assign { currentParams, params }, props
+    return Object.assign
+      to:
+        pathname: URL.getPath params
+      omit props, 'params', 'currentParams', 'slug', 'langParam'
   localeSelector: localeSelector
   loginSelector: Reselect.createSelector(
     [ loginSelector, compose(prop('LoginDialog'), localeSelector) ]

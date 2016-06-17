@@ -1,4 +1,5 @@
 router = require('express').Router()
+ReactRouter = require 'react-router'
 ReduxRouter = require 'react-router-redux'
 
 logger = require '../lib/log.coffee'
@@ -19,24 +20,18 @@ setUser = (session, userId, dispatch) ->
     return true
   return false
 
-router.get '*', createHandler (req, res, props) ->
+router.get '*', createHandler (req, res, config) ->
+  { params, props, storeModule } = config
   if !props
     throw new Error('no route match')
-  params = URL.getParams props.params
   res.format
     html: ->
-      storeModule = createStore()
       { store, history } = storeModule
       if req.user
         store.dispatch userActions.setUser utils.getUserProps req.user
       else
         setUser req.session, params.userId, store.dispatch
-      url = req.originalUrl
-      store.dispatch(
-        ReduxRouter.routeActions.replace pathname: url, state: params
-      )
-      serverUrl = URL.getServerUrl req
-      renderTemplate storeModule, serverUrl, params, negotiateLang req
+      renderTemplate config
         .then res.send.bind res
     default: ->
       API.fetchArticles params

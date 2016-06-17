@@ -40,12 +40,12 @@ module.exports = React.createClass
     return { from, userId, name, error }
   handleSubmit: (data) ->
     if data.resetPassword
-      action = @props.dispatch actions.requestPasswordReset data
+      promise = @props.dispatch actions.requestPasswordReset data
     else
-      action = @props.dispatch actions.login data
-    action.payload.promise.then (action) ->
+      promise = @props.dispatch actions.login data
+    promise.then ({ action, value }) ->
       method = if action.error then 'reject' else 'resolve'
-      Promise[method](action.payload.response.body)
+      Promise[method](value)
   handleLogout: (data) ->
     @props.dispatch actions.logout data
   render: ->
@@ -64,7 +64,7 @@ module.exports = React.createClass
     Form(
       if isLoggedIn
         [
-          action: URL.getUserPath(@props.user._id) + '/logout'
+          action: URL.getUserPath(@props.login.user._id) + '/logout'
           method: 'GET'
           initialData: @getInitialData()
           onSubmit: @handleLogout

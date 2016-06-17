@@ -1,3 +1,5 @@
+Immutable = require 'immutable'
+
 utils = require '../scripts/utils.coffee'
 padStart = require 'lodash/padStart'
 
@@ -49,4 +51,13 @@ getPath = (params) ->
 getServerUrl = ->
   location.protocol + '//' + location.host
 
-module.exports = { getPath, getServerUrl, getUserPath }
+getNextParams = ({ currentParams, langParam, params, slug }) ->
+  Immutable.Map currentParams || {}
+    .filter utils.keyIn 'userId', 'lang'
+    .set 'slug', slug
+    .merge params || {}
+    .update 'lang', (v) ->
+      langParam || v
+    .toJS()
+
+module.exports = { getNextParams, getPath, getServerUrl, getUserPath }

@@ -1,7 +1,9 @@
 require('es6-promise').polyfill()
 assign = require 'object-assign'
+React = require 'react'
 ReactDOM = require 'react-dom'
 { XmlEntities } = require 'html-entities'
+ReactRouter = require 'react-router'
 ReduxRouter = require 'react-router-redux'
 
 init = require './init.coffee'
@@ -13,25 +15,34 @@ Root = createFactory require './views/root.coffee'
 appActions = require './actions/app-actions.coffee'
 URL = require 'url-helpers'
 
-Object.assign || (Object.assign = assign)
+Router = createFactory ReactRouter.Router
 
-{ store, history } = createStore()
+Object.assign || (Object.assign = assign)
 
 entities = new XmlEntities()
 serverState = document.getElementById('state').textContent
 data = JSON.parse entities.decode serverState
-params = data.routing.location.state
-store.dispatch appActions.init data
-state = store.getState()
-store.dispatch ReduxRouter.routeActions.replace(
-  pathname: state.routing.location.pathname, state: params
-)
 serverUrl = URL.getServerUrl()
 
-init store, params, document.documentElement.lang
+{ store, history } = createStore ReactRouter.browserHistory, data
+
+history.listen ({ pathname }) ->
+  state = store.getState().appState.toJS()
+  if URL.getPath(state.currentParams) != pathname
+    params = state.urlsToParams[pathname] || {}
+    store.dispatch appActions.setCurrentParams params
+
+currentParams = store.getState().appState.toJS().currentParams
+
+init store, currentParams, document.documentElement.lang
   .then ->
     ReactDOM.render(
-      Root { store, history, serverUrl }
+      Root(
+        { store }
+        Router(
+          { history }, routes
+        )
+      )
       document.getElementById 'app'
     )
   .catch (err) ->

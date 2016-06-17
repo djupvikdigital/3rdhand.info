@@ -1,31 +1,33 @@
 Redux = require 'redux'
-promiseMiddleware = require 'redux-promise-middleware'
-thunkMiddleware = require 'redux-thunk'
+promiseMiddleware = require('redux-promise-middleware').default
+thunkMiddleware = require('redux-thunk').default
 Router = require 'react-router'
-createHistory = require 'history/lib/createMemoryHistory' # aliased in webpack
 ReduxRouter = require 'react-router-redux'
 
+actions = require './actions/app-actions.coffee'
 routes = require './views/routes.coffee'
 utils = require './utils.coffee'
 
 reducer = Redux.combineReducers
+  appState: require './reducers/app-reducer.coffee'
   articleState: require './reducers/article-reducer.coffee'
   localeState: require './reducers/locale-reducer.coffee'
   loginState: require './reducers/login-reducer.coffee'
-  routing: ReduxRouter.routeReducer
+  routing: ReduxRouter.routerReducer
 
-hasDevTools = (
-  typeof window == 'object' && typeof window.devToolsExtension != 'undefined'
-)
+isBrowser = typeof window == 'object'
+hasDevTools = isBrowser && typeof window.devToolsExtension != 'undefined'
 
-module.exports = ->
-  history = Router.useRouterHistory(createHistory)()
-  reduxRouterMiddleware = ReduxRouter.syncHistory history
+module.exports = (_history, data) ->
   store = Redux.compose(
     Redux.applyMiddleware(
-      promiseMiddleware(), thunkMiddleware, reduxRouterMiddleware
+      promiseMiddleware()
+      thunkMiddleware
+      ReduxRouter.routerMiddleware _history
     )
     if hasDevTools then window.devToolsExtension() else utils.identity
   )(Redux.createStore)(reducer)
-  reduxRouterMiddleware.listenForReplays store
+  if data
+    store.dispatch actions.init data
+  history = ReduxRouter.syncHistoryWithStore _history, store
   return { store, history }

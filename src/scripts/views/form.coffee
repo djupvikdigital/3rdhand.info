@@ -31,7 +31,7 @@ module.exports = React.createClass
   getPlaceholder: (k) ->
     @state.placeholders.getIn @keyResolver(k)
   getValue: (k) ->
-    @state.data.getIn @keyResolver(k)
+    @state.data.getIn @keyResolver(k), ''
   setValue: (k, v) ->
     if @isMounted()
       @setState data: @state.data.setIn @keyResolver(k), v

@@ -112,6 +112,7 @@ authenticate = (data) ->
     return Promise.reject new Error('authentication failed')
   fn userPromise, data
     .catch (err) ->
+      console.log err
       if err.status == 404
         logger.warn 'Invalid login attempt'
         err = new Error('authentication failed')

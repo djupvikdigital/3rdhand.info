@@ -12,3 +12,5 @@ module.exports =
       dispatch ReduxRouter.routeActions.push(
         pathname: URL.getPath(params), state: params
       )
+  setCurrentParams: (payload) ->
+    return { type: 'SET_CURRENT_PARAMS', payload }
