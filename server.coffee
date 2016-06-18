@@ -5,6 +5,7 @@ express = require 'express'
 favicon = require 'serve-favicon'
 bodyParser = require 'body-parser'
 _ = require 'lodash'
+{ createMemoryHistory } = require 'react-router'
 
 PROD = process.env.NODE_ENV == 'production'
 DEV = !PROD
@@ -45,7 +46,7 @@ server.set 'view engine', 'jade'
 server.get '/index.atom', (req, res) ->
   lang = negotiateLang req
   res.header 'Content-Type', 'application/atom+xml; charset=utf8'
-  { store } = createStore()
+  { store } = createStore createMemoryHistory()
   init(store, {}, lang).then ->
     articles = articleSelectors.containerSelector(store.getState()).articles
     articles.forEach (article) ->
