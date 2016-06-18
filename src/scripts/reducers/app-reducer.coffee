@@ -2,6 +2,9 @@ Immutable = require 'immutable'
 t = require 'transducers.js'
 
 URL = require 'url-helpers'
+utils = require '../utils.coffee'
+
+supportedLangParams = ['en', 'no']
 
 getNewParams = ->
   now = new Date()
@@ -22,13 +25,24 @@ params =
   newArticle: getNewParams()
 
 getUrlsToParams = (currentParams) ->
-  t.seq(
-    params
-    t.map (pair) ->
-      nextParams = URL.getNextParams
-        currentParams: currentParams
-        params: pair[1]
-      return [URL.getPath(nextParams), nextParams]
+  Object.assign(
+    t.seq(
+      params
+      t.map (pair) ->
+        nextParams = URL.getNextParams
+          currentParams: currentParams
+          params: pair[1]
+        return [URL.getPath(nextParams), nextParams]
+    )
+    t.toObj(
+      supportedLangParams
+      t.map (langParam) ->
+        nextParams = URL.getNextParams
+          currentParams: currentParams
+          params: currentParams
+          langParam: langParam
+        return [URL.getPath(nextParams), nextParams]
+    )
   )
 
 getArticleUrlsToParams = (currentParams, articles) ->
@@ -48,16 +62,36 @@ initialState = Immutable.fromJS
     '/': {}
     '/login': {}
 
+addUserParams = (state, payload) ->
+  if payload.user && payload.user._id
+    currentParams = state.get 'currentParams'
+    return setCurrentParams(
+      state
+      currentParams.set('userId', utils.getUserId payload.user._id).toJS()
+    )
+  else
+    return state
+
+removeUserParams = (state, payload) ->
+  currentParams = state.get 'currentParams'
+  return setCurrentParams state, currentParams.delete('userId').toJS()
+
+setCurrentParams = (state, payload) ->
+  state
+    .set 'currentParams', Immutable.Map payload
+    .mergeIn ['urlsToParams'], getUrlsToParams payload
+
 reducers =
   FETCH_ARTICLES_FULFILLED: (state, payload) ->
     state.mergeIn(
       ['urlsToParams']
       getArticleUrlsToParams state.get('currentParams'), payload.docs
     )
-  SET_CURRENT_PARAMS: (state, payload) ->
-    state
-      .set 'currentParams', payload
-      .mergeIn ['urlsToParams'], getUrlsToParams payload
+  LOGIN_FULFILLED: addUserParams
+  LOGOUT_PENDING: removeUserParams
+  SESSION_TIMEOUT: removeUserParams
+  SET_CURRENT_PARAMS: setCurrentParams
+  SET_LOGGEDIN_USER: addUserParams
   INIT: (state, payload) ->
     state.merge payload.state.appState
 

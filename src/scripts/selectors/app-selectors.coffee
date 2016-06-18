@@ -68,7 +68,10 @@ module.exports =
   linkSelector: (state, props) ->
     state = state.appState.toJS()
     { currentParams } = state
-    params: state.params[props.page]
+    if props.page
+      params = state.params[props.page]
+    else if props.langParam
+      params = Object.assign {}, currentParams, lang: props.langParam
     params = URL.getNextParams Object.assign { currentParams, params }, props
     return Object.assign
       to:

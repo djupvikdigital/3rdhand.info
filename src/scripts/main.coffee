@@ -30,6 +30,7 @@ history.listen ({ pathname }) ->
   state = store.getState().appState.toJS()
   if URL.getPath(state.currentParams) != pathname
     params = state.urlsToParams[pathname] || {}
+    console.log params
     store.dispatch appActions.setCurrentParams params
 
 currentParams = store.getState().appState.toJS().currentParams
