@@ -44,6 +44,11 @@ module.exports = {
   module: {
     loaders: [
       {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/
+      },
+      {
         test: /\.json$/,
         loader: 'json-loader'
       },
@@ -79,6 +84,7 @@ module.exports = {
       '.coffee',
       '.yaml'
     ],
+    root: path.resolve(__dirname, 'src', 'scripts'),
     alias: {
       'history/lib/createMemoryHistory': 'history/lib/createBrowserHistory',
       'logo': path.resolve(__dirname, 'src', 'svg', 'logo.svg')
