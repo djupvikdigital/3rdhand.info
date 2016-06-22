@@ -10,6 +10,7 @@
   "scripts": {
     "build": "npm run svgo && NODE_ENV=production webpack",
     "clean": "rm -r dist/*",
+    "dev": "babel-node server.js",
     "drop-db": "drop-db",
     "insert-ddoc": "insert-ddoc",
     "lint": "coffeelint lib/ src/",
@@ -29,6 +30,7 @@
     "url": "https://github.com/thirdhand/thirdhand.github.com/issues"
   },
   "devDependencies": {
+    "babel-cli": "^6.10.1",
     "cheerio": "^0.20.0",
     "coffeelint": "^1.15.7",
     "expect": "^1.20.1",
