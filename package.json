@@ -10,13 +10,12 @@
   "scripts": {
     "build": "npm run svgo && NODE_ENV=production webpack",
     "clean": "rm -r dist/*",
-    "dev": "babel-node server.js",
     "drop-db": "drop-db",
     "insert-ddoc": "insert-ddoc",
     "lint": "coffeelint lib/ src/",
     "test": "mocha --compilers coffee:coffee-script/register",
     "posttest": "npm run lint",
-    "start": "coffee server.coffee",
+    "start": "node server.js",
     "svgo": "svgo --config=./svgo.yaml -f ./src/svg -o ./dist/svg",
     "server": "webpack-dev-server --inline --hot"
   },
@@ -80,6 +79,7 @@
     "pouchdb": "^5.4.4",
     "pouchdb-upsert": "^2.0.1",
     "qs": "^6.2.0",
+    "ramda": "^0.21.0",
     "raw-loader": "^0.5.1",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
