@@ -21,7 +21,7 @@ const articleSelectors = require(
 );
 const createStore = require('./src/scripts/store.coffee');
 const init = require('./src/scripts/init.coffee');
-const logger = require('./lib/log.coffee');
+const logger = require('./lib/log.js');
 const negotiateLang = require('./lib/negotiate-lang.coffee');
 const siteRouter = require('./routers/site-router.coffee');
 const URL = require('./src/node_modules/url-helpers.coffee');
