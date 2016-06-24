@@ -15,7 +15,7 @@ const { createMemoryHistory } = require('react-router');
 const PROD = process.env.NODE_ENV === 'production';
 const DEV = !PROD;
 
-const API = require('./src/node_modules/api.coffee');
+const API = require('./src/node_modules/api.js');
 const articleSelectors = require(
   './src/scripts/selectors/article-selectors.coffee'
 );
