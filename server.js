@@ -23,7 +23,7 @@ const createStore = require('./src/scripts/store.coffee');
 const init = require('./src/scripts/init.coffee');
 const logger = require('./lib/log.js');
 const negotiateLang = require('./lib/negotiateLang.js');
-const siteRouter = require('./routers/site-router.coffee');
+const siteRouter = require('./routers/siteRouter.js');
 const URL = require('./src/node_modules/url-helpers.coffee');
 const userRouter = require('./routers/user-router.coffee');
 
