@@ -20,12 +20,13 @@ const articleSelectors = require(
   './src/scripts/selectors/article-selectors.coffee'
 );
 const createStore = require('./src/scripts/store.coffee');
+const handleError = require('./lib/handleError.js');
 const init = require('./src/scripts/init.coffee');
 const logger = require('./lib/log.js');
 const negotiateLang = require('./lib/negotiateLang.js');
 const siteRouter = require('./routers/siteRouter.js');
 const URL = require('./src/node_modules/urlHelpers.js');
-const userRouter = require('./routers/user-router.coffee');
+const userRouter = require('./routers/userRouter.js');
 
 server = express();
 server.use(favicon('./favicon.ico'));
@@ -57,12 +58,54 @@ server.get('/locales/:lang', (req, res) => {
   API.fetchLocaleStrings(req.params.lang).then(res.send.bind(res));
 });
 
+server.get('/signup', (req, res) => {
+  return DB.isSignupAllowed().then(isAllowed => {
+    if (isAllowed) {
+      return res.format({
+        html() {
+          return defaultRouterHandler(req, res);
+        },
+        default() {
+          return res.status(204).end();
+        },
+      });
+    }
+    return res.sendStatus(404);
+  });
+});
+
+server.post('/signup', (req, res) => {
+  return API.signup(req.body)
+    .then(body => (
+      res.format({
+        html() {
+          return res.redirect(303, URL.getUserPath(body.id));
+        },
+        default() {
+          return res.send(body);
+        }
+      })
+    )).catch(handleError.bind(null, res));
+});
+
 server.use('/users', userRouter);
 server.use('/', siteRouter);
 
 server.use((err, req, res, next) => {
-  logger.error(err);
-  res.sendStatus(500);
+  const msg = err.message;
+  if (msg === 'session timeout' || msg === 'token expired') {
+    logger.warn(msg);
+    return res.format({
+      html() {
+        res.status(404);
+        return defaultRouterHandler(req, res);
+      },
+      default() {
+        return res.sendStatus(404);
+      },
+    });
+  }
+  return handleError(res, err);
 });
 
 server.listen(8081, () => {
