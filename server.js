@@ -24,7 +24,7 @@ const init = require('./src/scripts/init.coffee');
 const logger = require('./lib/log.js');
 const negotiateLang = require('./lib/negotiateLang.js');
 const siteRouter = require('./routers/siteRouter.js');
-const URL = require('./src/node_modules/url-helpers.coffee');
+const URL = require('./src/node_modules/urlHelpers.js');
 const userRouter = require('./routers/user-router.coffee');
 
 server = express();
