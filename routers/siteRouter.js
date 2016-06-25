@@ -3,7 +3,7 @@ const ReactRouter = require('react-router');
 const ReduxRouter = require('react-router-redux');
 
 const API = require('../src/node_modules/api.js');
-const createHandler = require('../lib/create-router-handler.coffee');
+const createHandler = require('../lib/createRouterHandler.js');
 const createStore = require('../src/scripts/store.coffee');
 const logger = require('../lib/log.js');
 const negotiateLang = require('../lib/negotiateLang.js');
