@@ -8,14 +8,14 @@ const URL = require('url');
 const articleActions = require('../src/scripts/actions/article-actions.coffee');
 const API = require('../src/node_modules/api.js');
 const createStore = require('../src/scripts/store.coffee');
-const DB = require('../lib/db.coffee');
+const DB = require('../lib/db.js');
 const handleError = require('../lib/handleError.js');
 const siteRouter = require('./siteRouter.js');
 const userActions = require('../src/scripts/actions/user-actions.coffee');
 const { getPath, getUserPath, getServerUrl } = require(
   '../src/node_modules/urlHelpers.js'
 );
-const utils = require('../lib/utils.coffee');
+const utils = require('../lib/utils.js');
 
 const conf = YAML.safeLoad(utils.read('./config.yaml'));
 

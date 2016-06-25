@@ -7,8 +7,8 @@ const createHandler = require('../lib/createRouterHandler.js');
 const createStore = require('../src/scripts/store.coffee');
 const logger = require('../lib/log.js');
 const negotiateLang = require('../lib/negotiateLang.js');
-const renderTemplate = require('../lib/render-template.coffee');
-const URL = require('../src/node_modules/url-helpers.coffee');
+const renderTemplate = require('../lib/renderTemplate.js');
+const URL = require('../src/node_modules/urlHelpers.js');
 const userActions = require('../src/scripts/actions/user-actions.coffee');
 const utils = require('../src/scripts/utils.coffee');
 
@@ -29,7 +29,7 @@ router.get('*', createHandler((req, res, config) => {
   if (!props) {
     throw new Error('no route match');
   }
-  res.format({
+  return res.format({
     html() {
       const { store, history } = storeModule;
       if (req.user) {
@@ -41,11 +41,11 @@ router.get('*', createHandler((req, res, config) => {
       return renderTemplate(config).then(res.send.bind(res));
     },
     default() {
-      API.fetchArticles(params)
+      return API.fetchArticles(params)
         .then(res.send.bind(res))
         .catch(err => {
           logger.error(err);
-          res.sendStatus(500);
+          return res.sendStatus(500);
         });
     },
   });
