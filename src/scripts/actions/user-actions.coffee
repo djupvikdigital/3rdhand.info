@@ -2,7 +2,7 @@ ReduxRouter = require 'react-router-redux'
 
 API = require 'api'
 utils = require '../utils.coffee'
-URL = require 'url-helpers'
+URL = require 'urlHelpers'
 appActions = require './app-actions.coffee'
 
 module.exports =

@@ -4,7 +4,7 @@ Helmet = React.createFactory require 'react-helmet'
 { formatSelector } = require '../selectors/article-selectors.coffee'
 createFactory = require '../create-factory.coffee'
 Elements = require '../elements.coffee'
-URL = require 'url-helpers'
+URL = require 'urlHelpers'
 
 { div, h1, header, p, b } = Elements
 

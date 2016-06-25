@@ -2,7 +2,7 @@ React = require 'react'
 ReactRedux = require 'react-redux'
 
 createFactory = require '../create-factory.coffee'
-URL = require 'url-helpers'
+URL = require 'urlHelpers'
 Elements = require '../elements.coffee'
 actions = require '../actions/user-actions.coffee'
 selectors = require '../selectors/app-selectors.coffee'

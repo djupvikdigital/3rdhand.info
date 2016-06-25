@@ -1,7 +1,7 @@
 Immutable = require 'immutable'
 t = require 'transducers.js'
 
-URL = require 'url-helpers'
+URL = require 'urlHelpers'
 utils = require '../utils.coffee'
 
 supportedLangParams = ['en', 'no']

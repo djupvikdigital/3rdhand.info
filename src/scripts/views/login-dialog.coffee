@@ -4,7 +4,7 @@ ReactRedux = require 'react-redux'
 
 createFactory = require '../create-factory.coffee'
 selectors = require '../selectors/app-selectors.coffee'
-URL = require 'url-helpers'
+URL = require 'urlHelpers'
 
 Helmet = createFactory require 'react-helmet'
 

@@ -4,7 +4,7 @@ omit = require 'lodash/omit'
 { compose } = require 'transducers.js'
 
 utils = require '../utils.coffee'
-URL = require 'url-helpers'
+URL = require 'urlHelpers'
 
 { argsToObject, prop } = utils
 

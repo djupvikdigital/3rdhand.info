@@ -1,6 +1,6 @@
 ReduxRouter = require 'react-router-redux'
 
-URL = require 'url-helpers'
+URL = require 'urlHelpers'
 
 module.exports =
   init: (state) ->
