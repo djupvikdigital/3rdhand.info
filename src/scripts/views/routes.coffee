@@ -2,7 +2,7 @@ React = require 'react'
 Router = require 'react-router'
 ReactRedux = require 'react-redux'
 
-articleSelectors = require '../selectors/article-selectors.coffee'
+articleSelectors = require '../selectors/articleSelectors.js'
 appSelectors = require '../selectors/appSelectors.js'
 
 { changePasswordSelector, loginSelector, signupSelector } = appSelectors

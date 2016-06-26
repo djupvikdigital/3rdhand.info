@@ -17,7 +17,7 @@ const DEV = !PROD;
 
 const API = require('./src/node_modules/api.js');
 const articleSelectors = require(
-  './src/scripts/selectors/article-selectors.coffee'
+  './src/scripts/selectors/articleSelectors.js'
 );
 const createStore = require('./src/scripts/store.coffee');
 const handleError = require('./lib/handleError.js');

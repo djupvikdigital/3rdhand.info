@@ -1,7 +1,7 @@
 React = require 'react'
 Helmet = React.createFactory require 'react-helmet'
 
-{ formatSelector } = require '../selectors/article-selectors.coffee'
+{ formatSelector } = require '../selectors/articleSelectors.js'
 createFactory = require '../create-factory.coffee'
 Elements = require '../elements.coffee'
 URL = require 'urlHelpers'

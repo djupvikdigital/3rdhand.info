@@ -1,7 +1,7 @@
 Elements = require '../elements.coffee'
 createFactory = require '../create-factory.coffee'
 
-selectors = require '../selectors/article-selectors.coffee'
+selectors = require '../selectors/articleSelectors.js'
 ArticleItem = createFactory require './article-item.coffee'
 
 { article, div } = Elements

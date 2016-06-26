@@ -6,7 +6,7 @@ createFactory = require '../create-factory.coffee'
 
 actions = require '../actions/articleActions.js'
 { loginSelector } = require '../selectors/appSelectors.js'
-selectors = require '../selectors/article-selectors.coffee'
+selectors = require '../selectors/articleSelectors.js'
 authenticate = require './authenticate.coffee'
 
 ArticleList = createFactory require './article-list.coffee'
