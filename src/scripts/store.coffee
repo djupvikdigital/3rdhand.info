@@ -11,7 +11,7 @@ utils = require './utils.coffee'
 reducer = Redux.combineReducers
   appState: require './reducers/appReducer.js'
   articleState: require './reducers/articleReducer.js'
-  localeState: require './reducers/locale-reducer.coffee'
+  localeState: require './reducers/localeReducer.js'
   loginState: require './reducers/login-reducer.coffee'
   routing: ReduxRouter.routerReducer
 
