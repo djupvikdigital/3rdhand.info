@@ -17,7 +17,7 @@ const ArticleFull = createFactory(
 );
 const ArticleEditor = createFactory(
   connect(loginSelector)(
-    authenticate(connect(editorSelector)(require('./article-editor.coffee')))
+    authenticate(connect(editorSelector)(require('./ArticleEditor.js')))
   )
 );
 
