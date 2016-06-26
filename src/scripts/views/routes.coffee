@@ -18,7 +18,7 @@ SignupDialog = ReactRedux.connect(signupSelector)(
   require './signup-dialog.coffee'
 )
 ChangePasswordDialog = ReactRedux.connect(changePasswordSelector)(
-  authenticate require './change-password-dialog.coffee'
+  authenticate require './ChangePasswordDialog.js'
 )
 AuthenticatedArticleContainer = ReactRedux.connect(loginSelector)(
   authenticate ArticleContainer
