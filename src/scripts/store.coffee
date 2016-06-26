@@ -9,7 +9,7 @@ routes = require './views/routes.coffee'
 utils = require './utils.coffee'
 
 reducer = Redux.combineReducers
-  appState: require './reducers/app-reducer.coffee'
+  appState: require './reducers/appReducer.js'
   articleState: require './reducers/article-reducer.coffee'
   localeState: require './reducers/locale-reducer.coffee'
   loginState: require './reducers/login-reducer.coffee'
