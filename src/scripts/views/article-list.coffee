@@ -2,7 +2,7 @@ Elements = require '../elements.coffee'
 createFactory = require '../create-factory.coffee'
 
 selectors = require '../selectors/articleSelectors.js'
-ArticleItem = createFactory require './article-item.coffee'
+ArticleItem = createFactory require './ArticleItem.js'
 
 { article, div } = Elements
 
