@@ -2,7 +2,7 @@ React = require 'react'
 Router = require 'react-router'
 ReactRedux = require 'react-redux'
 
-actions = require '../actions/locale-actions.coffee'
+actions = require '../actions/localeActions.js'
 selector = require('../selectors/app-selectors.coffee').linkSelector
 createFactory = require '../create-factory.coffee'
 Elements = require '../elements.coffee'

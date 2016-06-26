@@ -1,5 +1,5 @@
 articleActions = require './actions/articleActions.js'
-{ fetchStrings } = require './actions/locale-actions.coffee'
+{ fetchStrings } = require './actions/localeActions.js'
 
 module.exports = (store, params, lang) ->
   Promise.all([
