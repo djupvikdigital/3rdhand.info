@@ -12,7 +12,7 @@ userActions = require './actions/user-actions.coffee'
 routes = require './views/routes.coffee'
 createFactory = require './create-factory.coffee'
 Root = createFactory require './views/root.coffee'
-appActions = require './actions/app-actions.coffee'
+appActions = require './actions/appActions.js'
 URL = require 'urlHelpers'
 
 Router = createFactory ReactRouter.Router

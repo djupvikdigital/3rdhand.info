@@ -4,7 +4,7 @@ thunkMiddleware = require('redux-thunk').default
 Router = require 'react-router'
 ReduxRouter = require 'react-router-redux'
 
-actions = require './actions/app-actions.coffee'
+actions = require './actions/appActions.js'
 routes = require './views/routes.coffee'
 utils = require './utils.coffee'
 

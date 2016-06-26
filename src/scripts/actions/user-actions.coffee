@@ -3,7 +3,7 @@ ReduxRouter = require 'react-router-redux'
 API = require 'api'
 utils = require '../utils.coffee'
 URL = require 'urlHelpers'
-appActions = require './app-actions.coffee'
+appActions = require './appActions.js'
 
 module.exports =
   sessionTimeout: ->
