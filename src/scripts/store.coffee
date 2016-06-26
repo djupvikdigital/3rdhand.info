@@ -12,7 +12,7 @@ reducer = Redux.combineReducers
   appState: require './reducers/appReducer.js'
   articleState: require './reducers/articleReducer.js'
   localeState: require './reducers/localeReducer.js'
-  loginState: require './reducers/login-reducer.coffee'
+  loginState: require './reducers/loginReducer.js'
   routing: ReduxRouter.routerReducer
 
 isBrowser = typeof window == 'object'
