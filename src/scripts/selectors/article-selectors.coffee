@@ -6,7 +6,7 @@ Reselect = require 'reselect'
 utils = require '../utils.coffee'
 formatters = require '../formatters.coffee'
 API = require 'api'
-appSelectors = require './app-selectors.coffee'
+appSelectors = require './appSelectors.js'
 
 { prop } = utils
 

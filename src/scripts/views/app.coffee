@@ -2,7 +2,7 @@ React = require 'react'
 ReactRedux = require 'react-redux'
 
 createFactory = require '../create-factory.coffee'
-selectors = require '../selectors/app-selectors.coffee'
+selectors = require '../selectors/appSelectors.js'
 Elements = require '../elements.coffee'
 
 SiteHeader = createFactory(

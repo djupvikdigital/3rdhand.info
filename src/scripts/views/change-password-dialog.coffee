@@ -5,7 +5,7 @@ createFactory = require '../create-factory.coffee'
 URL = require 'urlHelpers'
 Elements = require '../elements.coffee'
 actions = require '../actions/userActions.js'
-selectors = require '../selectors/app-selectors.coffee'
+selectors = require '../selectors/appSelectors.js'
 
 Helmet = createFactory require 'react-helmet'
 

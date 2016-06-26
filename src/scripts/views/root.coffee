@@ -3,7 +3,7 @@ ReactRedux = require 'react-redux'
 createFactory = require '../create-factory.coffee'
 
 Elements = require '../elements.coffee'
-selectors = require '../selectors/app-selectors.coffee'
+selectors = require '../selectors/appSelectors.js'
 routes = require './routes.coffee'
 
 Provider = createFactory ReactRedux.Provider

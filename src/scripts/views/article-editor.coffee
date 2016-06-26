@@ -5,7 +5,7 @@ Immutable = require 'immutable'
 API = require 'api'
 Elements = require '../elements.coffee'
 createFactory = require '../create-factory.coffee'
-selectors = require '../selectors/app-selectors.coffee'
+selectors = require '../selectors/appSelectors.js'
 
 Helmet = createFactory require 'react-helmet'
 
