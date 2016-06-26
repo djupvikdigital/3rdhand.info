@@ -13,7 +13,7 @@ const Form = createFactory(require('./form.coffee'));
 const FormMessage = createFactory(
   connect(formMessageSelector)(require('./form-message.coffee'))
 );
-const FormGroup = createFactory(require('./form-group.coffee'));
+const FormGroup = createFactory(require('./FormGroup.js'));
 const RadioGroup = createFactory(require('./radio-group.coffee'));
 const RadioOption = createFactory(require('./radio-option.coffee'));
 const TextInput = createFactory(require('./text-input.coffee'));

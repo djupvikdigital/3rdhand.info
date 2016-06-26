@@ -14,7 +14,7 @@ FormMessage = createFactory ReactRedux.connect(selectors.formMessageSelector)(
   require './form-message.coffee'
 )
 Output = createFactory require './output.coffee'
-FormGroup = createFactory require './form-group.coffee'
+FormGroup = createFactory require './FormGroup.js'
 TextInput = createFactory require './text-input.coffee'
 PasswordInput = createFactory require './password-input.coffee'
 SubmitButton = createFactory require './submit-button.coffee'
