@@ -8,7 +8,7 @@ appSelectors = require '../selectors/appSelectors.js'
 { changePasswordSelector, loginSelector, signupSelector } = appSelectors
 
 App = require './App.js'
-authenticate = require './authenticate.coffee'
+authenticate = require './authenticate.js'
 
 ArticleContainer = ReactRedux.connect(
   articleSelectors.containerSelector

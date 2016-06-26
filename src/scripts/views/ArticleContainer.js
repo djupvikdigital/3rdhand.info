@@ -9,7 +9,7 @@ const { editorSelector, itemSelector } = require(
   '../selectors/articleSelectors.js'
 );
 
-const authenticate = require('./authenticate.coffee');
+const authenticate = require('./authenticate.js');
 
 const ArticleList = createFactory(require('./ArticleList.js'));
 const ArticleFull = createFactory(
