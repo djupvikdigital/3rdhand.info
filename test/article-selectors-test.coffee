@@ -7,7 +7,7 @@ YAML = require 'js-yaml'
 createStore = require '../src/scripts/store.coffee'
 utils = require '../src/scripts/utils.coffee'
 selectors = require '../src/scripts/selectors/article-selectors.coffee'
-{ read } = require '../lib/utils.coffee'
+{ read } = require '../lib/utils.js'
 
 describe 'articleSelectors', ->
   describe 'containerSelector', ->

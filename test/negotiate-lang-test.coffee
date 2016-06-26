@@ -1,7 +1,7 @@
 expect = require 'expect'
 
-Lang = require '../lib/lang.coffee'
-negotiateLang = require '../lib/negotiate-lang.coffee'
+Lang = require '../lib/lang.js'
+negotiateLang = require '../lib/negotiateLang.js'
 
 createRequest = (lang) ->
   return {

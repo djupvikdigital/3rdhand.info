@@ -1,6 +1,6 @@
 expect = require 'expect'
 
-URL = require '../src/node_modules/url-helpers.coffee'
+URL = require '../src/node_modules/urlHelpers.js'
 
 describe 'URL modules', ->
   describe 'getParams', ->
