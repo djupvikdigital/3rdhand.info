@@ -9,7 +9,7 @@ const logger = require('../lib/log.js');
 const negotiateLang = require('../lib/negotiateLang.js');
 const renderTemplate = require('../lib/renderTemplate.js');
 const URL = require('../src/node_modules/urlHelpers.js');
-const userActions = require('../src/scripts/actions/user-actions.coffee');
+const userActions = require('../src/scripts/actions/userActions.js');
 const utils = require('../src/scripts/utils.coffee');
 
 function setUser(session, userId, dispatch) {

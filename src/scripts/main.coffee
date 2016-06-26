@@ -8,7 +8,7 @@ ReduxRouter = require 'react-router-redux'
 
 init = require './init.coffee'
 createStore = require './store.coffee'
-userActions = require './actions/user-actions.coffee'
+userActions = require './actions/userActions.js'
 routes = require './views/routes.coffee'
 createFactory = require './create-factory.coffee'
 Root = createFactory require './views/root.coffee'

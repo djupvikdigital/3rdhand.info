@@ -3,7 +3,7 @@ React = require 'react'
 
 createFactory = require '../create-factory.coffee'
 LoginDialog = createFactory require './login-dialog.coffee'
-actions = require '../actions/user-actions.coffee'
+actions = require '../actions/userActions.js'
 
 checkTimestamp = (props) ->
   login = props.login

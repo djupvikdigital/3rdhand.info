@@ -7,7 +7,7 @@ logo = require 'logo'
 createFactory = require '../create-factory.coffee'
 Elements = require '../elements.coffee'
 selectors = require '../selectors/app-selectors.coffee'
-userActions = require '../actions/user-actions.coffee'
+userActions = require '../actions/userActions.js'
 
 { div, header, nav, ul, li } = Elements
 

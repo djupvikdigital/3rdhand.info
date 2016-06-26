@@ -11,7 +11,7 @@ const createStore = require('../src/scripts/store.coffee');
 const DB = require('../lib/db.js');
 const handleError = require('../lib/handleError.js');
 const siteRouter = require('./siteRouter.js');
-const userActions = require('../src/scripts/actions/user-actions.coffee');
+const userActions = require('../src/scripts/actions/userActions.js');
 const { getPath, getUserPath, getServerUrl } = require(
   '../src/node_modules/urlHelpers.js'
 );
