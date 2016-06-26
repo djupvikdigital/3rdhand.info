@@ -11,7 +11,7 @@ const { editorSelector, itemSelector } = require(
 
 const authenticate = require('./authenticate.coffee');
 
-const ArticleList = createFactory(require('./article-list.coffee'));
+const ArticleList = createFactory(require('./ArticleList.js'));
 const ArticleFull = createFactory(
   connect(itemSelector)(require('./ArticleFull.js'))
 );
