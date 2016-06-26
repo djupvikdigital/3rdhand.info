@@ -1,6 +1,6 @@
 YAML = require 'js-yaml'
 
-{ read } = require '../lib/utils.coffee'
+{ read } = require '../lib/utils.js'
 Elements = require '../src/scripts/elements.coffee'
 
 conf = YAML.safeLoad read './config.yaml'
