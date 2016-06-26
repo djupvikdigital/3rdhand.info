@@ -4,7 +4,7 @@ Immutable = require 'immutable'
 
 createFactory = require '../create-factory.coffee'
 
-actions = require '../actions/article-actions.coffee'
+actions = require '../actions/articleActions.js'
 { loginSelector } = require '../selectors/app-selectors.coffee'
 selectors = require '../selectors/article-selectors.coffee'
 authenticate = require './authenticate.coffee'

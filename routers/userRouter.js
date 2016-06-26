@@ -5,7 +5,7 @@ const moment = require('moment');
 const createHistory = require('react-router').createMemoryHistory;
 const URL = require('url');
 
-const articleActions = require('../src/scripts/actions/article-actions.coffee');
+const articleActions = require('../src/scripts/actions/articleActions.js');
 const API = require('../src/node_modules/api.js');
 const createStore = require('../src/scripts/store.coffee');
 const DB = require('../lib/db.js');

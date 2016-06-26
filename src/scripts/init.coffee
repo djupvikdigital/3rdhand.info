@@ -1,4 +1,4 @@
-articleActions = require './actions/article-actions.coffee'
+articleActions = require './actions/articleActions.js'
 { fetchStrings } = require './actions/locale-actions.coffee'
 
 module.exports = (store, params, lang) ->
