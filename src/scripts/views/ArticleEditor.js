@@ -11,7 +11,7 @@ const Helmet = createFactory(require('react-helmet'));
 
 const Form = createFactory(require('./form.coffee'));
 const FormMessage = createFactory(
-  connect(formMessageSelector)(require('./form-message.coffee'))
+  connect(formMessageSelector)(require('./FormMessage.js'))
 );
 const FormGroup = createFactory(require('./FormGroup.js'));
 const RadioGroup = createFactory(require('./radio-group.coffee'));

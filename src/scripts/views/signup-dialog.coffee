@@ -9,7 +9,7 @@ Helmet = createFactory require 'react-helmet'
 Elements = require '../elements.coffee'
 Form = createFactory require './form.coffee'
 FormMessage = createFactory ReactRedux.connect(selectors.formMessageSelector)(
-  require './form-message.coffee'
+  require './FormMessage.js'
 )
 FormGroup = createFactory require './FormGroup.js'
 TextInput = createFactory require './text-input.coffee'
