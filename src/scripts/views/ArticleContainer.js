@@ -13,7 +13,7 @@ const authenticate = require('./authenticate.coffee');
 
 const ArticleList = createFactory(require('./article-list.coffee'));
 const ArticleFull = createFactory(
-  connect(itemSelector)(require('./article-full.coffee'))
+  connect(itemSelector)(require('./ArticleFull.js'))
 );
 const ArticleEditor = createFactory(
   connect(loginSelector)(
