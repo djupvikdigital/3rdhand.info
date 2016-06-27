@@ -2,7 +2,7 @@ const Immutable = require('immutable');
 const { Children, cloneElement } = require('react');
 const { elements } = require('react-elementary');
 
-const RadioOption = require('./radio-option.coffee');
+const RadioOption = require('./RadioOption.js');
 
 const { div, fieldset } = elements;
 

@@ -15,7 +15,7 @@ const FormMessage = createFactory(
 );
 const FormGroup = createFactory(require('./FormGroup.js'));
 const RadioGroup = createFactory(require('./RadioGroup.js'));
-const RadioOption = createFactory(require('./radio-option.coffee'));
+const RadioOption = createFactory(require('./RadioOption.js'));
 const TextInput = createFactory(require('./text-input.coffee'));
 
 const { div, form, h1, input, label, textarea } = elements;
