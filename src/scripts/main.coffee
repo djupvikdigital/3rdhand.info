@@ -7,7 +7,7 @@ ReactRouter = require 'react-router'
 ReduxRouter = require 'react-router-redux'
 { createFactory } = require('react-elementary').default;
 
-init = require './init.coffee'
+init = require './init.js'
 createStore = require './store.coffee'
 userActions = require './actions/userActions.js'
 routes = require './views/routes.js'
