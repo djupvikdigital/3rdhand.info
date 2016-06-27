@@ -91,7 +91,7 @@ module.exports = {
     }
   },
   entry: {
-    'scripts': './src/scripts/main.coffee',
+    'scripts': './src/scripts/main.js',
     'styles': './src/styles/main.scss'
   },
   plugins: plugins,
