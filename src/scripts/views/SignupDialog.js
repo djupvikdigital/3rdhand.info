@@ -13,7 +13,7 @@ const FormMessage = createFactory(
   connect(formMessageSelector)(require('./FormMessage.js'))
 );
 const PasswordInput = createFactory(require('./PasswordInput.js'));
-const TextInput = createFactory(require('./text-input.coffee'));
+const TextInput = createFactory(require('./TextInput.js'));
 
 const { h1, input } = elements;
 
