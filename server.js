@@ -19,7 +19,7 @@ const API = require('./src/node_modules/api.js');
 const articleSelectors = require(
   './src/scripts/selectors/articleSelectors.js'
 );
-const createStore = require('./src/scripts/store.coffee');
+const createStore = require('./src/scripts/store.js');
 const handleError = require('./lib/handleError.js');
 const init = require('./src/scripts/init.js');
 const logger = require('./lib/log.js');

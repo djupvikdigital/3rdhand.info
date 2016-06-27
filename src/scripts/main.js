@@ -8,7 +8,7 @@ const { createFactory } = require('react-elementary').default;
 const { XmlEntities } = require('html-entities');
 
 const appActions = require('./actions/appActions.js');
-const createStore = require('./store.coffee');
+const createStore = require('./store.js');
 const init = require('./init.js');
 const routes = require('./views/routes.js');
 const URL = require('urlHelpers');
