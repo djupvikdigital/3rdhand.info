@@ -148,7 +148,6 @@ module.exports =
   array: array
   createFormatMapper: createFormatMapper
   createPropertyMapper: createPropertyMapper
-  getProps: getProps
   getUserId: (userId) ->
     getUserId(userId).cuid || userId
   getUserProps: (user) ->
