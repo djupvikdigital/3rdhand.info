@@ -17,7 +17,7 @@ const FormMessage = createFactory(
 const Output = createFactory(require('./Output.js'));
 const PasswordInput = createFactory(require('./PasswordInput.js'));
 const TextInput = createFactory(require('./text-input.coffee'));
-const SubmitButton = createFactory(require('./submit-button.coffee'));
+const SubmitButton = createFactory(require('./SubmitButton.js'));
 
 const { button, form, h1, input, label } = elements;
 
