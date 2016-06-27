@@ -4,7 +4,7 @@ const request = require('superagent');
 require('superagent-as-promised')(request, Promise);
 
 const articleSchema = require('../../schema/article-schema.yaml');
-const URL = require('./urlHelpers.coffee');
+const URL = require('./urlHelpers.js');
 
 const articleDefaults = defaults(articleSchema);
 
