@@ -18,7 +18,7 @@ function formatSelector(state, lang) {
   moment.locale(lang);
   return utils.mapObjectRecursively(
     state,
-    [lang, utils.identity],
+    [lang, (x => x)],
     ['format', 'text', utils.createFormatMapper(formatters)],
     [
       'published',

@@ -154,7 +154,6 @@ module.exports =
   getUserProps: (user) ->
     getProps user, [ '_id', 'name' ]
   filterValues: filterValues
-  identity: identity
   keyIn: keyIn
   mapObjectRecursively: mapObjectRecursively
   mapValues: mapValues

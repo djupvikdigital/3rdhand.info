@@ -6,7 +6,6 @@ const ReduxRouter = require('react-router-redux');
 
 const actions = require('./actions/appActions.js');
 const routes = require('./views/routes.js');
-const utils = require('./utils.coffee');
 
 const reducer = Redux.combineReducers({
   appState: require('./reducers/appReducer.js'),
@@ -26,7 +25,7 @@ function createStore(_history, data) {
       thunkMiddleware,
       ReduxRouter.routerMiddleware(_history)
     ),
-    hasDevTools ? window.devToolsExtension() : utils.identity
+    hasDevTools ? window.devToolsExtension() : (x => x)
   )(Redux.createStore)(reducer);
   if (data) {
     store.dispatch(actions.init(data));
