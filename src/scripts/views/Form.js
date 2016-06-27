@@ -2,7 +2,7 @@ const Immutable = require('immutable');
 const { children, cloneElement, createClass } = require('react');
 const { elements } = require('react-elementary');
 
-const PasswordInput = require('./password-input.coffee');
+const PasswordInput = require('./PasswordInput.js');
 
 const { form } = elements;
 

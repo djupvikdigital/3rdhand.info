@@ -15,7 +15,7 @@ const FormMessage = createFactory(
   connect(formMessageSelector)(require('./FormMessage.js'))
 );
 const Output = createFactory(require('./Output.js'));
-const PasswordInput = createFactory(require('./password-input.coffee'));
+const PasswordInput = createFactory(require('./PasswordInput.js'));
 const TextInput = createFactory(require('./text-input.coffee'));
 const SubmitButton = createFactory(require('./submit-button.coffee'));
 

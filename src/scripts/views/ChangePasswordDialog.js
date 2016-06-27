@@ -13,7 +13,7 @@ const FormMessage = createFactory(
   connect(formMessageSelector)(require('./FormMessage.js'))
 );
 const FormGroup = createFactory(require('./FormGroup.js'));
-const PasswordInput = createFactory(require('./password-input.coffee'));
+const PasswordInput = createFactory(require('./PasswordInput.js'));
 const SubmitButton = createFactory(require('./submit-button.coffee'));
 const TextInput = createFactory(require('./text-input.coffee'));
 

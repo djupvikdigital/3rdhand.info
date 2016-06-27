@@ -13,7 +13,7 @@ FormMessage = createFactory ReactRedux.connect(selectors.formMessageSelector)(
 )
 FormGroup = createFactory require './FormGroup.js'
 TextInput = createFactory require './text-input.coffee'
-PasswordInput = createFactory require './password-input.coffee'
+PasswordInput = createFactory require './PasswordInput.js'
 
 actions = require '../actions/userActions.js'
 
