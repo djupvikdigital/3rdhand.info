@@ -160,4 +160,3 @@ module.exports =
     m = if gotMap then obj else Immutable.Map(obj)
     m = m.filterNot keyIn '_id', '_rev'
     unless gotMap then m.toObject() else m
-  zip: zip
