@@ -20,7 +20,7 @@ const ChangePasswordDialog = connect(changePasswordSelector)(
   authenticate(require('./ChangePasswordDialog.js'))
 );
 const LoginDialog = connect(loginSelector)(require('./LoginDialog.js'));
-const SignupDialog = connect(signupSelector)(require('./signup-dialog.coffee'));
+const SignupDialog = connect(signupSelector)(require('./SignupDialog.js'));
 
 const IndexRoute = createFactory(Router.IndexRoute);
 const Redirect = createFactory(Router.Redirect);
