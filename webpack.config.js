@@ -53,10 +53,6 @@ module.exports = {
         loader: 'json-loader'
       },
       {
-        test: /\.coffee$/,
-        loader: 'coffee-loader'
-      },
-      {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract(
           'css?sourceMap!' +
@@ -75,15 +71,6 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: [
-      '',
-      '.webpack.js',
-      '.web.js',
-      '.js',
-      '.json',
-      '.coffee',
-      '.yaml'
-    ],
     root: path.resolve(__dirname, 'src', 'scripts'),
     alias: {
       'history/lib/createMemoryHistory': 'history/lib/createBrowserHistory',
