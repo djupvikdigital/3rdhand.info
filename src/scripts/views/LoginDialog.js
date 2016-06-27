@@ -14,7 +14,7 @@ const FormGroup = createFactory(require('./FormGroup.js'));
 const FormMessage = createFactory(
   connect(formMessageSelector)(require('./FormMessage.js'))
 );
-const Output = createFactory(require('./output.coffee'));
+const Output = createFactory(require('./Output.js'));
 const PasswordInput = createFactory(require('./password-input.coffee'));
 const TextInput = createFactory(require('./text-input.coffee'));
 const SubmitButton = createFactory(require('./submit-button.coffee'));

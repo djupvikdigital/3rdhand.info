@@ -1,6 +1,6 @@
 const { createFactory, elements } = require('react-elementary').default;
 
-const Output = createFactory(require('./output.coffee'));
+const Output = createFactory(require('./Output.js'));
 
 const { span } = elements;
 
