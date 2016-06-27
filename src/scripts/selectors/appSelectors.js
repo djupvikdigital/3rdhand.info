@@ -5,7 +5,7 @@ const Reselect = require('reselect');
 const { compose } = require('transducers.js');
 
 const URL = require('urlHelpers');
-const utils = require('../utils.coffee');
+const utils = require('../utils.js');
 
 const { argsToObject } = utils;
 

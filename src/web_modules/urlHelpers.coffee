@@ -1,6 +1,6 @@
 Immutable = require 'immutable'
 
-utils = require '../scripts/utils.coffee'
+utils = require '../scripts/utils.js'
 padStart = require 'lodash/padStart'
 
 assemblePath = (obj) ->

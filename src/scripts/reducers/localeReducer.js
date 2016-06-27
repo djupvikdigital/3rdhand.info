@@ -1,7 +1,7 @@
 const Immutable = require('immutable');
 const { UPDATE_LOCATION } = require('react-router-redux');
 
-const utils = require('../utils.coffee');
+const utils = require('../utils.js');
 
 const initialState = Immutable.fromJS({
   lang: 'nb',

@@ -2,7 +2,7 @@ const Immutable = require('immutable');
 const t = require('transducers.js');
 
 const URL = require('urlHelpers');
-const utils = require('../utils.coffee');
+const utils = require('../utils.js');
 
 const supportedLangParams = ['en', 'no'];
 

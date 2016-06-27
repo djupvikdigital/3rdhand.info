@@ -5,7 +5,7 @@ const { createFactory, elements } = require('react-elementary');
 
 const API = require('api');
 const { formMessageSelector } = require('../selectors/appSelectors.js');
-const utils = require('../utils.coffee');
+const utils = require('../utils.js');
 
 const Helmet = createFactory(require('react-helmet'));
 

@@ -3,7 +3,7 @@ const ReduxRouter = require('react-router-redux');
 const API = require('api');
 const appActions = require('./appActions.js');
 const URL = require('urlHelpers');
-const utils = require('../utils.coffee');
+const utils = require('../utils.js');
 
 function changePassword(userId, data) {
   return {
