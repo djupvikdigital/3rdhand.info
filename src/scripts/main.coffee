@@ -11,7 +11,7 @@ createStore = require './store.coffee'
 userActions = require './actions/userActions.js'
 routes = require './views/routes.coffee'
 createFactory = require './create-factory.coffee'
-Root = createFactory require './views/root.coffee'
+Root = createFactory require './views/Root.js'
 appActions = require './actions/appActions.js'
 URL = require 'urlHelpers'
 
