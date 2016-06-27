@@ -154,7 +154,6 @@ module.exports =
     getProps user, [ '_id', 'name' ]
   keyIn: keyIn
   mapObjectRecursively: mapObjectRecursively
-  mapValues: mapValues
   maybe: maybe
   stripDbFields: (obj) ->
     gotMap = Immutable.Map.isMap(obj)
