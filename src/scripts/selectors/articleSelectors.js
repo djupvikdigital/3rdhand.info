@@ -5,7 +5,7 @@ const { compose } = require('transducers.js');
 
 const API = require('api');
 const appSelectors = require('./appSelectors.js');
-const formatters = require('../formatters.coffee');
+const formatters = require('../formatters.js');
 const utils = require('../utils.coffee');
 
 const { prop } = utils;
