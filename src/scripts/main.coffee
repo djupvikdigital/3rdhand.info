@@ -5,12 +5,12 @@ ReactDOM = require 'react-dom'
 { XmlEntities } = require 'html-entities'
 ReactRouter = require 'react-router'
 ReduxRouter = require 'react-router-redux'
+{ createFactory } = require('react-elementary').default;
 
 init = require './init.coffee'
 createStore = require './store.coffee'
 userActions = require './actions/userActions.js'
 routes = require './views/routes.js'
-createFactory = require './create-factory.coffee'
 Root = createFactory require './views/Root.js'
 appActions = require './actions/appActions.js'
 URL = require 'urlHelpers'

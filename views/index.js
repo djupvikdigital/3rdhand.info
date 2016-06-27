@@ -1,7 +1,7 @@
 const YAML = require('js-yaml');
+const { elements } = require('react-elementary').default;
 
 const { read } = require('../lib/utils.js');
-const Elements = require('../src/scripts/elements.coffee');
 
 const conf = YAML.safeLoad(read('./config.yaml'));
 
@@ -10,7 +10,7 @@ const server = assetServer ? `//${assetServer.hostname}:${assetServer.port}` : '
 
 const assetPaths = conf.assetPaths || require('../dist/webpack-assets.json');
 
-const { html, head, meta, title, link, body, header, div, script } = Elements;
+const { html, head, meta, title, link, body, header, div, script } = elements;
 
 const googleFontsUrl = '//fonts.googleapis.com/css?family=';
 const stylesheets = [
@@ -35,7 +35,7 @@ function IndexTemplate(props) {
   ));
   return html(
     { lang: props.lang },
-    head(metadata),
+    head(...metadata),
     body(
       div({ id: 'app', innerHtml: props.app }),
       script(
