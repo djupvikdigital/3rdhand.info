@@ -1,6 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { createFactory, elements } = require('react-elementary');
+const { createFactory, elements } = require('react-elementary').default;
 
 const Helmet = createFactory(require('react-helmet'));
 

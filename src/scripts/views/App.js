@@ -5,7 +5,7 @@ const { createFactory, elements } = require('react-elementary').default;
 const { headerSelector } = require('../selectors/appSelectors.js');
 
 const SiteHeader = createFactory(
-  connect(headerSelector)(require('./site-header.coffee'))
+  connect(headerSelector)(require('./SiteHeader.js'))
 );
 
 const { div } = elements;
