@@ -1,5 +1,6 @@
 const Immutable = require('immutable');
 const moment = require('moment-timezone');
+const prop = require('ramda/src/prop');
 const Reselect = require('reselect');
 const { compose } = require('transducers.js');
 
@@ -7,8 +8,6 @@ const API = require('api');
 const appSelectors = require('./appSelectors.js');
 const formatters = require('../formatters.js');
 const utils = require('../utils.coffee');
-
-const { prop } = utils;
 
 function langSelector(state) {
   return state.localeState.get('lang');

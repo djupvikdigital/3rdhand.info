@@ -158,7 +158,6 @@ module.exports =
   mapObjectRecursively: mapObjectRecursively
   mapValues: mapValues
   maybe: maybe
-  prop: prop
   stripDbFields: (obj) ->
     gotMap = Immutable.Map.isMap(obj)
     m = if gotMap then obj else Immutable.Map(obj)

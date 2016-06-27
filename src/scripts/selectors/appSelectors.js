@@ -1,12 +1,13 @@
 const Immutable = require('immutable');
 const omit = require('lodash/omit');
+const prop = require('ramda/src/prop');
 const Reselect = require('reselect');
 const { compose } = require('transducers.js');
 
 const URL = require('urlHelpers');
 const utils = require('../utils.coffee');
 
-const { argsToObject, prop } = utils;
+const { argsToObject } = utils;
 
 const localeSelector = compose(
   state => state.getIn(['localeStrings', state.get('lang')]).toJS(),
