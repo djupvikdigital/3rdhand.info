@@ -108,6 +108,17 @@ server.use((err, req, res, next) => {
   return handleError(res, err);
 });
 
+if (PROD) {
+  const credentials = {
+    key: fs.readFileSync(path.join(certsPath, 'privkey.pem')),
+    cert: fs.readFileSync(path.join(certsPath, 'fullchain.pem')),
+    ca: fs.readFileSync(path.join(certsPath, 'chain.pem')),
+  };
+  https.createServer(credentials, server).listen(8433, () => {
+    logger.info('HTTPS server listening on port 8443...');
+  })
+}
+
 server.listen(8081, () => {
   logger.info('Express web server listening on port 8081...');
 });
