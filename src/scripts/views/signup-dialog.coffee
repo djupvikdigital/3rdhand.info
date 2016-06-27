@@ -7,7 +7,7 @@ selectors = require '../selectors/appSelectors.js'
 Helmet = createFactory require 'react-helmet'
 
 Elements = require '../elements.coffee'
-Form = createFactory require './form.coffee'
+Form = createFactory require './Form.js'
 FormMessage = createFactory ReactRedux.connect(selectors.formMessageSelector)(
   require './FormMessage.js'
 )

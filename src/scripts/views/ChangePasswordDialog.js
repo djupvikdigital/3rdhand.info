@@ -8,7 +8,7 @@ const URL = require('urlHelpers');
 
 const Helmet = createFactory(require('react-helmet'));
 
-const Form = createFactory(require('./form.coffee'));
+const Form = createFactory(require('./Form.js'));
 const FormMessage = createFactory(
   connect(formMessageSelector)(require('./FormMessage.js'))
 );
