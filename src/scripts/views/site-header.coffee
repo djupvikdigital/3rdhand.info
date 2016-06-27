@@ -13,7 +13,7 @@ userActions = require '../actions/userActions.js'
 
 Link = createFactory ReactRedux.connect(selectors.linkSelector)(Router.Link)
 LangPicker = createFactory ReactRedux.connect(selectors.langPickerSelector)(
-  require './lang-picker.coffee'
+  require './LangPicker.js'
 )
 
 module.exports = React.createClass
