@@ -5,7 +5,7 @@ Router = require 'react-router'
 ReduxRouter = require 'react-router-redux'
 
 actions = require './actions/appActions.js'
-routes = require './views/routes.coffee'
+routes = require './views/routes.js'
 utils = require './utils.coffee'
 
 reducer = Redux.combineReducers
