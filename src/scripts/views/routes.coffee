@@ -13,7 +13,7 @@ authenticate = require './authenticate.js'
 ArticleContainer = ReactRedux.connect(
   articleSelectors.containerSelector
 )(require './ArticleContainer.js')
-LoginDialog = ReactRedux.connect(loginSelector)(require './login-dialog.coffee')
+LoginDialog = ReactRedux.connect(loginSelector)(require './LoginDialog.js')
 SignupDialog = ReactRedux.connect(signupSelector)(
   require './signup-dialog.coffee'
 )

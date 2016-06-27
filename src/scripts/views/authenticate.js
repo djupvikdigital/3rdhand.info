@@ -4,7 +4,7 @@ const { createFactory } = require('react-elementary');
 
 const actions = require('../actions/userActions.js');
 
-const LoginDialog = createFactory(require('./login-dialog.coffee'));
+const LoginDialog = createFactory(require('./LoginDialog.js'));
 
 function checkTimestamp({ dispatch, login }) {
   if (login.isLoggedIn) {
