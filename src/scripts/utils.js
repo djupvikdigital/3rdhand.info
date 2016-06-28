@@ -109,7 +109,7 @@ function argsToObject(...keys) {
     obj[keys[i]] = arg;
     return obj;
   };
-  return () => keys.reduce(reducer, {});
+  return (...args) => args.reduce(reducer, {});
 }
 
 function getUserProps(user) {

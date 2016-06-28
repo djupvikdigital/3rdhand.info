@@ -7,7 +7,7 @@ const RadioOption = require('./RadioOption.js');
 const { div, fieldset } = elements;
 
 function renderChildren(_props) {
-  const { name, onChange, value } = props;
+  const { name, onChange, value } = _props;
   const props = Immutable.Map({ name, onChange });
   return Children.map(_props.children, child => {
     if (child.type === RadioOption) {
