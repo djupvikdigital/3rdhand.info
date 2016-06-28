@@ -1,7 +1,6 @@
 const ReduxRouter = require('react-router-redux');
 
 const API = require('api');
-const appActions = require('./appActions.js');
 const URL = require('urlHelpers');
 const utils = require('../utils.js');
 
@@ -61,7 +60,7 @@ function setUser(obj, timestamp) {
     type: 'SET_LOGGEDIN_USER',
     payload: {
       user: obj.user || obj || null,
-      authenticationTime: obj.timestamp, timestamp
+      authenticationTime: obj.timestamp || timestamp,
     },
   };
 }

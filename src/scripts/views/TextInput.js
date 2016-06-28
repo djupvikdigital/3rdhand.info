@@ -5,14 +5,14 @@ const { input, label, textarea } = elements;
 
 const TextInput = React.createClass({
   displayName: 'TextInput',
-  getDefaultProps: function () {
+  getDefaultProps: function getDefaultProps() {
     return { multiline: false, placeholder: '' };
   },
-  render: function () {
+  render: function render() {
     const { multiline, name, onChange, placeholder, value } = this.props;
     const el = multiline ? textarea : input;
     return label(
-      { className: 'form-group'},
+      { className: 'form-group' },
       `${this.props.label}: `,
       el({ name, value, placeholder, onChange })
     );

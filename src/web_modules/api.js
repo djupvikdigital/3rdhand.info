@@ -14,7 +14,7 @@ function createDatetimeStruct(date) {
   return {
     utc: moment.utc(date).toISOString(),
     timezone: moment.tz.guess(),
-  }
+  };
 }
 
 function getBody(res) {
@@ -40,7 +40,8 @@ function getArticleDefaults() {
 }
 
 function login(data) {
-  return request.post('/users').accept(json).send(data).then(getBody);
+  return request.post('/users').accept(json).send(data)
+    .then(getBody);
 }
 
 function logout(userId) {
@@ -54,8 +55,9 @@ function requestPasswordReset(data) {
   return request.post('/users').accept(json).send(data);
 }
 
-function saveArticle(article, userId) {
+function saveArticle(_article, userId) {
   const now = createDatetimeStruct(new Date());
+  const article = Object.assign({}, _article);
   if (!article.created) {
     article.created = now;
   }

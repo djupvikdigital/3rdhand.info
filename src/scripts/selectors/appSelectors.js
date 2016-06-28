@@ -1,4 +1,3 @@
-const Immutable = require('immutable');
 const omit = require('lodash/omit');
 const prop = require('ramda/src/prop');
 const Reselect = require('reselect');
@@ -27,7 +26,7 @@ function loginSelector(_state) {
   }
   return {
     isLoggedIn: false,
-    params: params,
+    params,
   };
 }
 
@@ -53,7 +52,7 @@ const changePasswordSelector = Reselect.createSelector(
     const localeStrings = Object.assign({}, ChangePasswordDialog, LoginDialog);
     return { localeStrings, login, params };
   }
-)
+);
 
 const formMessageSelector = compose(
   argsToObject('localeStrings'), prop('FormMessage'), localeSelector
@@ -76,7 +75,7 @@ function linkSelector(_state, props) {
   }
   params = URL.getNextParams(Object.assign({ currentParams, params }, props));
   return Object.assign(
-    { to: { pathname: URL.getPath(params) }},
+    { to: { pathname: URL.getPath(params) } },
     omit(props, 'currentParams', 'langParam', 'params', 'slug')
   );
 }

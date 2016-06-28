@@ -1,4 +1,3 @@
-const React = require('react');
 const Router = require('react-router');
 const { connect } = require('react-redux');
 const { createFactory, elements } = require('react-elementary');
@@ -8,12 +7,12 @@ const selector = require('../selectors/appSelectors.js').linkSelector;
 
 const Link = createFactory(connect(selector)(Router.Link));
 
-const { div, li, nav, ul } = elements;
+const { li, nav, ul } = elements;
 
 function propFactory(props, langParam) {
-  const onClick = function () {
+  const onClick = function onClick() {
     props.dispatch(actions.fetchStrings(langParam));
-  }
+  };
   return { langParam, onClick };
 }
 

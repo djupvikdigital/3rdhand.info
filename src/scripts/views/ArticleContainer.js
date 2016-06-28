@@ -23,30 +23,30 @@ const ArticleEditor = createFactory(
 
 const ArticleContainer = React.createClass({
   displayName: 'ArticleContainer',
-  fetch: function (params, force) {
+  fetch: function fetch(params, force) {
     const prevParams = Immutable.Map(this.props.prevParams);
     if (force || !Immutable.is(prevParams, Immutable.Map(params))) {
       return this.props.dispatch(actions.fetch(params));
     }
     return null;
   },
-  save: function (data) {
+  save: function save(data) {
     return this.props.dispatch(actions.save(data, this.props.login.user._id));
   },
-  componentWillMount: function () {
+  componentWillMount: function componentWillMount() {
     return this.fetch(this.props.params);
   },
-  componentWillReceiveProps: function (nextProps) {
+  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
     return this.fetch(nextProps.params, nextProps.refetch);
   },
-  render: function () {
+  render: function render() {
     const params = this.props.params || {};
     const { articles, serverUrl } = this.props;
     if (articles.length > 1) {
       return ArticleList({ articles });
     }
     else if (params.view) {
-      return ArticleEditor({ save: this.save, params: params });
+      return ArticleEditor({ save: this.save, params });
     }
     return ArticleFull({ serverUrl });
   },

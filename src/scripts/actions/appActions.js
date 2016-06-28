@@ -1,5 +1,3 @@
-const URL = require('urlHelpers');
-
 function init(state) {
   return {
     type: 'INIT',

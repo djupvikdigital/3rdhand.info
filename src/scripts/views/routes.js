@@ -23,7 +23,6 @@ const LoginDialog = connect(loginSelector)(require('./LoginDialog.js'));
 const SignupDialog = connect(signupSelector)(require('./SignupDialog.js'));
 
 const IndexRoute = createFactory(Router.IndexRoute);
-const Redirect = createFactory(Router.Redirect);
 const Route = createFactory(Router.Route);
 
 const routes = Route(
@@ -33,7 +32,7 @@ const routes = Route(
   Route({ path: 'signup', component: SignupDialog }),
   Route({ path: '/locales/:file', component: App }),
   Route({
-    path: 'users/:userId/change-password', component: ChangePasswordDialog
+    path: 'users/:userId/change-password', component: ChangePasswordDialog,
   }),
   Route({ path: 'users/:userId/logout', component: LoginDialog }),
   Route({ path: 'users/:userId', component: AuthenticatedArticleContainer }),

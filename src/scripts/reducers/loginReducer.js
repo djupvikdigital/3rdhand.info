@@ -7,7 +7,7 @@ const initialState = Immutable.fromJS({
 function mergeUser(state, { user, timestamp }) {
   if (user) {
     return state.merge({
-      user: user,
+      user,
       authenticationTime: timestamp,
       isLoggedIn: true,
     });
@@ -30,7 +30,7 @@ const reducers = {
   INIT(state, payload) {
     return state.merge(payload.state.loginState);
   },
-}
+};
 
 function loginReducer(_state, { type, payload }) {
   const state = _state || initialState;

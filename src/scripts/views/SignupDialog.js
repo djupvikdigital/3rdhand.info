@@ -19,12 +19,12 @@ const { h1, input } = elements;
 
 const SignupDialog = React.createClass({
   displayName: 'SignupDialog',
-  handleSignup: function (data) {
+  handleSignup: function handleSignup(data) {
     return this.props.dispatch(actions.signup(data));
   },
-  render: function () {
+  render: function render() {
     const {
-      email, password, repeatPassword, signup, title
+      email, password, repeatPassword, signup, title,
     } = this.props.localeStrings;
     Helmet({ title });
     return Form(
@@ -35,7 +35,7 @@ const SignupDialog = React.createClass({
       PasswordInput({ label: password, name: 'password' }),
       PasswordInput({ label: repeatPassword, name: 'repeatPassword' }),
       FormGroup(input({ className: 'btn', type: 'submit', value: signup }))
-    )
+    );
   },
 });
 

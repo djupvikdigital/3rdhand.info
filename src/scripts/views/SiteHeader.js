@@ -20,7 +20,7 @@ const { div, header, li, nav, ul } = elements;
 
 const SiteHeader = React.createClass({
   displayName: 'SiteHeader',
-  handleLogout: function (e) {
+  handleLogout: function handleLogout(e) {
     e.preventDefault();
     const params = Object.assign({}, this.props.params);
     delete params.view;
@@ -30,14 +30,14 @@ const SiteHeader = React.createClass({
     };
     return this.props.dispatch(actions.logout(data));
   },
-  render: function () {
+  render: function render() {
     const {
-      changePassword, home, logout, newArticle
+      changePassword, home, logout, newArticle,
     } = this.props.localeStrings;
     const args = [
       { className: 'u-left', role: 'banner' },
       Link({
-        className: 'site-logo', title: home, innerHtml: logo, page: 'home'
+        className: 'site-logo', title: home, innerHtml: logo, page: 'home',
       }),
     ];
     if (this.props.login.isLoggedIn) {

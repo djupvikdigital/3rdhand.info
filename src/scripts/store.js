@@ -1,18 +1,19 @@
 const Redux = require('redux');
 const promiseMiddleware = require('redux-promise-middleware').default;
 const thunkMiddleware = require('redux-thunk').default;
-const Router = require('react-router');
 const ReduxRouter = require('react-router-redux');
 
 const actions = require('./actions/appActions.js');
-const routes = require('./views/routes.js');
+
+const appState = require('./reducers/appReducer.js');
+const articleState = require('./reducers/articleReducer.js');
+const localeState = require('./reducers/localeReducer.js');
+const loginState = require('./reducers/loginReducer.js');
+
+const routing = ReduxRouter.routerReducer;
 
 const reducer = Redux.combineReducers({
-  appState: require('./reducers/appReducer.js'),
-  articleState: require('./reducers/articleReducer.js'),
-  localeState: require('./reducers/localeReducer.js'),
-  loginState: require('./reducers/loginReducer.js'),
-  routing: ReduxRouter.routerReducer,
+  appState, articleState, localeState, loginState, routing,
 });
 
 const isBrowser = typeof window == 'object';

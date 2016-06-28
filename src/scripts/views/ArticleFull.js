@@ -1,4 +1,3 @@
-const React = require('react');
 const { createFactory, elements } = require('react-elementary');
 
 const Helmet = createFactory(require('react-helmet'));
@@ -6,7 +5,7 @@ const Helmet = createFactory(require('react-helmet'));
 const { formatSelector } = require('../selectors/articleSelectors.js');
 const URL = require('urlHelpers');
 
-const { b, div, header, h1, p } = elements;
+const { b, div, h1, p } = elements;
 
 function ArticleFull(props) {
   const { article, lang, serverUrl } = props;
@@ -14,7 +13,7 @@ function ArticleFull(props) {
     return div();
   }
   const {
-    body, headline, intro, summary, title
+    body, headline, intro, title,
   } = formatSelector(article, lang);
   const pageTitle = props.title || title;
   const description = article.summary[lang].text;

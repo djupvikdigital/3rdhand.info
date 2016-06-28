@@ -1,8 +1,6 @@
 const Immutable = require('immutable');
 const { UPDATE_LOCATION } = require('react-router-redux');
 
-const utils = require('../utils.js');
-
 const initialState = Immutable.fromJS({
   lang: 'nb',
   pendingLang: '',
@@ -25,14 +23,14 @@ const reducers = {
     let state = _state;
     const pending = state.get('pendingLang');
     if (pending !== lang) {
-      state = state.setIn(['langMap', pending], lang)
+      state = state.setIn(['langMap', pending], lang);
     }
     return state
       .mergeIn(['localeStrings', lang], data)
-      .merge({ lang: lang, pendingLang: '', lastUpdate: new Date() });
+      .merge({ lang, pendingLang: '', lastUpdate: new Date() });
   },
   [UPDATE_LOCATION](state, payload) {
-    const location = payload.state ||{};
+    const location = payload.state || {};
     let { lang } = location;
     if (!lang) {
       return state.set('lang', initialState.get('lang'));

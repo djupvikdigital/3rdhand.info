@@ -1,16 +1,10 @@
-const compose = require('ramda/src/compose');
+const assoc = require('ramda/src/assoc');
 const docuri = require('docuri');
-const filter = require('ramda/src/filter');
 const Immutable = require('immutable');
-const identity = require('ramda/src/identity');
-const into = require('ramda/src/into');
 const last = require('ramda/src/last');
 const map = require('ramda/src/map');
 const pick = require('ramda/src/pick');
 const toPairs = require('ramda/src/toPairs');
-const t = require('transducers.js');
-
-const { remove, seq, take, toArray, transduce } = t;
 
 const getUserId = docuri.route('user/:cuid');
 
@@ -25,14 +19,15 @@ function array() {
   return Array.prototype.concat.apply([], arguments);
 }
 
-function keyIn() {
-  const keySet = Immutable.Set(arguments);
+function keyIn(...args) {
+  const keySet = Immutable.Set(args);
   return (v, k) => keySet.has(k);
 }
 
 function shortCircuitScalars(fn) {
-  return function (input) {
-    return typeof input == 'object' ? fn(...arguments) : input;
+  return function shortCircuitedScalars(...args) {
+    const input = args[0];
+    return typeof input == 'object' ? fn(...args) : input;
   };
 }
 
@@ -72,9 +67,7 @@ const mapObjectRecursively = shortCircuitScalars((obj, ..._p) => {
       if (results.length) {
         return f(results[0]);
       }
-      else {
-        return map(f, input);
-      }
+      return map(f, input);
     }
     return input;
   });
@@ -99,16 +92,13 @@ function createFormatMapper(formatters) {
 }
 
 function maybe(fn) {
-  return arg => arg ? fn(arg) : null;
+  return arg => (arg ? fn(arg) : null);
 }
 
 // Public API
 
 function argsToObject(...keys) {
-  const reducer = (obj, arg, i) => {
-    obj[keys[i]] = arg;
-    return obj;
-  };
+  const reducer = (obj, arg, i) => assoc(keys[i], arg, obj);
   return (...args) => args.reduce(reducer, {});
 }
 

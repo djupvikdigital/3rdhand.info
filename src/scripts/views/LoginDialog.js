@@ -1,4 +1,3 @@
-const Immutable = require('immutable');
 const React = require('react');
 const { connect } = require('react-redux');
 const { createFactory, elements } = require('react-elementary');
@@ -19,13 +18,13 @@ const PasswordInput = createFactory(require('./PasswordInput.js'));
 const TextInput = createFactory(require('./TextInput.js'));
 const SubmitButton = createFactory(require('./SubmitButton.js'));
 
-const { button, form, h1, input, label } = elements;
+const { h1, input } = elements;
 
 const LoginDialog = React.createClass({
   displayName: 'LoginDialog',
-  getInitialData: function () {
+  getInitialData: function getInitialData() {
     let userId = '';
-    let error = '';
+    const error = '';
     let from = '';
     let name = '';
     if (this.props.login) {
@@ -40,7 +39,7 @@ const LoginDialog = React.createClass({
     }
     return { error, from, name, userId };
   },
-  handleSubmit: function (data) {
+  handleSubmit: function handleSubmit(data) {
     let promise;
     if (data.resetPassword) {
       promise = this.props.dispatch(actions.requestPasswordReset(data));
@@ -53,18 +52,17 @@ const LoginDialog = React.createClass({
       return Promise[method](value);
     });
   },
-  handleLogout: function (data) {
+  handleLogout: function handleLogout(data) {
     return this.props.dispatch(actions.logout(data));
   },
-  render: function () {
+  render: function render() {
     const l = this.props.localeStrings;
     const {
       email,
-      forgotPassword,
       loggedInAs,
       login,
       logout,
-      password
+      password,
     } = l;
     const { isLoggedIn, user } = this.props.login;
     const title = isLoggedIn ? logout : login;
@@ -103,7 +101,7 @@ const LoginDialog = React.createClass({
       ];
     }
     return Form(...args);
-  }
+  },
 });
 
 module.exports = LoginDialog;

@@ -18,7 +18,7 @@ const RadioGroup = createFactory(require('./RadioGroup.js'));
 const RadioOption = createFactory(require('./RadioOption.js'));
 const TextInput = createFactory(require('./TextInput.js'));
 
-const { div, form, h1, input, label, textarea } = elements;
+const { h1, input } = elements;
 
 function keyResolver(k) {
   const v = this.state.data.getIn(k);
@@ -27,7 +27,7 @@ function keyResolver(k) {
     const len = k.length;
     const keys = k.slice(0);
     keys.splice(len, 0, lang, 'text');
-    return keys
+    return keys;
   }
   return k;
 }
@@ -37,17 +37,17 @@ const ArticleEditor = React.createClass({
   propTypes: {
     lang: React.PropTypes.string.isRequired,
   },
-  handleSubmit: function (data) {
+  handleSubmit: function handleSubmit(data) {
     return this.props.save(
       Immutable.fromJS(data).filterNot(utils.keyIn('lang')).toJS()
     );
   },
-  render: function () {
+  render: function render() {
     let data = this.props.article;
     const { lang, params, title } = this.props;
     const isNew = params.view === 'new';
     const props = {
-      keyResolver: keyResolver,
+      keyResolver,
       onSubmit: this.handleSubmit,
     };
     if (params.view !== 'edit') {
@@ -73,7 +73,7 @@ const ArticleEditor = React.createClass({
       short_title,
       slug,
       summary,
-      teaser
+      teaser,
     } = l;
     Helmet({ title });
     return Form(

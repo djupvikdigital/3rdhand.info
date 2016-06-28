@@ -1,5 +1,5 @@
 const Immutable = require('immutable');
-const { children, cloneElement, createClass } = require('react');
+const { Children, cloneElement, createClass } = require('react');
 const { elements } = require('react-elementary');
 
 const PasswordInput = require('./PasswordInput.js');
@@ -8,13 +8,13 @@ const { form } = elements;
 
 const Form = createClass({
   displayName: 'Form',
-  propsToState: function (props) {
+  propsToState: function propsToState(props) {
     return {
       placeholders: Immutable.fromJS(props.placeholders),
       data: Immutable.fromJS(props.initialData),
     };
   },
-  getDefaultProps: function () {
+  getDefaultProps: function getDefaultProps() {
     return {
       action: '',
       method: 'GET',
@@ -23,34 +23,34 @@ const Form = createClass({
       error: '',
     };
   },
-  getInitialState: function () {
+  getInitialState: function getInitialState() {
     return this.propsToState(this.props);
   },
-  keyResolver: function (k) {
+  keyResolver: function keyResolver(k) {
     let keys = Array.isArray(k) ? k : [k];
     if (typeof this.props.keyResolver == 'function') {
       keys = this.props.keyResolver.call(this, keys);
     }
     return keys;
   },
-  getPlaceholder: function (k) {
+  getPlaceholder: function getPlaceholder(k) {
     return this.state.placeholders.getIn(this.keyResolver(k));
   },
-  getValue: function (k) {
+  getValue: function getValue(k) {
     return this.state.data.getIn(this.keyResolver(k), '');
   },
-  setValue: function (k, v) {
+  setValue: function setValue(k, v) {
     if (this.isMounted()) {
       this.setState({ data: this.state.data.setIn(this.keyResolver(k), v) });
     }
   },
-  componentWillReceiveProps: function (nextProps) {
+  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
     this.setState(this.propsToState(nextProps));
   },
-  handleChange: function ({ target }) {
+  handleChange: function handleChange({ target }) {
     this.setValue(target.name, target.value);
   },
-  handleSubmit: function (e) {
+  handleSubmit: function handleSubmit(e) {
     if (typeof this.props.onSubmit == 'function') {
       e.preventDefault();
       return Promise.resolve(this.props.onSubmit(this.state.data.toJS()))
@@ -60,8 +60,9 @@ const Form = createClass({
           this.setValue('error', message);
         });
     }
+    return Promise.resolve(null);
   },
-  renderChild: function (child) {
+  renderChild: function renderChild(child) {
     if (!child.props) {
       return child;
     }
@@ -90,7 +91,7 @@ const Form = createClass({
     }
     return child;
   },
-  render: function () {
+  render: function render() {
     return form(
       {
         action: this.props.action,

@@ -4,7 +4,7 @@ const { elements } = require('react-elementary');
 
 const RadioOption = require('./RadioOption.js');
 
-const { div, fieldset } = elements;
+const { div, fieldset, legend } = elements;
 
 function renderChildren(_props) {
   const { name, onChange, value } = _props;

@@ -1,5 +1,5 @@
-const Immutable = require('immutable');
 const moment = require('moment-timezone');
+const merge = require('ramda/src/merge');
 const prop = require('ramda/src/prop');
 const Reselect = require('reselect');
 const { compose } = require('transducers.js');
@@ -23,7 +23,7 @@ function formatSelector(state, lang) {
       'published',
       utils.createPropertyMapper('publishedFormatted', ({ utc, timezone }) => (
         moment.tz(utc, timezone).format('LLL z')
-      ))
+      )),
     ]
   );
 }
@@ -56,9 +56,7 @@ const itemSelector = Reselect.createSelector(
         title = `${articleTitle[lang].text} - ${title}`;
       }
     }
-    state.lang = lang;
-    state.title = title;
-    return state;
+    return merge(state, { lang, title });
   }
 );
 
@@ -75,10 +73,7 @@ const editorSelector = Reselect.createSelector(
 module.exports = {
   containerSelector: Reselect.createSelector(
     [containerSelector, appSelectors.paramSelector],
-    (state, params) => {
-      state.params = params;
-      return state;
-    }
+    (state, params) => merge(state, { params })
   ),
   editorSelector,
   formatSelector,

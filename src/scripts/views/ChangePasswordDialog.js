@@ -15,21 +15,20 @@ const FormMessage = createFactory(
 const FormGroup = createFactory(require('./FormGroup.js'));
 const PasswordInput = createFactory(require('./PasswordInput.js'));
 const SubmitButton = createFactory(require('./SubmitButton.js'));
-const TextInput = createFactory(require('./TextInput.js'));
 
 const { h1, input } = elements;
 
 const ChangePasswordDialog = React.createClass({
   displayName: 'ChangePasswordDialog',
-  handleReset: function (data) {
+  handleReset: function handleReset(data) {
     const { dispatch, params } = this.props;
     return dispatch(actions.changePassword(params.userId, data))
       .then(action => {
         const method = action.error ? 'reject' : 'resolve';
         return Promise[method](action.payload.response.body);
-      })
+      });
   },
-  render: function () {
+  render: function render() {
     const { location, localeStrings, params } = this.props;
     let data = {};
     if (location && location.query) {
@@ -39,7 +38,7 @@ const ChangePasswordDialog = React.createClass({
     const timestamp = data.timestamp || '';
     const token = data.token || '';
     const {
-      changePassword, newPassword, oldPassword, repeatPassword, title
+      changePassword, newPassword, oldPassword, repeatPassword, title,
     } = localeStrings;
     const props = {
       action: URL.getUserPath(id),
@@ -67,7 +66,7 @@ const ChangePasswordDialog = React.createClass({
     ].concat(inputs, [
       PasswordInput({ label: newPassword, name: 'newPassword' }),
       PasswordInput({ label: repeatPassword, name: 'repeatPassword' }),
-      FormGroup(SubmitButton({ name: 'changePassword'}, changePassword)),
+      FormGroup(SubmitButton({ name: 'changePassword' }, changePassword)),
     ]);
     Helmet({ title });
     return Form.apply(null, args);

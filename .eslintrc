@@ -3,6 +3,8 @@
   "rules": {
     "brace-style": [2, "stroustrup"],
     "eqeqeq": [2, "smart"],
-    "no-underscore-dangle": [2, { "allow":["_id"] }]
+    "new-cap": [0],
+    "no-underscore-dangle": [2, { "allow":["_id"] }],
+    "prefer-rest-params": [0]
   }
 }

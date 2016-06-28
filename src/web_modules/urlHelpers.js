@@ -3,10 +3,11 @@ const padStart = require('lodash/padStart');
 
 const utils = require('../scripts/utils.js');
 
-function assemblePath(obj) {
-  if (!Array.isArray(obj.path) || !Array.isArray(obj.filename)) {
+function assemblePath(_obj) {
+  if (!Array.isArray(_obj.path) || !Array.isArray(_obj.filename)) {
     throw new Error('invalid object');
   }
+  const obj = Object.assign({}, _obj);
   obj.path.pop();
   if (obj.path[0]) {
     obj.path.unshift('');
@@ -34,8 +35,10 @@ function setUserInArray(_arr, userId) {
   return arr;
 }
 
-function addLangToArray(arr, lang) {
+function addLangToArray(_arr, lang) {
+  let arr = _arr;
   if (lang) {
+    arr = arr.slice(0);
     arr[arr.length] = lang;
   }
   return arr;
@@ -60,8 +63,8 @@ function getPath(params) {
   if (params.userId) {
     path = setUserInArray(path, params.userId);
   }
-  const filename = [path[path.length - 1]];
-  addLangToArray(filename, params.lang);
+  let filename = [path[path.length - 1]];
+  filename = addLangToArray(filename, params.lang);
   return assemblePath({ path, filename });
 }
 

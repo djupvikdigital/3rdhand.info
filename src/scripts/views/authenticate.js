@@ -17,13 +17,13 @@ function checkTimestamp({ dispatch, login }) {
 
 function authenticate(Component) {
   return React.createClass({
-    componentWillMount: function () {
+    componentWillMount: function componentWillMount() {
       checkTimestamp(this.props);
     },
-    componentDidUpdate: function () {
+    componentDidUpdate: function componentDidUpdate() {
       checkTimestamp(this.props);
     },
-    render: function () {
+    render: function render() {
       const props = this.props;
       if (props.login.isLoggedIn) {
         return React.createElement(Component, props);
