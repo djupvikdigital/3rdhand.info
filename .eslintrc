@@ -1,0 +1,8 @@
+{
+  "extends": "airbnb-base",
+  "rules": {
+    "brace-style": [2, "stroustrup"],
+    "eqeqeq": [2, "smart"],
+    "no-underscore-dangle": [2, { "allow":["_id"] }]
+  }
+}

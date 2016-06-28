@@ -12,8 +12,8 @@
     "clean": "rm -r dist/*",
     "drop-db": "drop-db",
     "insert-ddoc": "insert-ddoc",
-    "lint": "coffeelint lib/ src/",
-    "test": "mocha --compilers coffee:coffee-script/register",
+    "lint": "eslint lib/ src/",
+    "test": "mocha",
     "posttest": "npm run lint",
     "start": "node server.js",
     "svgo": "svgo --config=./svgo.yaml -f ./src/svg -o ./dist/svg",
@@ -31,7 +31,9 @@
   "devDependencies": {
     "babel-cli": "^6.10.1",
     "cheerio": "^0.20.0",
-    "coffeelint": "^1.15.7",
+    "eslint": "^2.13.1",
+    "eslint-config-airbnb-base": "^3.0.1",
+    "eslint-plugin-import": "^1.9.2",
     "expect": "^1.20.1",
     "mocha": "^2.5.3",
     "webpack-dev-server": "^1.14.1"
