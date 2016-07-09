@@ -1,8 +1,8 @@
+const compose = require('ramda/src/compose');
 const moment = require('moment-timezone');
 const merge = require('ramda/src/merge');
 const prop = require('ramda/src/prop');
 const Reselect = require('reselect');
-const { compose } = require('transducers.js');
 
 const API = require('api');
 const appSelectors = require('./appSelectors.js');

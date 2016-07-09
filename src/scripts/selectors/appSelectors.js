@@ -1,7 +1,7 @@
+const compose = require('ramda/src/compose');
 const omit = require('lodash/omit');
 const prop = require('ramda/src/prop');
 const Reselect = require('reselect');
-const { compose } = require('transducers.js');
 
 const URL = require('urlHelpers');
 const utils = require('../utils.js');

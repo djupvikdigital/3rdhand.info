@@ -1,5 +1,7 @@
+const fromPairs = require('ramda/src/fromPairs');
 const Immutable = require('immutable');
-const t = require('transducers.js');
+const map = require('ramda/src/map');
+const values = require('ramda/src/values');
 
 const URL = require('urlHelpers');
 const utils = require('../utils.js');
@@ -21,7 +23,7 @@ function getNewParams() {
   };
 }
 
-const params = {
+const initialParams = {
   changePassword: {
     slug: 'change-password',
   },
@@ -34,19 +36,16 @@ const params = {
 
 function getUrlsToParams(currentParams) {
   return Object.assign(
-    t.seq(
-      params,
-      t.map(pair => (
-        getUrlToParams(URL.getNextParams({ currentParams, params: pair[1] }))
-      ))
-    ),
-    t.toObj(
-      supportedLangParams,
-      t.map(langParam => (
+    fromPairs(values(map(
+      params => getUrlToParams(URL.getNextParams({ currentParams, params })),
+      initialParams
+    ))),
+    fromPairs(
+      map(langParam => (
         getUrlToParams(
           URL.getNextParams({ currentParams, langParam, params: currentParams })
         )
-      ))
+      ), supportedLangParams)
     )
   );
 }
@@ -69,11 +68,10 @@ function addUserParams(state, { user }) {
 }
 
 function getArticleUrlsToParams(currentParams, articles) {
-  return t.toObj(
-    articles,
-    t.map(({ urlParams }) => (
+  return fromPairs(
+    map(({ urlParams }) => (
       getUrlToParams(URL.getNextParams({ currentParams, params: urlParams }))
-    ))
+    ), articles)
   );
 }
 
@@ -84,7 +82,7 @@ function removeUserParams(state) {
 
 const initialState = Immutable.fromJS({
   currentParams: {},
-  params,
+  params: initialParams,
   urlsToParams: {
     '/': {},
     '/login': {},

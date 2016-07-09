@@ -1,7 +1,6 @@
 const expect = require('expect');
 
 const Immutable = require('immutable');
-const t = require('transducers.js');
 
 const formatters = require('../src/scripts/formatters.js');
 const utils = require('../src/scripts/utils.js');
