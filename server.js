@@ -1,5 +1,3 @@
-require('coffee-script/register');
-
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
@@ -8,18 +6,18 @@ const express = require('express');
 const favicon = require('serve-favicon');
 const bodyParser = require('body-parser');
 
-const _ = require('lodash');
 const R = require('ramda');
 const { createMemoryHistory } = require('react-router');
 
 const PROD = process.env.NODE_ENV === 'production';
-const DEV = !PROD;
 
 const API = require('./src/node_modules/api.js');
 const articleSelectors = require(
   './src/scripts/selectors/articleSelectors.js'
 );
 const createStore = require('./src/scripts/store.js');
+const DB = require('./lib/db.js');
+const defaultRouterHandler = require('./lib/defaultHandler.js');
 const handleError = require('./lib/handleError.js');
 const init = require('./src/scripts/init.js');
 const logger = require('./lib/log.js');
@@ -28,7 +26,9 @@ const siteRouter = require('./routers/siteRouter.js');
 const URL = require('./src/node_modules/urlHelpers.js');
 const userRouter = require('./routers/userRouter.js');
 
-server = express();
+const certsPath = path.resolve('/etc/letsencrypt/live/3rdhand.info');
+
+const server = express();
 server.use(favicon('./favicon.ico'));
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
@@ -58,8 +58,8 @@ server.get('/locales/:lang', (req, res) => {
   API.fetchLocaleStrings(req.params.lang).then(res.send.bind(res));
 });
 
-server.get('/signup', (req, res) => {
-  return DB.isSignupAllowed().then(isAllowed => {
+server.get('/signup', (req, res) => (
+  DB.isSignupAllowed().then(isAllowed => {
     if (isAllowed) {
       return res.format({
         html() {
@@ -71,11 +71,11 @@ server.get('/signup', (req, res) => {
       });
     }
     return res.sendStatus(404);
-  });
-});
+  })
+));
 
-server.post('/signup', (req, res) => {
-  return API.signup(req.body)
+server.post('/signup', (req, res) => (
+  API.signup(req.body)
     .then(body => (
       res.format({
         html() {
@@ -83,15 +83,17 @@ server.post('/signup', (req, res) => {
         },
         default() {
           return res.send(body);
-        }
+        },
       })
-    )).catch(handleError.bind(null, res));
-});
+    )).catch(handleError.bind(null, res))
+));
 
 server.use('/users', userRouter);
 server.use('/', siteRouter);
 
+/* eslint-disable no-unused-vars */
 server.use((err, req, res, next) => {
+  /* eslint-enable no-unused-vars */
   const msg = err.message;
   if (msg === 'session timeout' || msg === 'token expired') {
     logger.warn(msg);
@@ -116,7 +118,7 @@ if (PROD) {
   };
   https.createServer(credentials, server).listen(8433, () => {
     logger.info('HTTPS server listening on port 8443...');
-  })
+  });
 }
 
 server.listen(8081, () => {
