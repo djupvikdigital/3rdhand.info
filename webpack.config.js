@@ -1,23 +1,23 @@
-var YAML = require('js-yaml');
-var fs = require('fs');
-var path = require('path');
-var webpack = require('webpack');
-var AssetsPlugin = require('assets-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var CleanPlugin = require('clean-webpack-plugin');
+const YAML = require('js-yaml');
+const fs = require('fs');
+const path = require('path');
+const webpack = require('webpack');
+const AssetsPlugin = require('assets-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CleanPlugin = require('clean-webpack-plugin');
 
-var production = process.env.NODE_ENV === 'production';
-var server = !production ? 'http://localhost:8080' : '';
+const production = process.env.NODE_ENV === 'production';
+const server = !production ? 'http://localhost:8080' : '';
 
-var svgoConfig = JSON.stringify(
+const svgoConfig = JSON.stringify(
   YAML.safeLoad(fs.readFileSync(path.resolve(__dirname, 'svgo.yaml')))
 );
 
-var plugins = [
+let plugins = [
   new webpack.DefinePlugin({
     'process.env.NODE_ENV': '"development"',
   }),
-  new ExtractTextPlugin('styles.css')
+  new ExtractTextPlugin('styles.css'),
 ];
 
 if (production) {
@@ -31,10 +31,10 @@ if (production) {
     new webpack.optimize.UglifyJsPlugin({
       mangle: true,
       compress: {
-        warnings: false
-      }
+        warnings: false,
+      },
     }),
-    new webpack.optimize.OccurenceOrderPlugin()
+    new webpack.optimize.OccurenceOrderPlugin(),
   ];
 }
 
@@ -46,45 +46,47 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
       },
       {
         test: /\.json$/,
-        loader: 'json-loader'
+        loader: 'json-loader',
       },
       {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract(
-          'css?sourceMap!' +
-          'sass?sourceMap&includePaths[]=' +
-            path.resolve(__dirname, 'src', 'styles')
-        )
+          [
+            'css?sourceMap!',
+            'sass?sourceMap&includePaths[]=',
+            path.resolve(__dirname, 'src', 'styles'),
+          ].join('')
+        ),
       },
       {
         test: /\.yaml$/,
-        loader: 'json-loader!yaml-loader'
+        loader: 'json-loader!yaml-loader',
       },
       {
         test: /\.svg$/,
-        loader: 'raw-loader!svgo-loader?' + svgoConfig
-      }
+        loader: `raw-loader!svgo-loader?${svgoConfig}`,
+      },
     ],
   },
   resolve: {
     root: path.resolve(__dirname, 'src', 'scripts'),
     alias: {
       'history/lib/createMemoryHistory': 'history/lib/createBrowserHistory',
-      'logo': path.resolve(__dirname, 'src', 'svg', 'logo.svg')
-    }
+      logo: path.resolve(__dirname, 'src', 'svg', 'logo.svg'),
+    },
   },
   entry: {
-    'scripts': './src/scripts/main.js',
-    'styles': './src/styles/main.scss'
+    scripts: './src/scripts/main.js',
+    styles: './src/styles/main.scss',
   },
-  plugins: plugins,
+  plugins,
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: production ? 'scripts/[chunkhash].js' : '[name].js',
-    publicPath: server + '/'
-  }
-}
+    publicPath: `${server}/`,
+  },
+};
