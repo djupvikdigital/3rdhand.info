@@ -3,6 +3,7 @@ const docuri = require('docuri');
 const Immutable = require('immutable');
 const last = require('ramda/src/last');
 const map = require('ramda/src/map');
+const moment = require('moment-timezone');
 const pick = require('ramda/src/pick');
 const toPairs = require('ramda/src/toPairs');
 
@@ -102,6 +103,13 @@ function argsToObject(...keys) {
   return (...args) => args.reduce(reducer, {});
 }
 
+function createDatetimeStruct(date) {
+  return {
+    utc: moment.utc(date).toISOString(),
+    timezone: moment.tz.guess(),
+  };
+}
+
 function getUserProps(user) {
   return pick(['_id', 'name'], user);
 }
@@ -115,6 +123,7 @@ function stripDbFields(obj) {
 module.exports = {
   argsToObject,
   array,
+  createDatetimeStruct,
   createFormatMapper,
   createPropertyMapper,
   getUserId(userId) {

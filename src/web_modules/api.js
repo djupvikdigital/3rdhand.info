@@ -6,17 +6,11 @@ require('superagent-as-promised')(request, Promise);
 
 const articleSchema = require('../../schema/article-schema.yaml');
 const URL = require('./urlHelpers.js');
+const { createDatetimeStruct } = require('../scripts/utils.js');
 
 const articleDefaults = defaults(articleSchema);
 
 const json = 'application/json';
-
-function createDatetimeStruct(date) {
-  return {
-    utc: moment.utc(date).toISOString(),
-    timezone: moment.tz.guess(),
-  };
-}
 
 function isValidDatetimeStruct(obj) {
   const has = Object.prototype.hasOwnProperty;
