@@ -9,6 +9,7 @@ const utils = require('../utils.js');
 
 const Helmet = createFactory(require('react-helmet'));
 
+const CheckBox = createFactory(require('./CheckBox.js'));
 const Form = createFactory(require('./Form.js'));
 const FormMessage = createFactory(
   connect(formMessageSelector)(require('./FormMessage.js'))
@@ -17,8 +18,9 @@ const FormGroup = createFactory(require('./FormGroup.js'));
 const RadioGroup = createFactory(require('./RadioGroup.js'));
 const RadioOption = createFactory(require('./RadioOption.js'));
 const TextInput = createFactory(require('./TextInput.js'));
+const SubmitButton = createFactory(require('./SubmitButton.js'));
 
-const { h1, input } = elements;
+const { h1 } = elements;
 
 function keyResolver(k) {
   const v = this.state.data.getIn(k);
@@ -69,14 +71,24 @@ const ArticleEditor = React.createClass({
       headline,
       intro,
       norwegian,
+      publish,
+      published,
       save,
       short_title,
       slug,
       summary,
       teaser,
     } = l;
+    const isPublished = data.hasOwnProperty('published');
+    const submits = [SubmitButton(save)];
+    if (!isPublished) {
+      submits.push(
+        ' ',
+        SubmitButton({ name: 'published', value: '{}' }, publish)
+      );
+    }
     Helmet({ title });
-    return Form(
+    const args = [
       props,
       h1(title),
       FormMessage({ type: 'error', name: 'error' }),
@@ -93,10 +105,10 @@ const ArticleEditor = React.createClass({
       TextInput({ label: summary, name: 'summary', multiline: true }),
       TextInput({ label: intro, name: 'intro', multiline: true }),
       TextInput({ label: body, name: 'body', multiline: true }),
-      FormGroup(
-        input({ className: 'btn', type: 'submit', value: save })
-      )
-    );
+      isPublished ? CheckBox({ label: published, name: 'published' }) : null,
+      FormGroup(...submits),
+    ].filter(Boolean);
+    return Form(...args);
   },
 });
 

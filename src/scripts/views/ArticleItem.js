@@ -12,14 +12,19 @@ function ArticleItem(props) {
   const {
     headline, published, publishedFormatted, summary, title, urlParams,
   } = props.article;
-  return div(
-    header(
-      h1(
-        { className: 'article__heading' },
-        Link({ params: urlParams, innerHtml: headline || title })
-      ),
-      time({ className: 'milli', dateTime: published.utc }, publishedFormatted)
+  const headerChildren = [
+    h1(
+      { className: 'article__heading' },
+      Link({ params: urlParams, innerHtml: headline || title })
     ),
+  ];
+  if (published && published.utc) {
+    headerChildren.push(
+      time({ className: 'milli', dateTime: published.utc }, publishedFormatted)
+    );
+  }
+  return div(
+    header(...headerChildren),
     div({ innerHtml: summary })
   );
 }

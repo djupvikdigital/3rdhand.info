@@ -1,4 +1,5 @@
 const defaults = require('json-schema-defaults');
+const evolve = require('ramda/src/evolve');
 const moment = require('moment-timezone');
 const request = require('superagent');
 require('superagent-as-promised')(request, Promise);
@@ -17,8 +18,23 @@ function createDatetimeStruct(date) {
   };
 }
 
+function isValidDatetimeStruct(obj) {
+  const has = Object.prototype.hasOwnProperty;
+  return ['utc', 'tz'].every(has, obj) && moment.tz(obj.utc, obj.tz).isValid();
+}
+
 function getBody(res) {
   return res.body;
+}
+
+function mergePublished(left) {
+  return right => {
+    const published = JSON.parse(right);
+    if (isValidDatetimeStruct(published)) {
+      return published;
+    }
+    return left;
+  };
 }
 
 // Public API
@@ -57,16 +73,10 @@ function requestPasswordReset(data) {
 
 function saveArticle(_article, userId) {
   const now = createDatetimeStruct(new Date());
-  const article = Object.assign({}, _article);
-  if (!article.created) {
-    article.created = now;
-  }
-  if (!article.published) {
-    article.published = now;
-  }
-  if (!article.updated) {
-    article.updated = [];
-  }
+  const article = evolve(
+    { published: mergePublished(now) },
+    Object.assign({ created: now, updated: [] }, _article)
+  );
   article.updated.push(now);
   return request.post(URL.getUserPath(userId)).accept(json).send(article);
 }

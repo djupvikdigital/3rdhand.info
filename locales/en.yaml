@@ -33,7 +33,9 @@ ArticleEditor:
     summary: Summary
     intro: Intro
     body: Body
+    published: Published
     save: Save
+    publish: Save and Publish
 LoginDialog:
     loggedInAs: Logged in as
     logout: Log out

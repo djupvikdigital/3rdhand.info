@@ -1,18 +1,18 @@
 const { elements } = require('react-elementary').default;
 
-const { input } = elements;
+const { button } = elements;
 
 function SubmitButton(props) {
   const childProps = {
     className: 'btn',
     type: 'submit',
     name: props.name,
-    value: props.children,
+    value: props.value,
   };
   if (typeof props.onChange == 'function') {
     childProps.onClick = props.onChange;
   }
-  return input(childProps);
+  return button(childProps, props.children);
 }
 
 module.exports = SubmitButton;

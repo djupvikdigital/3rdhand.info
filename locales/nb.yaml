@@ -33,7 +33,9 @@ ArticleEditor:
     summary: Sammendrag
     intro: Intro
     body: Brødtekst
+    published: Publisert
     save: Lagre
+    publish: Lagre og publiser
 LoginDialog:
     loggedInAs: Innlogget som
     logout: Logg ut
