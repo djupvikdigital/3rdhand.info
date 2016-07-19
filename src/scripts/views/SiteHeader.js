@@ -26,7 +26,7 @@ const SiteHeader = React.createClass({
     delete params.view;
     const data = {
       from: JSON.stringify(params),
-      userId: this.props.login.usser._id,
+      userId: this.props.login.user._id,
     };
     return this.props.dispatch(actions.logout(data));
   },

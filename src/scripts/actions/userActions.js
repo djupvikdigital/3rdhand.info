@@ -30,18 +30,20 @@ function login(data) {
 }
 
 function logout(data) {
-  return dispatch => ({
-    type: 'LOGOUT',
-    payload: API.logout(data.userId),
-  }).then(res => {
-    const { from } = data;
-    const params = from ? JSON.parse(from) : {};
-    delete params.userId;
-    dispatch(
-      ReduxRouter.push({ pathname: URL.getPath(params), state: params })
-    );
-    return res;
-  });
+  return dispatch => (
+    dispatch({
+      type: 'LOGOUT',
+      payload: API.logout(data.userId),
+    }).then(res => {
+      const { from } = data;
+      const params = from ? JSON.parse(from) : {};
+      delete params.userId;
+      dispatch(
+        ReduxRouter.push({ pathname: URL.getPath(params), state: params })
+      );
+      return res;
+    })
+  );
 }
 
 function requestPasswordReset(data) {
