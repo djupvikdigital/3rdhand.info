@@ -14,7 +14,11 @@ function createDB(docs) {
 }
 
 function createDoc(date) {
-  return { created: createDatetimeStruct(new Date(date)), slug: 'test' };
+  return {
+    created: createDatetimeStruct(new Date(date)),
+    slug: 'test',
+    type: 'article',
+  };
 }
 
 describe('ddoc', () => {
@@ -24,13 +28,11 @@ describe('ddoc', () => {
         '2016-06-18T19:00:00Z',
         '2016-07-18T19:00:00Z',
       ].map(R.pipe(createDoc, doc => R.assoc('_id', getDocumentId(doc), doc)));
+      const { query } = buildQuery(
+        { year: 2016, month: 6, day: 18, slug: 'test' }
+      );
       createDB(docs)
-        .then(
-          db => db.query(
-            'app/by_slug_and_date',
-            buildQuery({ year: 2016, month: 6, day: 18, slug: 'test' })
-          )
-        )
+        .then(db => db.query('app/by_slug_and_date', query))
         .then(res => {
           expect(res.rows.length).toBe(1);
           done();
