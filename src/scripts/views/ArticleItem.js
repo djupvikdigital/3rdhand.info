@@ -2,16 +2,21 @@ const Router = require('react-router');
 const { connect } = require('react-redux');
 const { createFactory, elements } = require('react-elementary').default;
 
+const { footerSelector } = require('../selectors/articleSelectors.js');
 const { linkSelector } = require('../selectors/appSelectors.js');
+
+const ArticleFooter = createFactory(
+  connect(footerSelector)(require('./ArticleFooter.js'))
+);
 
 const Link = createFactory(connect(linkSelector)(Router.Link));
 
 const { div, header, h1, time } = elements;
 
-function ArticleItem(props) {
+function ArticleItem({ article }) {
   const {
     headline, published, publishedFormatted, summary, title, urlParams,
-  } = props.article;
+  } = article;
   const headerChildren = [
     h1(
       { className: 'article__heading' },
@@ -25,7 +30,8 @@ function ArticleItem(props) {
   }
   return div(
     header(...headerChildren),
-    div({ innerHtml: summary })
+    div({ innerHtml: summary }),
+    ArticleFooter({ article })
   );
 }
 

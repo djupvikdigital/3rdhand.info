@@ -36,6 +36,8 @@ ArticleEditor:
     published: Published
     save: Save
     publish: Save and Publish
+ArticleFooter:
+    edit: Edit
 LoginDialog:
     loggedInAs: Logged in as
     logout: Log out

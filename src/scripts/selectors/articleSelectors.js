@@ -1,3 +1,4 @@
+const assoc = require('ramda/src/assoc');
 const compose = require('ramda/src/compose');
 const moment = require('moment-timezone');
 const merge = require('ramda/src/merge');
@@ -70,12 +71,21 @@ const editorSelector = Reselect.createSelector(
   }
 );
 
+const footerSelector = Reselect.createSelector(
+  [
+    compose(prop('ArticleFooter'), appSelectors.localeSelector),
+    appSelectors.loginSelector,
+  ],
+  assoc('localeStrings')
+);
+
 module.exports = {
   containerSelector: Reselect.createSelector(
     [containerSelector, appSelectors.paramSelector],
     (state, params) => merge(state, { params })
   ),
   editorSelector,
+  footerSelector,
   formatSelector,
   itemSelector,
 };

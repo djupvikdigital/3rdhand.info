@@ -36,6 +36,8 @@ ArticleEditor:
     published: Publisert
     save: Lagre
     publish: Lagre og publiser
+ArticleFooter:
+    edit: Rediger
 LoginDialog:
     loggedInAs: Innlogget som
     logout: Logg ut
