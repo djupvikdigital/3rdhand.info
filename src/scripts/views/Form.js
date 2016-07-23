@@ -36,8 +36,8 @@ const Form = createClass({
   getPlaceholder: function getPlaceholder(k) {
     return this.state.placeholders.getIn(this.keyResolver(k));
   },
-  getValue: function getValue(k) {
-    return this.state.data.getIn(this.keyResolver(k), '');
+  getValue: function getValue(k, v = '') {
+    return this.state.data.getIn(this.keyResolver(k), v);
   },
   setValue: function setValue(k, v) {
     if (this.isMounted()) {
@@ -75,7 +75,7 @@ const Form = createClass({
         onChange: this.handleChange,
       };
       if (child.type !== PasswordInput) {
-        props.value = this.getValue(child.props.name);
+        props.value = this.getValue(child.props.name, child.props.value);
       }
       const placeholder = this.getPlaceholder(child.props.name);
       if (placeholder) {
