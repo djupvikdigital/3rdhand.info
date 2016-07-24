@@ -2,6 +2,7 @@ const assoc = require('ramda/src/assoc');
 const compose = require('ramda/src/compose');
 const moment = require('moment-timezone');
 const merge = require('ramda/src/merge');
+const path = require('ramda/src/path');
 const prop = require('ramda/src/prop');
 const Reselect = require('reselect');
 
@@ -52,9 +53,9 @@ const itemSelector = Reselect.createSelector(
     const { article } = state;
     let title = _title;
     if (article) {
-      const articleTitle = article.title;
-      if (articleTitle && articleTitle[lang].text) {
-        title = `${articleTitle[lang].text} - ${title}`;
+      const articleTitle = path(['title', lang, 'text'], article);
+      if (articleTitle) {
+        title = `${articleTitle} - ${title}`;
       }
     }
     return merge(state, { lang, title });
