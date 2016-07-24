@@ -1,11 +1,10 @@
 const assoc = require('ramda/src/assoc');
 const docuri = require('docuri');
 const Immutable = require('immutable');
-const last = require('ramda/src/last');
 const map = require('ramda/src/map');
 const moment = require('moment-timezone');
 const pick = require('ramda/src/pick');
-const toPairs = require('ramda/src/toPairs');
+const propArray = require('ramda/src/props');
 
 const getUserId = docuri.route('user/:cuid');
 
@@ -48,8 +47,7 @@ function propsAndMappersMapper(propsAndMapper) {
   const props = propsAndMapper.slice(0);
   const mapper = props.pop();
   if (props.every(Object.prototype.hasOwnProperty, this)) {
-    const pairs = toPairs(pick(props, this));
-    const args = pairs.map(last);
+    const args = propArray(props, this);
     return mapper.apply(this, args);
   }
   return null;
