@@ -11,6 +11,7 @@ const initialState = Immutable.fromJS({
       ArticleEditor: {},
       LangPicker: {},
       LoginDialog: {},
+      ArticleFooter: {},
     },
   },
 });
