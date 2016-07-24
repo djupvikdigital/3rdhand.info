@@ -24,7 +24,7 @@ describe('utils module', () => {
     it('leaves an array alone', () => {
       const test = ['item1', 'item2'];
       expect(utils.array(test)).toEqual(test);
-    })
+    });
   });
   describe('createFormatMapper', () => {
     it('returns text formatted from a format and a text', () => {
@@ -52,7 +52,6 @@ describe('utils module', () => {
     );
     it('returns null if the property key already exists', () => {
       const input = { foo: 'bar' };
-      const test = { foo: 'bar', baz: 'quux' };
       const fn = () => 'baz';
       expect(utils.createPropertyMapper('foo', fn).call(input)).toBe(null);
     });
@@ -103,7 +102,7 @@ describe('utils module', () => {
               3,
               { foo: 1, baz: 1 },
             ],
-          }
+          };
           const mapper1 = (foo, bar) => foo + bar;
           const mapper2 = bar => bar + 1;
           const args = [
