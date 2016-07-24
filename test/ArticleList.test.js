@@ -1,7 +1,6 @@
 const expect = require('expect');
 
 const cheerio = require('cheerio');
-const React = require('react');
 const ReactDOM = require('react-dom/server');
 const ReactRedux = require('react-redux');
 const { createMemoryHistory } = require('react-router');
@@ -40,5 +39,5 @@ describe('ArticleList', () => {
     const $ = cheerio.load(html);
     const els = $('article');
     expect(els.length).toBe(2);
-  })
+  });
 });
