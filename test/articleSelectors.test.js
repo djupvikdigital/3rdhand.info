@@ -1,12 +1,10 @@
 const expect = require('expect');
 
-const Immutable = require('immutable');
 const { createMemoryHistory } = require('react-router');
 const YAML = require('js-yaml');
 
 const createStore = require('../src/scripts/store.js');
 const selectors = require('../src/scripts/selectors/articleSelectors.js');
-const utils = require('../src/scripts/utils.js');
 const { read } = require('../lib/utils.js');
 
 describe('articleSelectors', () => {
@@ -35,12 +33,12 @@ describe('articleSelectors', () => {
         const localeStrings = YAML.safeLoad(read(`locales/${lang}.yaml`));
         store.dispatch({
           type: 'FETCH_LOCALE_STRINGS_FULFILLED',
-          payload: { lang: lang, data: localeStrings },
+          payload: { lang, data: localeStrings },
         });
         state = store.getState();
         state.articleState = state.articleState.merge({
           articles: [
-            { _id: '_id', title: { nb: { format: '', text: 'Article Title' }}},
+            { _id: '_id', title: { nb: { format: '', text: 'Article Title' } } },
           ],
         });
         const output = selectors.itemSelector(state);
@@ -60,21 +58,18 @@ describe('articleSelectors', () => {
         const localeStrings = YAML.safeLoad(read(`locales/${lang}.yaml`));
         store.dispatch({
           type: 'FETCH_LOCALE_STRINGS_FULFILLED',
-          payload: { lang: lang, data: localeStrings },
+          payload: { lang, data: localeStrings },
         });
         state = store.getState();
         state.articleState = state.articleState.merge({
           articles: [
-            { _id: '_id', title: { nb: { format: '', text: '' }}},
+            { _id: '_id', title: { nb: { format: '', text: '' } } },
           ],
         });
         const output = selectors.itemSelector(state);
         const { title } = localeStrings;
-        const articleTitle = state.articleState.getIn(
-          ['articles', 0, 'title', lang, 'text']
-        );
         expect(output.title).toBe(title);
       }
-    )
+    );
   });
 });
