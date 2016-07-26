@@ -1,18 +1,10 @@
 const assoc = require('ramda/src/assoc');
 const docuri = require('docuri');
 const Immutable = require('immutable');
-const map = require('ramda/src/map');
 const moment = require('moment-timezone');
 const pick = require('ramda/src/pick');
-const propArray = require('ramda/src/props');
 
 const getUserId = docuri.route('user/:cuid');
-
-function isObject(x) {
-  return (
-    x instanceof Object && Object.getPrototypeOf(x) === Object.getPrototypeOf({})
-  );
-}
 
 function array() {
   // cast to array
@@ -22,13 +14,6 @@ function array() {
 function keyIn(...args) {
   const keySet = Immutable.Set(args);
   return (v, k) => keySet.has(k);
-}
-
-function shortCircuitScalars(fn) {
-  return function shortCircuitedScalars(...args) {
-    const input = args[0];
-    return typeof input == 'object' ? fn(...args) : input;
-  };
 }
 
 function createFunctionMapper(functionMap, noValue) {
@@ -42,36 +27,6 @@ function createFunctionMapper(functionMap, noValue) {
     return v;
   };
 }
-
-function propsAndMappersMapper(propsAndMapper) {
-  const props = propsAndMapper.slice(0);
-  const mapper = props.pop();
-  if (props.every(Object.prototype.hasOwnProperty, this)) {
-    const args = propArray(props, this);
-    return mapper.apply(this, args);
-  }
-  return null;
-}
-
-const mapObjectRecursively = shortCircuitScalars((obj, ..._p) => {
-  const propsAndMappers = Array.isArray(_p[0]) ? _p : [_p];
-  const f = shortCircuitScalars(input => {
-    if (Array.isArray(input)) {
-      return input.map(f);
-    }
-    else if (isObject(input)) {
-      const results = propsAndMappers
-        .map(propsAndMappersMapper, input)
-        .filter(x => x != null);
-      if (results.length) {
-        return f(results[0]);
-      }
-      return map(f, input);
-    }
-    return input;
-  });
-  return f(obj);
-});
 
 function createFormatMapper(formatters) {
   if (formatters) {
@@ -118,7 +73,6 @@ module.exports = {
   },
   getUserProps,
   keyIn,
-  mapObjectRecursively,
   maybe,
   stripDbFields,
 };

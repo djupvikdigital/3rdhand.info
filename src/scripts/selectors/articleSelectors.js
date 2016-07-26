@@ -1,6 +1,8 @@
+const apply = require('ramda/src/apply');
 const assoc = require('ramda/src/assoc');
 const compose = require('ramda/src/compose');
 const curry = require('ramda/src/curry');
+const has = require('ramda/src/has');
 const lens = require('ramda/src/lens');
 const moment = require('moment-timezone');
 const map = require('ramda/src/map');
@@ -8,8 +10,10 @@ const merge = require('ramda/src/merge');
 const over = require('ramda/src/over');
 const path = require('ramda/src/path');
 const prop = require('ramda/src/prop');
+const props = require('ramda/src/props');
 const propOr = require('ramda/src/propOr');
 const Reselect = require('reselect');
+const when = require('ramda/src/when');
 
 const API = require('api');
 const appSelectors = require('./appSelectors.js');
@@ -23,6 +27,12 @@ const assocWhen = curry((key, value, obj) => {
   return obj;
 });
 
+const formatMapper = apply(utils.createFormatMapper(formatters));
+
+const hasAll = curry((keys, obj) => (
+  keys.every(Object.prototype.hasOwnProperty, obj)
+));
+
 function langSelector(state) {
   return state.localeState.get('lang');
 }
@@ -33,16 +43,21 @@ const formatSelector = curry((lang, state) => {
     propOr({}, 'published'),
     assocWhen('publishedFormatted')
   );
-  return utils.mapObjectRecursively(
+  return map(
+    compose(
+      when(
+        hasAll(['format', 'text']),
+        compose(formatMapper, props(['format', 'text']))
+      ),
+      when(has(lang), prop(lang))
+    ),
     over(
       publishedLens,
       ({ utc, timezone }) => (
         utc && timezone && moment.tz(utc, timezone).format('LLL z')
       ),
       state
-    ),
-    [lang, (x => x)],
-    ['format', 'text', utils.createFormatMapper(formatters)]
+    )
   );
 });
 

@@ -67,36 +67,6 @@ describe('utils module', () => {
         }
       );
     });
-    describe('mapObjectRecursively', () => {
-      it(
-        `takes mapper functions and goes over the object recursively, applying
-          to objects with provided props`,
-        () => {
-          const input = {
-            foo: { bar: 1 },
-            baz: [
-              { foo: 1, bar: 2 },
-              { foo: 1, baz: 1 },
-            ],
-          };
-          const test = {
-            foo: 2,
-            baz: [
-              3,
-              { foo: 1, baz: 1 },
-            ],
-          };
-          const mapper1 = (foo, bar) => foo + bar;
-          const mapper2 = bar => bar + 1;
-          const args = [
-            input,
-            ['foo', 'bar', mapper1],
-            ['bar', mapper2],
-          ];
-          expect(utils.mapObjectRecursively(...args)).toEqual(test);
-        }
-      );
-    });
   });
   describe('maybe', () => {
     it(
