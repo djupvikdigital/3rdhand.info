@@ -18,6 +18,7 @@ const when = require('ramda/src/when');
 const API = require('api');
 const appSelectors = require('./appSelectors.js');
 const formatters = require('../formatters.js');
+const URL = require('urlHelpers');
 const utils = require('../utils.js');
 
 const assocWhen = curry((key, value, obj) => {
@@ -51,12 +52,16 @@ const formatSelector = curry((lang, state) => {
       ),
       when(has(lang), prop(lang))
     ),
-    over(
-      publishedLens,
-      ({ utc, timezone }) => (
-        utc && timezone && moment.tz(utc, timezone).format('LLL z')
-      ),
-      state
+    assoc(
+      'urlParams',
+      URL.getArticleParams(state),
+      over(
+        publishedLens,
+        ({ utc, timezone }) => (
+          utc && timezone && moment.tz(utc, timezone).format('LLL z')
+        ),
+        state
+      )
     )
   );
 });

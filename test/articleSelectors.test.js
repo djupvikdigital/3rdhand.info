@@ -1,5 +1,6 @@
 const expect = require('expect');
 
+const R = require('ramda');
 const { createMemoryHistory } = require('react-router');
 const YAML = require('js-yaml');
 
@@ -18,8 +19,10 @@ describe('articleSelectors', () => {
           { _id: '_id' },
         ],
       });
-      const output = selectors.containerSelector(state);
-      expect(output.articles).toEqual(state.articleState.get('articles').toJS());
+      const output = R.map(
+        R.omit('urlParams'), selectors.containerSelector(state).articles
+      );
+      expect(output).toEqual(state.articleState.get('articles').toJS());
     });
   });
   describe('itemSelector', () => {

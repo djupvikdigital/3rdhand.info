@@ -1,5 +1,7 @@
 const Immutable = require('immutable');
+const moment = require('moment');
 const padStart = require('lodash/padStart');
+const rpath = require('ramda/src/path');
 
 const utils = require('../scripts/utils.js');
 
@@ -68,6 +70,16 @@ function getPath(params) {
   return assemblePath({ path, filename });
 }
 
+function getArticleParams(article) {
+  const created = moment(rpath(['created', 'utc'], article) || new Date());
+  return {
+    year: created.year(),
+    month: created.month() + 1,
+    day: created.date(),
+    slug: article.slug,
+  };
+}
+
 function getServerUrl() {
   return `${location.protocol}//${location.host}`;
 }
@@ -81,4 +93,6 @@ function getNextParams({ currentParams, langParam, params, slug }) {
     .toJS();
 }
 
-module.exports = { getNextParams, getPath, getServerUrl, getUserPath };
+module.exports = {
+  getArticleParams, getNextParams, getPath, getServerUrl, getUserPath,
+};
