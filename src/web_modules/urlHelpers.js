@@ -1,7 +1,7 @@
+const find = require('ramda/src/find');
 const Immutable = require('immutable');
 const moment = require('moment');
 const padStart = require('lodash/padStart');
-const rpath = require('ramda/src/path');
 
 const utils = require('../scripts/utils.js');
 
@@ -71,11 +71,16 @@ function getPath(params) {
 }
 
 function getArticleParams(article) {
-  const created = moment(rpath(['created', 'utc'], article) || new Date());
+  const dateFields = ['published', 'created'];
+  const dateField = find(
+    Object.prototype.hasOwnProperty.bind(article),
+    dateFields
+  );
+  const date = moment(dateField ? article[dateField].utc : new Date());
   return {
-    year: created.year(),
-    month: created.month() + 1,
-    day: created.date(),
+    year: date.year(),
+    month: date.month() + 1,
+    day: date.date(),
     slug: article.slug,
   };
 }
