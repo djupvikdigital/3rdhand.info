@@ -73,16 +73,6 @@ const mapObjectRecursively = shortCircuitScalars((obj, ..._p) => {
   return f(obj);
 });
 
-function createPropertyMapper(k, fn) {
-  return function propertyMapper() {
-    if (this.hasOwnProperty(k)) {
-      return null;
-    }
-    this[k] = fn.apply(this, arguments);
-    return this;
-  };
-}
-
 function createFormatMapper(formatters) {
   if (formatters) {
     return createFunctionMapper(formatters, '');
@@ -123,7 +113,6 @@ module.exports = {
   array,
   createDatetimeStruct,
   createFormatMapper,
-  createPropertyMapper,
   getUserId(userId) {
     return getUserId(userId).cuid || userId;
   },

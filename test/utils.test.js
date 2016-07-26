@@ -39,23 +39,6 @@ describe('utils module', () => {
       expect(utils.createFormatMapper()(format, text)).toEqual(text);
     });
   });
-  describe('createPropertyMapper', () => {
-    it(
-      `takes a property key and a function, when applied to an object it sets
-        the object key to the function return value`,
-      () => {
-        const input = { foo: 'bar' };
-        const test = { foo: 'bar', baz: 'quux' };
-        const fn = () => 'quux';
-        expect(utils.createPropertyMapper('baz', fn).call(input)).toEqual(test);
-      }
-    );
-    it('returns null if the property key already exists', () => {
-      const input = { foo: 'bar' };
-      const fn = () => 'baz';
-      expect(utils.createPropertyMapper('foo', fn).call(input)).toBe(null);
-    });
-  });
   describe('getUserId', () => {
     it('returns the cuid portion of a user id', () => {
       const input = 'user/foo';
