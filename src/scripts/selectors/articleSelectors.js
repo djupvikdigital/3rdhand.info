@@ -1,6 +1,8 @@
 const assoc = require('ramda/src/assoc');
 const compose = require('ramda/src/compose');
+const curry = require('ramda/src/curry');
 const moment = require('moment-timezone');
+const map = require('ramda/src/map');
 const merge = require('ramda/src/merge');
 const path = require('ramda/src/path');
 const prop = require('ramda/src/prop');
@@ -15,7 +17,7 @@ function langSelector(state) {
   return state.localeState.get('lang');
 }
 
-function formatSelector(state, lang) {
+const formatSelector = curry((lang, state) => {
   moment.locale(lang);
   return utils.mapObjectRecursively(
     state,
@@ -28,10 +30,13 @@ function formatSelector(state, lang) {
       )),
     ]
   );
-}
+});
 
 const containerSelector = Reselect.createSelector(
-  [state => state.articleState.toJS(), langSelector], formatSelector
+  [state => state.articleState.toJS(), langSelector],
+  (state, lang) => (
+    merge(state, { articles: map(formatSelector(lang), state.articles) })
+  )
 );
 
 function articleSelector(_state) {
@@ -50,7 +55,7 @@ const itemSelector = Reselect.createSelector(
     compose(prop('title'), appSelectors.titleSelector),
   ],
   (state, lang, _title) => {
-    const { article } = state;
+    let { article } = state;
     let description = '';
     let title = _title;
     if (article) {
@@ -60,7 +65,8 @@ const itemSelector = Reselect.createSelector(
       }
       description = path(['summary', lang, 'text'], article);
     }
-    return merge(formatSelector(state, lang), { description, title });
+    article = formatSelector(lang, article);
+    return merge(state, { article, description, title });
   }
 );
 
