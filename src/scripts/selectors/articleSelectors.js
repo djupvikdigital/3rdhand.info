@@ -51,14 +51,16 @@ const itemSelector = Reselect.createSelector(
   ],
   (state, lang, _title) => {
     const { article } = state;
+    let description = '';
     let title = _title;
     if (article) {
       const articleTitle = path(['title', lang, 'text'], article);
       if (articleTitle) {
         title = `${articleTitle} - ${title}`;
       }
+      description = path(['summary', lang, 'text'], article);
     }
-    return merge(state, { lang, title });
+    return merge(formatSelector(state, lang), { description, title });
   }
 );
 
@@ -87,6 +89,5 @@ module.exports = {
   ),
   editorSelector,
   footerSelector,
-  formatSelector,
   itemSelector,
 };

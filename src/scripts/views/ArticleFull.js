@@ -2,21 +2,19 @@ const { createFactory, elements } = require('react-elementary');
 
 const Helmet = createFactory(require('react-helmet'));
 
-const { formatSelector } = require('../selectors/articleSelectors.js');
 const URL = require('urlHelpers');
 
 const { b, div, h1, p } = elements;
 
 function ArticleFull(props) {
-  const { article, lang, serverUrl } = props;
-  if (!article || !article.title[lang].text) {
+  const { article, description, serverUrl } = props;
+  if (!article || !article.title) {
     return div();
   }
   const {
     body, headline, intro, title,
-  } = formatSelector(article, lang);
+  } = article;
   const pageTitle = props.title || title;
-  const description = article.summary[lang].text;
   const url = serverUrl + URL.getPath(article.urlParams);
   return div(
     Helmet({
