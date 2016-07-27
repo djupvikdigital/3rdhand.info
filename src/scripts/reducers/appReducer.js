@@ -1,6 +1,8 @@
+const chain = require('ramda/src/chain');
 const fromPairs = require('ramda/src/fromPairs');
 const Immutable = require('immutable');
 const map = require('ramda/src/map');
+const merge = require('ramda/src/merge');
 const pipe = require('ramda/src/pipe');
 const values = require('ramda/src/values');
 
@@ -70,14 +72,19 @@ function addUserParams(state, { user }) {
 
 function getArticleUrlsToParams(currentParams, articles) {
   return fromPairs(
-    map(
+    chain(
       pipe(
         URL.getArticleParams,
-        urlParams => (
+        urlParams => ([
           getUrlToParams(
             URL.getNextParams({ currentParams, params: urlParams })
-          )
-        )
+          ),
+          getUrlToParams(
+            URL.getNextParams(
+              { currentParams, params: merge(urlParams, { view: 'edit' }) }
+            )
+          ),
+        ])
       ),
       articles
     )
