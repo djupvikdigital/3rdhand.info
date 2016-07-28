@@ -26,10 +26,12 @@ function keyResolver(k) {
   const v = this.state.data.getIn(k);
   if (Immutable.Map.isMap(v)) {
     const lang = this.state.data.get('lang');
-    const len = k.length;
-    const keys = k.slice(0);
-    keys.splice(len, 0, lang, 'text');
-    return keys;
+    if (v.has(lang)) {
+      const len = k.length;
+      const keys = k.slice(0);
+      keys.splice(len, 0, lang, 'text');
+      return keys;
+    }
   }
   return k;
 }

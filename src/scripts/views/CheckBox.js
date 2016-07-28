@@ -3,7 +3,12 @@ const { elements } = require('react-elementary').default;
 
 const { input, label } = elements;
 
+function stringifyComplex(value) {
+  return typeof value == 'object' ? JSON.stringify(value) : value;
+}
+
 const CheckBox = createClass({
+  displayName: 'CheckBox',
   propsToState: function propsToState({ value }) {
     return { value };
   },
@@ -25,11 +30,17 @@ const CheckBox = createClass({
   render: function render() {
     const props = this.props;
     const { name } = props;
-    const { value } = this.state;
+    const value = stringifyComplex(this.state.value);
     return label(
       { className: 'form-group' },
       `${props.label}: `,
-      input({ type: 'checkbox', onChange: this.handleChange, name, value })
+      input({
+        type: 'checkbox',
+        checked: !!props.value,
+        onChange: this.handleChange,
+        name,
+        value,
+      })
     );
   },
 });

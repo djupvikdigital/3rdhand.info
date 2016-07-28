@@ -23,9 +23,8 @@ function getBody(res) {
 
 function mergePublished(left) {
   return right => {
-    const published = JSON.parse(right);
-    if (isValidDatetimeStruct(published)) {
-      return published;
+    if (isValidDatetimeStruct(right)) {
+      return right;
     }
     return left;
   };
