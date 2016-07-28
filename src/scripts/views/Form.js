@@ -44,11 +44,22 @@ const Form = createClass({
       this.setState({ data: this.state.data.setIn(this.keyResolver(k), v) });
     }
   },
+  removeValue: function removeValue(k) {
+    if (this.isMounted()) {
+      this.setState({ data: this.state.data.deleteIn(this.keyResolver(k)) });
+    }
+  },
   componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
     this.setState(this.propsToState(nextProps));
   },
   handleChange: function handleChange({ target }) {
-    this.setValue(target.name, target.value);
+    const { checked, name, value } = target;
+    if (!target.hasOwnProperty('checked') || checked) {
+      this.setValue(name, value);
+    }
+    else {
+      this.removeValue(name);
+    }
   },
   handleSubmit: function handleSubmit(e) {
     if (typeof this.props.onSubmit == 'function') {

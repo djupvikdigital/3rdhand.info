@@ -20,11 +20,11 @@ const CheckBox = createClass({
       this.setState({ value });
     }
   },
-  handleChange: function handleChange({ target }) {
+  handleChange: function handleChange({ target: { checked } }) {
     const { name, onChange } = this.props;
-    const value = target.checked ? this.state.value : '';
+    const value = checked ? this.state.value : '';
     if (typeof onChange == 'function') {
-      onChange({ target: { name, value } });
+      onChange({ target: { checked, name, value } });
     }
   },
   render: function render() {
