@@ -13,6 +13,7 @@ const authenticate = require('./authenticate.js');
 const ArticleContainer = connect(containerSelector)(
   require('./ArticleContainer.js')
 );
+
 const AuthenticatedArticleContainer = connect(loginSelector)(
   authenticate(ArticleContainer)
 );

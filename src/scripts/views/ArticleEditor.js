@@ -81,7 +81,7 @@ const ArticleEditor = React.createClass({
       summary,
       teaser,
     } = l;
-    const isPublished = data.hasOwnProperty('published');
+    const isPublished = Object.prototype.hasOwnProperty.call(data, 'published');
     const submits = [SubmitButton(save)];
     if (!isPublished) {
       submits.push(

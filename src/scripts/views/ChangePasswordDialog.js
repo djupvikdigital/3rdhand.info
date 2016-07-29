@@ -69,7 +69,7 @@ const ChangePasswordDialog = React.createClass({
       FormGroup(SubmitButton({ name: 'changePassword' }, changePassword)),
     ]);
     Helmet({ title });
-    return Form.apply(null, args);
+    return Form(...args);
   },
 });
 

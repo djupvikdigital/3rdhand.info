@@ -54,7 +54,7 @@ const Form = createClass({
   },
   handleChange: function handleChange({ target }) {
     const { checked, name, value } = target;
-    if (!target.hasOwnProperty('checked') || checked) {
+    if (!Object.prototype.hasOwnProperty.call(target, 'checked') || checked) {
       this.setValue(name, value);
     }
     else {
