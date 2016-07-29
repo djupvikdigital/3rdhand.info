@@ -8,6 +8,7 @@
     "brace-style": [2, "stroustrup"],
     "eqeqeq": [2, "smart"],
     "new-cap": [0],
+    "no-extraneous-dependencies": [0],
     "no-underscore-dangle": [2, { "allow":["_id"] }],
     "prefer-rest-params": [0]
   }
