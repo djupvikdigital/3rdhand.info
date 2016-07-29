@@ -76,7 +76,7 @@ function getArticleParams(article) {
     Object.prototype.hasOwnProperty.bind(article),
     dateFields
   );
-  const date = moment(dateField ? article[dateField].utc : new Date());
+  const date = moment.utc(dateField ? article[dateField].utc : new Date());
   return {
     year: date.year(),
     month: date.month() + 1,
