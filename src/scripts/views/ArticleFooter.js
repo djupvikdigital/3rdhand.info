@@ -1,11 +1,10 @@
 const merge = require('ramda/src/merge');
 const { createFactory, elements } = require('react-elementary').default;
 const { connect } = require('react-redux');
-const Router = require('react-router');
 
 const { linkSelector } = require('../selectors/appSelectors.js');
 
-const Link = createFactory(connect(linkSelector)(Router.Link));
+const Link = createFactory(connect(linkSelector)(require('./Link.js')));
 
 const { footer } = elements;
 

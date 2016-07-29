@@ -1,11 +1,10 @@
-const Router = require('react-router');
 const { connect } = require('react-redux');
 const { createFactory, elements } = require('react-elementary');
 
 const actions = require('../actions/localeActions.js');
 const selector = require('../selectors/appSelectors.js').linkSelector;
 
-const Link = createFactory(connect(selector)(Router.Link));
+const Link = createFactory(connect(selector)(require('./Link.js')));
 
 const { li, nav, ul } = elements;
 

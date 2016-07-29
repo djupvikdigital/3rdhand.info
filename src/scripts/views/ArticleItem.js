@@ -1,4 +1,3 @@
-const Router = require('react-router');
 const { connect } = require('react-redux');
 const { createFactory, elements } = require('react-elementary').default;
 
@@ -9,7 +8,7 @@ const ArticleFooter = createFactory(
   connect(footerSelector)(require('./ArticleFooter.js'))
 );
 
-const Link = createFactory(connect(linkSelector)(Router.Link));
+const Link = createFactory(connect(linkSelector)(require('./Link.js')));
 
 const { div, header, h1, time } = elements;
 

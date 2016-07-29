@@ -1,6 +1,5 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const Router = require('react-router');
 const { createFactory, elements } = require('react-elementary').default;
 
 const logo = require('logo');
@@ -14,7 +13,7 @@ const LangPicker = createFactory(
   connect(langPickerSelector)(require('./LangPicker.js'))
 );
 
-const Link = createFactory(connect(linkSelector)(Router.Link));
+const Link = createFactory(connect(linkSelector)(require('./Link.js')));
 
 const { div, header, li, nav, ul } = elements;
 

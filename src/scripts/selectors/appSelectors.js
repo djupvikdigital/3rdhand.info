@@ -74,10 +74,7 @@ function linkSelector(_state, props) {
     params = Object.assign({}, currentParams, { lang: langParam });
   }
   params = URL.getNextParams(Object.assign({ currentParams, params }, props));
-  return Object.assign(
-    { to: { pathname: URL.getPath(params) } },
-    omit(props, 'currentParams', 'langParam', 'params', 'slug')
-  );
+  return Object.assign({ to: { pathname: URL.getPath(params) } }, props);
 }
 
 const signupSelector = Reselect.createSelector(
