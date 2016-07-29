@@ -1,5 +1,5 @@
 const Redux = require('redux');
-const promiseMiddleware = require('redux-promise-middleware').default;
+const promiseMiddleware = require('redux-promise-middleware');
 const thunkMiddleware = require('redux-thunk').default;
 const ReduxRouter = require('react-router-redux');
 
