@@ -116,7 +116,7 @@ if (PROD) {
     cert: fs.readFileSync(path.join(certsPath, 'fullchain.pem')),
     ca: fs.readFileSync(path.join(certsPath, 'chain.pem')),
   };
-  https.createServer(credentials, server).listen(8433, () => {
+  https.createServer(credentials, server).listen(8443, () => {
     logger.info('HTTPS server listening on port 8443...');
   });
 }
